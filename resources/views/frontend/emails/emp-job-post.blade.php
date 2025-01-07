@@ -61,14 +61,14 @@
     <div class="container">
         <div class="row align-items-center justify-content-center">
             <div class="col-md-12 text-center">
-                <img class="logo-1 mb-2" src="{{ asset('images/Angel-Jobs-Malta-logo.svg')}}" alt="Angel Jobs India">
+                <img class="logo-1 mb-2" src="{{ asset('images/Angel-Jobs-Malta-logo.svg')}}" alt="Angel Jobs France">
             </div>
             <hr>
             <h4 class="mb-3" style="display: flex; justify-content: center; color:#11a1f5">
                 Job Posted Successfully
             </h4>
             <div class="col-md-8">
-                <img class="p-3" src="{{ asset('images/emails/job_post.png')}}" alt="Angel Jobs India" style="width: 100%">
+                <img class="p-3" src="{{ asset('images/emails/job_post.png')}}" alt="Angel Jobs France" style="width: 100%">
             </div>
 
             <div class="col-md-12 ps-md-4 my-md-4 border-md-start">
@@ -79,7 +79,7 @@
 
                 <p>Once your job post is approved, you’ll receive a confirmation email, and it will go live on our platform to attract top candidates.</p>
 
-                <p>In the meantime, if you have any questions or need assistance, feel free to reach out to us at <strong><a class="text-decoration-none text-dark" href="mailto:info@angel-jobs.in">info@angel-jobs.com</a></strong>. We're here to support you throughout the process.</p>
+                <p>In the meantime, if you have any questions or need assistance, feel free to reach out to us at <strong><a class="text-decoration-none text-dark" href="mailto:info@angel-jobs.fr">info@angel-jobs.fr</a></strong>. We're here to support you throughout the process.</p>
 
                 <p>Thank you for choosing Angel-Jobs to find the best talent!</p>
                 <p>Job Url : <a href="#Link#">Click to See Posted Job</a></p> 

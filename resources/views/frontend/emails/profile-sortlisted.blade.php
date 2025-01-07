@@ -61,14 +61,14 @@
     <div class="container">
         <div class="row align-items-center justify-content-center">
             <div class="col-md-12 text-center">
-                <img class="logo-1 mb-2" src="{{ asset('images/angel-Jobs-india-logo.png')}}" alt="Angel Jobs India">
+                <img class="logo-1 mb-2" src="{{ asset('images/angel-jobs-France.png')}}" alt="Angel Jobs France">
             </div>
             <hr>
             <h5 class="mb-3" style="display: flex; justify-content: center; text-align: center; color:#11a1f5">
                 Congratulations! <br/>You’ve Been Shortlisted for [Job Title] 
             </h5>
             <div class="col-md-8">
-                <img class="p-3" src="{{ asset('images/emails/sortlisted.png')}}" alt="Angel Jobs India" style="width: 100%">
+                <img class="p-3" src="{{ asset('images/emails/sortlisted.png')}}" alt="Angel Jobs France" style="width: 100%">
             </div>
 
             <div class="col-md-12 ps-md-4 my-md-4 border-md-start">
@@ -79,7 +79,7 @@
 
                 <p>Our team is impressed with your experience and qualifications, and we would like to move forward with the next steps.</p>
 
-                <p>In the meantime, if you have any questions, feel free to reach out to us at <strong><a class="text-decoration-none text-dark" href="mailto:info@angel-jobs.in">info@angel-jobs.com</a></strong>. We're happy to assist you.</p>
+                <p>In the meantime, if you have any questions, feel free to reach out to us at <strong><a class="text-decoration-none text-dark" href="mailto:info@angel-jobs.fr">info@angel-jobs.fr</a></strong>. We're happy to assist you.</p>
 
                 <p>Best regards, <br> Angel Jobs Team</p>
 

@@ -61,14 +61,14 @@
     <div class="container"> 
         <div class="row align-items-center justify-content-center">
             <div class="col-md-12 text-center ">
-                <img class="logo-1 mb-2" src="{{ asset('images/angel-Jobs-india-logo.png')}}" alt="Angel Jobs India">
+                <img class="logo-1 mb-2" src="{{ asset('images/angel-jobs-France.png')}}" alt="Angel Jobs France">
             </div>
             <hr>
             <div class="col-md-8">
                 <h5 class="mb-3 text-center">
                     Welcome to Angel Jobs <br/> Your Hiring Journey Starts Here!
                 </h5>
-                <img class="p-3 " src="{{ asset('images/emails/registration.png')}}" alt="Angel-jobs India" style="width: 100%">
+                <img class="p-3 " src="{{ asset('images/emails/registration.png')}}" alt="Angel-jobs France" style="width: 100%">
             </div>
 
             <div class="col-md-12 ps-md-4 my-md-4 border-md-start">
@@ -81,7 +81,7 @@
                     <li>Direct communication with job seekers interested in your vacancies.</li>
                 </ul>
                 <p>Start posting your job openings and connect with top talent today!</p>
-                <p>If you need assistance, feel free to reach out to us at <strong><a class="text-decoration-none text-dark" href="mailto:info@angel-jobs.in">info@angel-jobs.com</a></strong>. We're here to support you throughout the hiring process. <br></p>
+                <p>If you need assistance, feel free to reach out to us at <strong><a class="text-decoration-none text-dark" href="mailto:info@angel-jobs.fr">info@angel-jobs.fr</a></strong>. We're here to support you throughout the hiring process. <br></p>
                 <strong>Employer Details: <br>
                    
                     Email: #Email#<br>

@@ -15,7 +15,7 @@ if (!function_exists('getDropDownlist')) {
         }
         if (isset($table) && !empty($table) && isset($select) && is_array($select)) {
             if($table == 'job_types'){
-                $query = DB::table($table)->select($select)->where('is_deleted', 'No')->orderBy('id','DESC');
+                $query = DB::table($table)->select($select)->where('is_deleted', 'No')->orderBy('id','ASC');
             }
             elseif($table == 'notice_periods'){
                 $query = DB::table($table)->select($select)->where('is_deleted', 'No')->orderBy($order,'DESC');

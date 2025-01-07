@@ -30,7 +30,7 @@
 									<h5 class="m-b15">Resume Headline</h5>
 									<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#resumeheadline" class="site-button add-btn button-sm"><i class="fas fa-pencil-alt m-r5"></i> Edit</a>
 								</div>
-								<p class="m-b0">Job board currently living in India</p>
+								<p class="m-b0">Job board currently living in France</p>
 								<!-- Modal -->
 								<div class="modal fade modal-bx-info editor" id="resumeheadline" tabindex="-1" role="dialog" aria-labelledby="ResumeheadlineModalLongTitle" aria-hidden="true">
 									<div class="modal-dialog" role="document">

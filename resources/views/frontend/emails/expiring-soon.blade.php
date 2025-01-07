@@ -59,14 +59,14 @@
     <div class="container">
         <div class="row align-items-center justify-content-center">
             <div class="col-md-12 text-center">
-                <img class="logo-1 mb-2" src="{{ asset('images/angel-Jobs-india-logo.png')}}" alt="Angel Jobs India">
+                <img class="logo-1 mb-2" src="{{ asset('images/angel-jobs-France.png')}}" alt="Angel Jobs France">
             </div>
             <hr>
             <div class="col-md-8">
                 <h5 class="mb-3 text-center">
                     Your <span class="text-primary">Angel-Jobs</span> Plan is Expiring Soon Do not Miss Out on New Opportunities!
                 </h5>
-                <img class="p-3 d-flex justify-content-center mx-auto" src="{{ asset('images/emails/expire_soon.png')}}" alt="Angel Jobs India" style="width: 70%">
+                <img class="p-3 d-flex justify-content-center mx-auto" src="{{ asset('images/emails/expire_soon.png')}}" alt="Angel Jobs France" style="width: 70%">
             </div>
 
             <div class="col-md-12 ps-md-4 my-md-4 border-md-start">
@@ -81,7 +81,7 @@
 
                 <p style="margin-top: 10px;">Secure your next big opportunity—act now to keep your journey going!</p>
 
-                <p style="margin-top: 10px;">If you need any assistance or have questions, feel free to contact us at <strong><a class="text-decoration-none text-dark" href="mailto:info@angel-jobs.in">info@angel-jobs.com</a></strong>. We're happy to help!</p>
+                <p style="margin-top: 10px;">If you need any assistance or have questions, feel free to contact us at <strong><a class="text-decoration-none text-dark" href="mailto:info@angel-jobs.fr">info@angel-jobs.fr</a></strong>. We're happy to help!</p>
 
                 <p>Thank you for choosing Angel Jobs. We appreciate having you with us!</p>
 

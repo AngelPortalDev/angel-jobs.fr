@@ -14,13 +14,15 @@
                     <h1 class="about-h1">Grievance Form</h1>
                     <div class="text"><a href="{{url('/')}}">Home</a> / Grievance Form</div> <br>
 
-                    <p class="m-b15">
+                    <p> Need Help? Contact Angel-Jobs France! </p>
+
+                       <p> Welcome to Angel-Jobs France! We're glad to see you on our website at www.angel-jobs.fr. If you're looking for a job or have questions about scams, our team is here to help you and ensure you stay safe online. </p>
+
+                    <p> Do you have questions? Check out our 'Help Desk' for easy-to-understand answers to common questions. Need more information or help? Just fill out the form below, and we'll email you back within 48 hours. </p>
+
+                    <p>At Angel-Jobs France, your satisfaction is our priority. Use our 'Grievance Form' below for concerns or complaints. We're here to listen and enhance your experience.</p>
                         
-                        Welcome to Angel-Jobs India! We're super excited to have you on our website (www.angel-jobs.in). <br><br>
-                        Whether you're searching for a job or have concerns about scams, our team is here to help and keep you safe online.<br><br>
-                        Do you have questions? Check out our 'Help Desk' for easy-to-understand answers to common questions. Need more information or help? Just fill out the form below, and we'll email you back within 48 hours.<br><br>
-                        If you have any complaints, use the 'Grievance Form' to let us know and help us help you better!
-                        </p>
+                       <br> 
             
                 </div>
 
@@ -57,12 +59,11 @@
                                                 <div class="form-group">
                                                     <div class="dropdown bootstrap-select mob-code">
                                                         <div class="dropdown bootstrap-select">
-                                                            <select class="" name="country_code" required>
-                                                                  {{-- <option value="">Select Code</option> --}}
-                                                                {{-- @foreach (getDropDownlist('country_master', ['country_code']) as $country_master)
+                                                            <select class="" tabindex="null" name="country_code" required>
+                                                                  <option>Select Code</option>
+                                                                @foreach (getDropDownlist('country_master', ['country_code']) as $country_master)
                                                                     <option value="{{$country_master->country_code}}">{{$country_master->country_code}}</option>
-                                                                @endforeach --}}
-                                                                <option value="1" data-content='<img src="{{ asset('images/india.png') }}" style="width: 20px; height: 15px; margin-right:5px; border-radius:0px">  +91'></option>
+                                                                @endforeach
                                                         </select>
                                                         </div>
                                                     </div>
@@ -92,7 +93,7 @@
                                     <div class="col-lg-12 col-md-12">
                                         <div class="form-group">
                                             <label>Please share the link (URL) of the Page which you are reporting against:</label>
-                                            <input type="url" name='report_url' class="form-control" placeholder="www.angel-jobs.in">
+                                            <input type="url" name='report_url' class="form-control" placeholder="www.angel-jobs.fr">
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12">

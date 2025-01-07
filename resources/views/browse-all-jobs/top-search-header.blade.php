@@ -22,7 +22,7 @@
 									<select name="search_city[]" class="citysearch" id="search_city" multiple style="width: 100%">
 										<option value="">All Cities (India)</option>
 										 @foreach (getDropDownlist('cities', ['id', 'city_name','country_id']) as $city_name)
-										 @if($city_name->country_id == '1')
+										 @if($city_name->country_id == '31')
 										<option value="{{ base64_encode($city_name->id)}}">{{ $city_name->city_name}}</option>
 										@endif
 										@endforeach 

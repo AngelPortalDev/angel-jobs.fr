@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Angel Jobs India</title>
+    <title>Welcome to Angel Jobs France</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -57,21 +57,21 @@
 <body>
     <div class="container">
             @if (!empty(session('status')) && session('status') ==='true')
-                <img class="logo-1" src="{{ asset('images/verified-icon.png')}}" alt="Angel Jobs India Logo" width="80px">
+                <img class="logo-1" src="{{ asset('images/verified-icon.png')}}" alt="Angel Jobs France Logo" width="80px">
                     <h2><span style="color: #00d97f;font-weight: 600;">
                         {{session('msg')}}
                     </h2>
             @endif
          @if (!empty(session('status')) && session('status') ==='false')
-           <img class="logo-1" src="{{ asset('images/not-verified-icon.png')}}" alt="Angel Jobs India Logo" width="80px">
+           <img class="logo-1" src="{{ asset('images/not-verified-icon.png')}}" alt="Angel Jobs France Logo" width="80px">
          <h2><span style="color: #d72f37;font-weight: 600;">{{session('msg')}}</span></h2>
             @endif
-        <img class="logo" src="{{ asset('images/angel-Jobs-india-logo.png')}}" alt="Angel Jobs India Logo">
-        <h2 style="font-weight: 600;">Welcome to <br> <span style="font-size: 40px; color: #23a0d2;font-weight: 700;">Angel Jobs India</span></h2>
+        <img class="logo" src="{{ asset('images/angel-jobs-France.png')}}" alt="Angel Jobs France Logo">
+        <h2 style="font-weight: 600;">Welcome to <br> <span style="font-size: 40px; color: #23a0d2;font-weight: 700;">Angel Jobs France</span></h2>
         
-        <p class="message">Thank you for registering on our platform. <br> You are now part of the Angel Jobs India community.</p>
-        <a href="https://www.angel-jobs.in/" class="button" target="_blank">Explore Opportunities</a>
-        <p class="footer">If you have any questions, feel free to contact our support team at <strong>info@angel-jobs.com</strong></p>
+        <p class="message">Thank you for registering on our platform. <br> You are now part of the Angel Jobs France community.</p>
+        <a href="https://www.angel-jobs.fr/" class="button" target="_blank">Explore Opportunities</a>
+        <p class="footer">If you have any questions, feel free to contact our support team at <strong>info@angel-jobs.fr</strong></p>
     </div>
 </body>
 </html>

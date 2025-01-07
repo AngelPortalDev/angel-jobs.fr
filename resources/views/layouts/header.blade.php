@@ -3,7 +3,7 @@
 <head>
 
 	<!-- PAGE TITLE HERE -->
-	<title>Search Jobs in India, Recruitment India</title>
+	<title>Search Jobs in France, Recruitment France</title>
 	
 	<!-- All Meta -->
 	<meta charset="utf-8">
@@ -174,9 +174,9 @@ li.site-button{
                     <!-- Website Logo -->
                     <div class="logo-header mostion logo-dark">
 					@if (session()->has('emp_username') )
-					<a href="{{route('employer-home')}}"><img src="{{ asset('images/Angel-Jobs-India-logo.svg')}}" alt=""></a>
+					<a href="{{route('employer-home')}}"><img src="{{ asset('images/Angel-Jobs-France-logo-01.svg')}}" alt=""></a>
 					@else
-					<a href="{{url('/')}}"><img src="{{ asset('images/Angel-Jobs-India-logo.svg')}}" alt=""></a>
+					<a href="{{url('/')}}"><img src="{{ asset('images/Angel-Jobs-France-logo-01.svg')}}" alt=""></a>
 					@endif
 					</div>
 
@@ -225,27 +225,27 @@ li.site-button{
 							<li>
 								<a href="javascript:void(0);">Jobs <i class="fa fa-chevron-down"></i></a>
 								<ul class="sub-menu mm-show jobs-top-btn">
-								<li class="active">
+									<li>
 										<form class="dezPlaceAni" action="{{url('top-search-bar')}}" method="GET">
-									@csrf
-									<input name="search_job_type[]" value='{{base64_encode(19)}}' hidden>
-									<a class="dez-page"><button class="btn btn-none" type="submit">Full Time</button></a>
-									</form>
-								</li>
-								<li class="active">
-									<form class="dezPlaceAni" action="{{url('top-search-bar')}}" method="GET">
-									@csrf
-									<input name="search_job_type[]" value='{{base64_encode(17)}}' hidden>
-									<a class="dez-page"><button class="btn btn-none" type="submit">Part Time</button></a>
-									</form>
-								</li>
-								<li>
-									<form class="dezPlaceAni" action="{{url('top-search-bar')}}" method="GET">
-									@csrf
-									<input name="search_job_type[]" value='{{base64_encode(16)}}' hidden>
-									<a class="dez-page"><button class="btn btn-none" type="submit">Internship</button></a>
-									</form>
-								</li>
+										@csrf
+										<input name="search_job_type[]" value='{{base64_encode(16)}}' hidden>
+										<a class="dez-page"><button class="btn btn-none" type="submit">Internship</button></a>
+										</form>
+									</li>
+									<li class="active">
+										<form class="dezPlaceAni" action="{{url('top-search-bar')}}" method="GET">
+										@csrf
+										<input name="search_job_type[]" value='{{base64_encode(17)}}' hidden>
+										<a class="dez-page"><button class="btn btn-none" type="submit">Part Time</button></a>
+										</form>
+									</li>
+									<li class="active">
+											<form class="dezPlaceAni" action="{{url('top-search-bar')}}" method="GET">
+										@csrf
+										<input name="search_job_type[]" value='{{base64_encode(19)}}' hidden>
+										<a class="dez-page"><button class="btn btn-none" type="submit">Full Time</button></a>
+										</form>
+									</li>
 								</ul>
 							</li>
 							<li>

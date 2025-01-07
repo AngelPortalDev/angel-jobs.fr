@@ -162,7 +162,7 @@
             <!-- Invoice Header Section -->
             <div class="invoice-header flex-column flex-md-row">
                 <div class="logo-container">
-                    <img class="logo-1 mb-2" src="{{ asset('images/angel-Jobs-india-logo.png') }}" alt="Angel Jobs India">
+                    <img class="logo-1 mb-2" src="{{ asset('images/angel-jobs-France.png') }}" alt="Angel Jobs France">
                 </div>
                 <div class="details-container">
                     <div>

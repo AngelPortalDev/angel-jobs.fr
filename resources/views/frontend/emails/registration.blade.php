@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Jobs in India</title>
+    <title>Search Jobs in France</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,12 +63,12 @@
     <div class="container"> 
             <div class="row align-items-center justify-content-center">
                     <div class="col-md-12 text-center ">
-                        <img class="logo-1 mb-2" src="http://www.dev.angel-jobs.in/assets/images/angel-Jobs-india-logo.png" alt="Angel Jobs India">
+                        <img class="logo-1 mb-2" src="http://www.dev.angel-jobs.fr/assets/images/angel-jobs-France.png" alt="Angel Jobs France">
                     </div>
                     <hr>
                     <div class="col-md-8">
                         
-                        <img class="p-3 " src="{{ asset('images/emails/profileupdate-min.png')}}" alt="Angel-jobs India" style="width: 100%">
+                        <img class="p-3 " src="{{ asset('images/emails/profileupdate-min.png')}}" alt="Angel-jobs France" style="width: 100%">
 
                     </div>
 
@@ -78,15 +78,15 @@
                        
                 
                         <p> Dear #Name#, <br></p>
-                        <p><span style="font-weight: 600">We’re excited to inform you that your profile has been successfully updated on Angel Jobs India. </p>
+                        <p><span style="font-weight: 600">We’re excited to inform you that your profile has been successfully updated on Angel Jobs France. </p>
                        
-                        <p>Your latest information is now visible to potential employers, helping you to explore opportunities that best match your skills and career aspirations. We encourage you to: Double-check your profile to ensure all details are accurate. Explore new job openings that align with your updated profile. If you have any questions or need further assistance, feel free to contact our support team at info@angel-jobs.com Thank you for choosing Angel Jobs India to advance your career!</p>
+                        <p>Your latest information is now visible to potential employers, helping you to explore opportunities that best match your skills and career aspirations. We encourage you to: Double-check your profile to ensure all details are accurate. Explore new job openings that align with your updated profile. If you have any questions or need further assistance, feel free to contact our support team at info@angel-jobs.fr Thank you for choosing Angel Jobs France to advance your career!</p>
                         
                         
                         <p>Thank you for choosing Angel Jobs for your for Searching Jobs!</p>
                             <p>Best regards, <br><br> Angel Jobs Team</p>                           
-                         <a href="https://www.facebook.com/angeljobsdotcom/" target="_blank"><img class="social-logo mb-2" src="http://www.dev.angel-jobs.in/assets/images/social/social-media-01.png" alt="social logo"></a>
-            <a href="https://www.instagram.com/angeljobsdotcom/" target="_blank"><img class="social-logo mb-2" src="http://www.dev.angel-jobs.in/assets/images/social/social-media-02.png" alt="social logo"></a>
+                         <a href="https://www.facebook.com/angeljobsdotcom/" target="_blank"><img class="social-logo mb-2" src="http://www.dev.angel-jobs.fr/assets/images/social/social-media-01.png" alt="social logo"></a>
+            <a href="https://www.instagram.com/angeljobsdotcom/" target="_blank"><img class="social-logo mb-2" src="http://www.dev.angel-jobs.fr/assets/images/social/social-media-02.png" alt="social logo"></a>
                          </div>
             </div>
     </div>  

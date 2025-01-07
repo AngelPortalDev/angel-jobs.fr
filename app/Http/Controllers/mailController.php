@@ -25,9 +25,9 @@ class mailController extends Controller
             // Test
             // $user['to'] = 'aftab@angel-portal.com';
             $send = Mail::send('mail', $data, function ($message) use ($user, $email, $name) {
-                $message->from('amservices12info@gmail.com');
+                $message->from('abdullah@angel-portal.com');
                 $message->to($user['to']);
-                $message->subject('Enquiry Recieve from Angel-jobs.in');
+                $message->subject('Enquiry Recieve from Angel-jobs.fr');
                 $message->replyTo($email, $name);
             });
             echo json_encode(array('code' => 200, 'remark' => 'send'));

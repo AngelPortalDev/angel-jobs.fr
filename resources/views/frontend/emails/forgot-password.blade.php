@@ -61,14 +61,14 @@
     <div class="container">
         <div class="row align-items-center justify-content-center">
             <div class="col-md-12 text-center">
-                <img class="logo-1 mb-2" src="http://www.dev.angel-jobs.in/assets/images/angel-Jobs-india-logo.png" alt="Angel Jobs India">
+                <img class="logo-1 mb-2" src="http://www.dev.angel-jobs.fr/assets/images/angel-jobs-France.png" alt="Angel Jobs France">
             </div>
             <hr>
             <div class="col-md-8">
                 <h5 class="mb-3 text-center">
                     Password Reset Request for Your <span class="text-primary">Angel-Jobs</span>#Cat# Account
                 </h5>
-                <img class="p-3" src="http://www.dev.angel-jobs.in/assets/images/emails/forgot_password.png" alt="Forgot Password" style="width: 100%">
+                <img class="p-3" src="http://www.dev.angel-jobs.fr/assets/images/emails/forgot_password.png" alt="Forgot Password" style="width: 100%">
             </div>
 
             <div class="col-md-12 ps-md-4 my-md-4 border-md-start">
@@ -80,14 +80,14 @@
 
                 <p style="margin-top: 10px;">For your security, please note that this link is valid for 24 hours.</p>
 
-                <p style="margin-top: 10px">If you have any issues or need assistance, feel free to contact us at <strong><a class="text-decoration-none text-dark" href="mailto:info@angel-jobs.in">info@angel-jobs.com</a></strong>. We're here to help!</p>
+                <p style="margin-top: 10px">If you have any issues or need assistance, feel free to contact us at <strong><a class="text-decoration-none text-dark" href="mailto:info@angel-jobs.fr">info@angel-jobs.fr</a></strong>. We're here to help!</p>
 
                 <p>Thank you for being a part of Angel Jobs!</p>
 
                 <p>Best Regards, <br> Angel Jobs Team</p>
 
-                <a href="" target="_blank"><img class="social-logo mb-2" src="http://www.dev.angel-jobs.in/assets/images/social/social-media-01.png" alt="social logo"></a>
-                <a href="" target="_blank"><img class="social-logo mb-2" src="http://www.dev.angel-jobs.in/assets/images/social/social-media-02.png" alt="social logo"></a>
+                <a href="" target="_blank"><img class="social-logo mb-2" src="http://www.dev.angel-jobs.fr/assets/images/social/social-media-01.png" alt="social logo"></a>
+                <a href="" target="_blank"><img class="social-logo mb-2" src="http://www.dev.angel-jobs.fr/assets/images/social/social-media-02.png" alt="social logo"></a>
                 </div>
         </div>
     </div>

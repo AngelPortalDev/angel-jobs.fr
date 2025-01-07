@@ -4,12 +4,12 @@
     <div class="page-content">
         <!-- Section Banner -->
         <div class="dez-bnr-inr dez-bnr-inr-md main-slider"
-            style="background-image:url({{ asset('images/main-slider/india-city-bg.jpg') }});">
+            style="background-image:url({{ asset('images/france-city-bg.jpg') }});">
             <div class="container">
                 <div class="dez-bnr-inr-entry align-m">
                     <div class="find-job-bx">
                         <h2 class="hero-sect-top-text main-heading-home-page">Find jobs in <span
-                                class="text-primary">India</span></h2>
+                                class="text-primary">France</span></h2>
 
                         <!--<h2>Search among over <span class="text-primary">50,000</span> <br/>  open job opportunities in <span class="text-primary">Malta.</span></h2>-->
 
@@ -126,7 +126,7 @@
                 <div class="section-head head-counter clearfix text-center">
                     <div class="">
                         <h2 class="m-b5">Job by Industries</h2>
-                        <h6 class="fw3">Explore diverse job opportunities available in various sectors across India.</h6>
+                        <h6 class="fw3">Discover a variety of job openings across different categories in France.</h6>
                     </div>
                     {{-- @php
                         $jobountlist = [];
@@ -272,49 +272,48 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-12 section-head text-center">
-                        <h2 class="m-b5">Indian Job Hubs</h2>
-                        <h6 class="fw4 m-b0">Let's discover job opportunities in the vibrant cities of India that match your skills! Starting with Bangalore, often called India's "Silicon Valley," this city is renowned for its booming tech industry, flourishing startup ecosystem, and richly diverse lifestyle. Mumbai stands tall as South Asia's financial and entertainment hub, offering many opportunities. These cities have something for every jobseeker!
+                        <h2 class="m-b5">French Job Hubs</h2>
+                        <h6 class="fw4 m-b0">Explore skill-match job opportunities in France's dynamic cities! Lyon is renowned for biotech; Paris offers global career prospects; Bordeaux boasts a vibrant student scene; Toulouse is a hub for aerospace; Nantes thrives in technology; Strasbourg is a center for manufacturing; Rennes specializes in automotive and electronics; and Marseille provides coastal career possibilities.
                         </h6>
                     </div>
                 </div>
                 <div class="row justify-content-center">
                     @php
                         $citycountlist = [];
-                        $citycountlist = getData('cities', ['city_name', 'id'], ['country_id' => 1]);
+                        $citycountlist = getData('cities', ['city_name', 'id'], ['country_id' => 31]);
                         // print_r($citycountlist);
                         // exit;
                     @endphp
-                    @if(isset($citycountlist[2]) && $citycountlist[2]->city_name)
+                    @if(isset($citycountlist[1]) && $citycountlist[1]->city_name)
                     <div class="col-lg-4 col-sm-6 col-md-6 m-b30">
-                        <a href="{{url('top-search-bar')}}?search_city%5B%5D={{base64_encode($citycountlist[2]->id)}}">
+                        <a href="{{url('top-search-bar')}}?search_city%5B%5D={{base64_encode($citycountlist[1]->id)}}">
                         <div class="city-bx align-items-end  d-flex"
-                            style="background-image:url({{ asset('images/city/mumbai.jpg') }});">
+                            style="background-image:url({{ asset('images/city/paris.jpg') }});">
                             <div class="city-info">
-                                <h5>{{ $citycountlist[2]->city_name }}</h5>
-                                <span>{{ jobCount('job_posting_view', ['location_hiring' => $citycountlist[2]->id, 'is_deleted' => 'No', 'status' => 'Live','approval_status' => 'APPROVED']) }}
+                                <h5>{{ $citycountlist[1]->city_name }}</h5>
+                                <span>{{ jobCount('job_posting_view', ['location_hiring' => $citycountlist[1]->id, 'is_deleted' => 'No', 'status' => 'Live','approval_status' => 'APPROVED']) }}
                                     Jobs</span>
                             </div>
                         </div>
                         </a>
                     </div>
                     @endif
-                    @if(isset($citycountlist[5]) && $citycountlist[5]->city_name)
+                    @if(isset($citycountlist[0]) && $citycountlist[0]->city_name)
                     <div class="col-lg-4 col-sm-6 col-md-6 m-b30">
-                        <a href="{{url('top-search-bar')}}?search_city%5B%5D={{base64_encode($citycountlist[5]->id)}}">
+                        <a href="{{url('top-search-bar')}}?search_city%5B%5D={{base64_encode($citycountlist[0]->id)}}">
                         <div class="city-bx align-items-end  d-flex"
-                            style="background-image:url({{ asset('images/city/delhi.jpg') }});">
+                            style="background-image:url({{ asset('images/city/lyon.jpg') }});">
                             <div class="city-info">
-                                <h5>{{ $citycountlist[5]->city_name }}</h5>
-                                <span>{{ jobCount('job_postings', ['location_hiring' => $citycountlist[5]->id, 'is_deleted' => 'No', 'status' => 'Live','approval_status' => 'APPROVED']) }}
+                                <h5>{{ $citycountlist[0]->city_name }}</h5>
+                                <span>{{ jobCount('job_postings', ['location_hiring' => $citycountlist[0]->id, 'is_deleted' => 'No', 'status' => 'Live','approval_status' => 'APPROVED']) }}
                                     Jobs</span>
                             </div>
                         </div>
                         </a>
                     </div>
                     @endif
-                    @if(isset($citycountlist[3]) && $citycountlist[3]->city_name)
+                    {{-- @if(isset($citycountlist[3]) && $citycountlist[3]->city_name)
                     <div class="col-lg-4 col-sm-6 col-md-6 m-b30">
-                        {{-- <a href="javascript:void(0);"> --}}
                         <div class="city-bx align-items-end  d-flex"
                             style="background-image:url({{ asset('images/city/banglore.jpg') }});">
                             <div class="city-info">
@@ -323,7 +322,6 @@
                                     Jobs</span>
                             </div>
                         </div>
-                        {{-- </a> --}}
                     </div>
                     @endif
 
@@ -368,7 +366,7 @@
                         </div>
                         </a>
                     </div>
-                    @endif
+                    @endif --}}
                 </div>
             </div>
         </div>
@@ -378,7 +376,7 @@
             <div class="container">
                 <div class="d-flex job-title-bx section-head">
                     <div class="me-auto">
-                        <h2 class="m-b5">Jobs in India</h2>
+                        <h2 class="m-b5">Jobs in France</h2>
                         <h6 class="fw4 m-b0">5+ Recently Added Jobs</h6>
                     </div>
                     {{-- <div class="align-self-end">
@@ -857,10 +855,9 @@
     <div class="section-full about-work content-inner-1 bg-white pb-5">
         <div class="container">
             <div class="section-head text-center style-1">
-                <h6>How do I get a job in India?</h6>
-                <h2 class="section-title">Get a job in India in four easy steps</h2>
-                <p>Explore your desired job with Angel-Jobs India: Create a profile, discover opportunities, showcase your skills, and apply seamlessly. 
-                    Embark on your path to the desired job today.</p>
+                <h6>How to Approach Job Search in France?</h6>
+                <h2 class="section-title">Four Simple Steps to Secure a Job in France</h2>
+                <p>Explore your desired job with Angel-Jobs France: Create a profile, discover opportunities, showcase your skills, and apply seamlessly. Embark on your path to the desired job today.</p>
             </div>
             <div class="row sp20  about-work-inner">
 
@@ -886,7 +883,7 @@
                                 </svg>
                             </a>
                             <a class="dez-tilte">Create Account</a>
-                            <p class="dz-text">Sign up on Angel-Jobs India for a smoother application process.</p>
+                            <p class="dz-text">Sign up on Angel-Jobs France to explore job opportunities, show off your skills, and apply hassle-free.</p>
                         </div>
                     </div>
                 </div>
@@ -903,8 +900,7 @@
                                 </svg>
                             </a>
                             <a class="dez-tilte">Search Jobs</a>
-                            <p class="dz-text">Begin your job search on Angel-Jobs India by exploring roles that
-                                interest you.</p>
+                            <p class="dz-text">Start a Job Hunt! Discover your desired roles on Angel-Jobs France. Your perfect job is waiting for you.</p>
                         </div>
                     </div>
                 </div>
@@ -933,8 +929,7 @@
                                 </svg>
                             </a>
                             <a class="dez-tilte">Send Your Resume</a>
-                            <p class="dz-text">When you find a job you like, simply submit your resume through the
-                                website.</p>
+                            <p class="dz-text">Once you find your preferred job, effortlessly submit your resume via the website. <br><br></p>
                         </div>
                     </div>
                 </div>
@@ -954,8 +949,7 @@
                                 </svg>
                             </a>
                             <a class="dez-tilte">Apply Easily</a>
-                            <p class="dz-text">Once your account is set up and your resume is submitted, applying for
-                                jobs becomes easy.</p>
+                            <p class="dz-text">Once your account is set up and your resume is submitted, applying for jobs becomes a breeze.</p>
                         </div>
                     </div>
                 </div>

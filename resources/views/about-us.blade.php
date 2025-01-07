@@ -28,11 +28,10 @@
                     <div class="col-md-12 col-lg-12">
                         <h6 class=" m-b0">About Us</h6>
                 
-                        <h1 class="about-h1">Welcome to Angel-Jobs for India - your guide for shaping your professional journey!</h1>
+                        <h1 class="about-h1">Welcome to Angel-Jobs France - where we help shape your career journey!</h1>
                 
                         <p class="m-b15">
-                            Are you ready to explore job opportunities in India? Angel-Jobs is your dedicated partner in connecting
-                            employers with job seekers and fostering meaningful interactions for success. </p>
+                            Looking for jobs in France? Angel-Jobs is here to bring together employers and jobseekers, making meaningful connections for success. We're like matchmakers for jobs, linking great companies with talented individuals like yourself. Think of us as your career cupid, ensuring you find the job that truly inspires you.</p>
                 
                     </div>
                 </div>
@@ -44,26 +43,25 @@
                 
                             <div class="col-md-12">
                                 <p>
-                                    <strong>Here's What We Offer:</strong><br>
-                                    We are your trusted companions in navigating the job market and securing exciting opportunities on
-                                    the beautiful island of India.
+                                    <strong>What We Offer:</strong><br>
+									We are here to help you navigate the job market and find preferred opportunities in France. You can trust us to be your companions throughout the job search journey.
                                 </p>
                             </div>
                 
                 
                             <div class="col-md-6 mb-3 ">
-                                <strong>Personal Career Advisor:</strong>
+                                <strong>Your Career Guide:</strong>
                                 <ol>
-                                    <li>Tailored guidance just for you
-                                    <li>Pro tips for acing interviews
-                                    <li>Customized career strategies
+                                    <li>Personalized advice just for you.
+                                    <li>Pro tips for acing interviews.
+                                    <li>Customized career strategies.
                                 </ol>
                             </div>
                 
                             <div class="col-md-6 mb-3">
                                 <strong>Priority Application Processing:</strong>
                                 <ol>
-                                    <li>Fast-track your applications.</li>
+                                    <li>Speed up your applications.</li>
                                     <li>Get priority consideration from employers.</li>
                                 </ol>
                             </div>
@@ -71,8 +69,8 @@
                             <div class="col-md-6 mb-3">
                                 <strong>Precision-Matched Job Recommendations:</strong>
                                 <ol>
-                                    <li>Jobs that fit your skills and preference.</li>
-                                    <li>Say goodbye to endless job searches.</li>
+                                    <li>Discover jobs that fit you perfectly.</li>
+                                    <li>No more endless job searches.</li>
                             </div>
                 
                             <div class="col-md-6 mb-3">
@@ -85,8 +83,8 @@
                             <div class="col-md-6 mb-3">
                                 <strong>Real-Time Job Notifications:</strong>
                                 <ol>
-                                    <li>Premium job are delivered instantly.</li>
-                                    <li>Aligned with your preference.</li>
+                                    <li>Premium jobs are delivered instantly.</li>
+                                    <li>Aligned with your preferences.</li>
                             </div>
                 
                             <div class="col-md-6 mb-3">
@@ -111,32 +109,25 @@
 				
                 <div class="row sp20 wrapper-spacing">
                     
-                    <div class="col-md-8 m-b20 job-wraper" style="display: flex;">
+                    <div class="col-md-6 m-b20 job-wraper" style="display: flex;">
                         <a class="job-bx-wraper" style="display: flex;">
                             <div class="icon-content" >
                                 <h5 class="job-name">Mission</h5>
                                 <span>
-                                    <p>Our mission at Angel-Jobs India is to redefine job placement by matching skills, opportunities, and careers. We serve as more than a bridge between employers and job seekers; we are dedicated to:</p>
-                                    <ol style="margin-left: 15px;">
-                                    <li>Empowering job seekers to reach their full potential.</li>
-                                    <li>Facilitating smooth transitions from job search to settling in India.</li>
-                                    <li>Providing comprehensive solutions for worry-free experiences.</li>
-                                    <li>Offering personalized support for uniquely tailored success.</li>
-                                     </ol>
-                                    
-                                    <p>Our commitment lies in making the job-seeking process genuine, simple, and effective for both employers and individuals seeking opportunities in India.</p>
+                                    <p>At Angel-Jobs France, our mission is clear: we want to help you discover a job that makes you happy. Everyone deserves work they love and eagerly anticipate. We aim to link you with opportunities that suit your skills and preferences, making the job hunt simple and enjoyable. We're on a mission to ensure you discover a job that fits you perfectly!</p>
+									
+									<p>Join Angel-Jobs today for a job journey you'll truly enjoy!</p>
                                     
                                    
                                     </span>
                             </div>
                         </a>				
                     </div>
-                    <div class="col-md-4 m-b20 job-wraper" style="display: flex;">
+                    <div class="col-md-6 m-b20 job-wraper" style="display: flex;">
                         <a class="job-bx-wraper" style="display: flex;">
                             <div class="icon-content">
                                 <h5 class="job-name">Vision</h5>
-                                <span>Empowering individuals to build successful careers and creating a dynamic ecosystem where talent finds opportunities seamlessly. 
-                                We see angel-jobs as a catalyst that propels professionals towards their aspirations, fostering a thriving community where every career journey is a path to success.</span>
+                                <span><p>We have a vision at Angel-Jobs France to help people make their careers awesome and create a place where skills meet opportunities easily. We want to connect people with jobs that match their skills and bring them happiness. We dream of a future where you can easily find a job and everyone can happily follow their passions. Join Angel-Jobs today, and let's build a happy community where every career journey leads to success!</p></span>
                             </div>
                         </a>				
                     </div>
@@ -151,7 +142,7 @@
 							 </div>
 							<div class="icon-content">
 								<h5 class="dlab-tilte text-uppercase">Our Reputation</h5>
-								<p>Our reputation stands as a beacon of trust, built on a foundation of quality service, reliability, and the lasting relationships we have built with our community and partners.</p>
+								<p>Our good reputation is like a trust beacon. We built it on providing quality service, offering a reliable service, and forming lasting connections with our community and partners.</p>
 							</div>
 						</div>
 					</div>
@@ -160,7 +151,7 @@
 							<div class="icon-md text-primary m-b20"><img src="{{ asset('images/about-icons-02.png')}}" alt="" srcset=""></div>
 							<div class="icon-content">
 								<h5 class="dlab-tilte text-uppercase">Teamwork</h5>
-								<p>We work together, celebrate diverse talent, and leverage cutting-edge technology to connect candidates with ideal positions. We ensure perfect matching for a seamless fit.</p>
+								<p>At Angel-Jobs France, we're like a big family using awesome technology to help you find the preferred job. We work together to discover the job that fits your requirements and skill set and make your desired job a reality.</p>
 							</div>
 						</div>
 					</div>
@@ -169,7 +160,7 @@
 							<div class="icon-md text-primary m-b20"><img src="{{ asset('images/about-icons-03.png')}}" alt="" srcset=""></div>
 							<div class="icon-content">
 								<h5 class="dlab-tilte text-uppercase">Leadership</h5>
-								<p>Our leaders act swiftly, engage effectively, and with determination to ensure flawless execution to achieve success. They promote teamwork to prioritize innovation.</p>
+								<p>Our leaders at Angel-Jobs France act quickly, communicate well, and provide expert guidance for your career journey. They prioritize teamwork and innovation to ensure your success.</p>
 							</div>
 						</div>
 					</div>
@@ -178,7 +169,7 @@
 							<div class="icon-md text-primary m-b20"><img src="{{ asset('images/about-icons-04.png')}}" alt="" srcset=""></div>
 							<div class="icon-content">
 								<h5 class="dlab-tilte text-uppercase">Positive Impact</h5>
-								<p>We are committed to making a positive impact by empowering job seekers to connect to opportunities for a better world.</p>
+								<p>Our commitment is to empower jobseekers for a better world. Explore diverse roles, build valuable skills, and join a supportive community for growth and success.</p>
 							</div>
 						</div>
 					</div>
@@ -186,8 +177,8 @@
 						<div class="icon-bx-wraper p-a30 center bg-gray radius-sm">
 							<div class="icon-md text-primary m-b20"><img src="{{ asset('images/about-icons-05.png')}}" alt="" srcset=""></div>
 							<div class="icon-content">
-								<h5 class="dlab-tilte text-uppercase">Speedy Service</h5>
-								<p>We act immediately upon receiving your inquiry, rapidly beginning to explore your best opportunities to ensure prompt and efficient service.</p>
+								<h5 class="dlab-tilte text-uppercase">Quality Service</h5>
+								<p>We provide excellent service, ensuring a smooth job journey. Offering personalized guidance and quick responses, we prioritize your success with genuine care.</p>
 							</div>
 						</div>
 					</div>
@@ -196,7 +187,7 @@
 							<div class="icon-md text-primary m-b20"><img src="{{ asset('images/about-icons-06.png')}}" alt="" srcset=""></div>
 							<div class="icon-content">
 								<h5 class="dlab-tilte text-uppercase">Great Support</h5>
-								<p>Our team is ready to help. With advanced automation and personalized profiles, we ensure you get the support you deserve from our dedicated team.</p>
+								<p>Our team is here to assist with advanced automation and personalized profiles. Expect reliable support as we navigate your career path together. Feel the warmth of genuine assistance.</p>
 							</div>
 						</div>
 					</div>

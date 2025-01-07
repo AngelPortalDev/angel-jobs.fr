@@ -63,7 +63,7 @@
         <div class="row align-items-center justify-content-center">
             <div class="col-md-12 text-center">
                 <!-- Company Logo -->
-                <img class="logo-1 mb-2" src="{{ asset('images/angel-Jobs-india-logo.png') }}" alt="Angel Jobs India">
+                <img class="logo-1 mb-2" src="{{ asset('images/angel-jobs-France.png') }}" alt="Angel Jobs France">
             </div>
             <hr>
             <div class="col-md-8">
@@ -89,7 +89,7 @@
                 <p>To get started, simply click the link below to log in and start posting job openings:</p>
                 <p><a class="button" href="[Login URL]" target="_blank">Login to Angel Jobs</a></p>
 
-                <p>If you have any questions or need assistance with your account, feel free to reach out to us at <strong><a class="text-decoration-none text-dark" href="mailto:info@angel-jobs.in">info@angel-jobs.com</a></strong>. Our team is here to help you every step of the way.</p>
+                <p>If you have any questions or need assistance with your account, feel free to reach out to us at <strong><a class="text-decoration-none text-dark" href="mailto:info@angel-jobs.fr">info@angel-jobs.fr</a></strong>. Our team is here to help you every step of the way.</p>
 
                 <p>Thank you for choosing Angel Jobs. We look forward to helping you find top talent for your organization!</p>
 

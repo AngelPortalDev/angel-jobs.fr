@@ -1,5 +1,5 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('css/accordion.scss')}}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.in/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
 
 @extends('layouts.main')
 @section('content')
@@ -16,10 +16,10 @@
             <ul class="accordion-list">
                 
                 <li>
-                  <h3>How can I create an employer account on Angel Jobs India?</h3>
+                  <h3>How can I create an employer account on Angel Jobs France?</h3>
                   <div class="answer">
                     <p>Creating an employer account on Angel-Jobs is quick and easy:</p>
-                    <p>Visit the Angel-Jobs website at https://www.angel-jobs.in/login-employer.</p>
+                    <p>Visit the Angel-Jobs website at https://www.angel-jobs.fr/login-employer.</p>
                     
                     <p>Click on the "Employer Login" or "Register" button.</p>
                     
@@ -29,7 +29,7 @@
                     <p>Choose a username and an alphanumeric password for your account.</p>
                     <p>Log in with your new account details.</p>
                     <p>Complete your employer profile with company details and job postings.</p>
-                    <p>Congratulations! Your employer account on Angel Jobs India is ready to connect you with potential talents</p>
+                    <p>Congratulations! Your employer account on Angel Jobs France is ready to connect you with potential talents</p>
 
                   </div>
                 </li>
@@ -49,7 +49,7 @@
                     <p>Real-time Notifications: Stay informed with instant updates on applications and job matches.</p>
                     <p>Time- and Cost-Efficiency: Efficiently find candidates that match your specific job requirements.</p>
                     <p>Targeted Recruitment: Locate candidates that align with your specific job requirements.</p>
-                    <p>By using these features and benefits, employers on Angel Jobs India can streamline their recruitment process and connect with top talent efficiently.</p>
+                    <p>By using these features and benefits, employers on Angel Jobs France can streamline their recruitment process and connect with top talent efficiently.</p>
 
                   </div>
 
@@ -57,7 +57,7 @@
                 <li>
                   <h3>How do I post a job vacancy on the platform, and what information should I include?</h3>
                   <div class="answer">
-                    <p>Here is a list of what to do and what to include when you are posting a job vacancy on Angel Jobs India:</p>
+                    <p>Here is a list of what to do and what to include when you are posting a job vacancy on Angel Jobs France:</p>
                     <p>Log in to your Angel-Jobs employer account.</p>
                     
                     <p>Once logged in, go to your dashboard.</p>
@@ -78,7 +78,7 @@
                 <li>
                   <h3>How can I search and view potential candidates on Angel-Jobs?</h3>
                   <div class="answer">
-                    <p>Searching and viewing potential candidates on Angel Jobs India is a straightforward process. Here's a simple guide:</p>
+                    <p>Searching and viewing potential candidates on Angel Jobs France is a straightforward process. Here's a simple guide:</p>
                     <p>Login or Create an Account: Log in to your Angel Jobs account. If you don't have one, create an account on the platform.</p>
                     
                     <p>Navigate to Jobseeker Search: Look for a section or tab that's about finding candidates. It labeled "Jobseeker"</p>
@@ -122,7 +122,7 @@
                   <h3>Can I browse resumes and profiles without posting a job on Angel-Jobs?</h3>
                   <div class="answer">
                     <p>You can check out resumes and profiles on Angel Jobs without posting a job. Here's how:</p>
-                    <p>Create an employer account on Angel Jobs India’s portal.</p>
+                    <p>Create an employer account on Angel Jobs France’s portal.</p>
                     
                     <p>Log in to your account.</p>
                     

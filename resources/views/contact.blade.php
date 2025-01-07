@@ -40,9 +40,9 @@
                                         <option value="Jobseeker">Jobseeker</option>
                                         <option value="Employer">Employer</option>
                                     </select></div>
-                                    <span id="cat_error" style="color:red;display:none; margin-bottom: 5px;">
+                                    <span id="cat_error" style="color:red;display:none;">
                                         <small>
-                                            <i>Please select category </i>
+                                            <i>Please Select Category </i>
                                         </small>
                                     </span>
                                 </div>
@@ -56,7 +56,7 @@
                                         </div>
                                         <span id="name_error" style="color:red;display:none;">
                                             <small>
-                                                <i>Please enter your name </i>
+                                                <i>Please Enter Your Name </i>
                                             </small>
                                         </span>
                                     </div>
@@ -69,7 +69,7 @@
                                         </div>
                                         <span id="email_error" style="color:red;display:none;">
                                             <small>
-                                                <i>Please enter email id </i>
+                                                <i>Please Enter Email id </i>
                                             </small>
                                         </span>
                                         <span id="email_ptrn_error" style="color:red;display:none;">
@@ -84,20 +84,15 @@
                                         <div class="col-4" style="padding-right: 0;">
                                             <div class="form-group">
                                                 <div class="dropdown bootstrap-select mob-code">
-                                                    <select class="" id="contry_contact_no" name="contry_contact_no">
-                                                        {{-- <option value="" >Select Country Code</option> --}}
-                                                    {{-- @foreach (getDropDownlist('country_master', ['id','country_code','country_name'],'1') as $code) --}}
-                                                    {{-- @if($code->id == '') --}}
-                                                        {{-- <option value="1" data-content="{{Storage::url('app/flags/india.png')}}">+91</option> --}}
-
-                                                        <option value="1" data-content='<img src="{{ asset('images/india.png') }}" style="width: 20px; height: 15px; margin-right:5px; border-radius:0px">  +91'></option>
-                                                    {{-- @endif --}}
-                                                    {{-- @endforeach  --}}
+                                                    <select class="" id="contry_contact_no" >
+                                                    @foreach (getDropDownlist('country_master', ['id','country_code','country_name']) as $code)
+                                                    <option value="{{ $code->id}}" >{{ $code->country_code}}</option>
+                                                    @endforeach 
                                                     </select>
                                                 </div>
                                                      <span id="code_contact_no_error" style="color:red;display:none;">
                                                     <small>
-                                                        <i>Select code</i>
+                                                        <i>Select Code</i>
                                                     </small>
                                                 </span>
                                                 
@@ -127,7 +122,7 @@
                                         </div>
                                         <span id="message_error" style="color:red;display:none;">
                                             <small>
-                                                <i>Please enter message </i>
+                                                <i>Please Enter Message </i>
                                             </small>
                                         </span>
                                     </div>
@@ -152,27 +147,19 @@
                     </div>
                 </div>
 
-
                 <!-- right part start -->
-                <div class="col-lg-6 col-md-6 ">
+                <div class="col-lg-6 col-md-6">
                     <div class="p-a30 border-1  m-b30 contact-area border-1 align-self-stretch radius-sm">
                         <h4 class="m-b10">Quick Contact</h4>
                         <p>If you have any questions simply use the following contact details.</p>
                         <ul class="no-margin">
-                            {{-- <li class="icon-bx-wraper left m-b30">
-                                <div class="icon-bx-xs border-1"> <a class="icon-cell"><i
-                                            class="ti-location-pin"></i></a> </div>
-                                <div class="icon-content">
-                                    <h6 class="text-uppercase m-tb0 dez-tilte">Address:</h6>
-                                    <p>23 Vincenzo Dimech Street, Floriana Malta.</p>
-                                </div>
-                            </li> --}}
+
                             <li class="icon-bx-wraper left  m-b30">
                                 <div class="icon-bx-xs border-1"> <a class="icon-cell"><i
                                             class="ti-email"></i></a> </div>
                                 <div class="icon-content">
                                     <h6 class="text-uppercase m-tb0 dez-tilte">Email:</h6>
-                                    <p><a href="mailto:info@angel-jobs.com">info@angel-jobs.com</p>
+                                    <p>info@angel-jobs.fr</p>
                                 </div>
                             </li>
                             <!-- <li class="icon-bx-wraper left">
@@ -185,8 +172,8 @@
                         </ul>
                         <div class="m-t20">
                             <ul class="dez-social-icon dez-social-icon-lg">
-                                <li><a href="https://www.facebook.com/angeljobsdotcom/" target="_blank" class="fab fa-facebook-f bg-primary"></a></li>
-                                <li><a href="https://www.instagram.com/angeljobsdotcom/" target="_blank" class="fab fa-instagram bg-primary"></a></li>
+                                <li><a target="_blank" href="https://www.facebook.com/people/Angel-Jobs-Malta/61555632533346/" class="fab fa-facebook-f bg-primary"></a></li>
+                                <li><a target="_blank" href="https://www.instagram.com/angeljobsmalta/" class="fab fa-instagram bg-primary"></a></li>
                             </ul>
                         </div>
                     </div>
