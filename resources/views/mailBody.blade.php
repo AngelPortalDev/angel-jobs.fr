@@ -1,0 +1,2 @@
+{!!    htmlspecialchars_decode($newContain) !!}
+    
