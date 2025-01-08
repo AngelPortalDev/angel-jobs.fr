@@ -217,7 +217,7 @@
 						<input class="form-check-input sal_fil" name="left_sal_fil[]" id="salary-op{{$data->id}}"
 							type="checkbox" value="{{$data->id}}">
 						<label class="form-check-label" for="salary-op{{$data->id}}"
-							id="left_sal1_fil"> <i class='fa fa-euro-sign'></i> {{$data->salary_range}} 
+							id="left_sal1_fil"> {{$data->salary_range}} 
 							{{-- <span>(0)</span>  --}}
 						</label>
 					</div>
