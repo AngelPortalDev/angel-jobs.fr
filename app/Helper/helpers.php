@@ -18,7 +18,8 @@ if (!function_exists('getDropDownlist')) {
                 $query = DB::table($table)->select($select)->where('is_deleted', 'No')->orderBy('id','ASC');
             }
             elseif($table == 'notice_periods'){
-                $query = DB::table($table)->select($select)->where('is_deleted', 'No')->orderBy($order,'DESC');
+                // $query = DB::table($table)->select($select)->where('is_deleted', 'No')->orderBy($order,'ASC');
+                $query = DB::table($table)->select($select)->where('is_deleted', 'No')->orderBy('id','ASC');
         }else{
                 $query = DB::table($table)->select($select)->where('is_deleted', 'No')->orderBy($order,'ASC');
             }
@@ -80,7 +81,7 @@ if (!function_exists('jobList')) {
             //         });  
             //     }                
             // }
-            $query->where('job_expired_on', '>=', Carbon::now('Asia/Kolkata')->format('Y-m-d'));
+            $query->where('job_expired_on', '>=', Carbon::now('Europe/Paris')->format('Y-m-d'));
             $data = $query->get();
             return $data;
         }
@@ -134,7 +135,7 @@ if (!function_exists('jobCount')) {
     function jobCount($table, $where)
     {
         if (isset($table) && !empty($table) && isset($where) && is_array($where)) {
-            $data = DB::table($table)->where($where)->where('job_expired_on', '>=', Carbon::now('Asia/Kolkata')->format('Y-m-d'))->count();
+            $data = DB::table($table)->where($where)->where('job_expired_on', '>=', Carbon::now('Europe/Paris')->format('Y-m-d'))->count();
             return $data;
         }
     }
@@ -171,7 +172,7 @@ if (!function_exists('getCurrentPlan')) {
 
         if (!empty($table) && !empty($where) && is_array($where)) {
 
-            $currentDate = Carbon::now('Asia/Kolkata');
+            $currentDate = Carbon::now('Europe/Paris');
             $today = $currentDate->format('Y-m-d');
             $planDetails = DB::table($table)->where($where)->where(function ($query) {
                 $query->where('left_credit_job_posting_plan', '>', 0)->orWhere('free_assign_job_posting', '>', 0);

@@ -146,7 +146,7 @@
 									<div class="acod-head">
 										<h6 class="acod-title"> 
 											<a data-bs-toggle="collapse"  href="#salary" class="collapsed" >
-												Salary 
+												Salary (Monthly)
 											</a>
 										</h6>
 									</div>

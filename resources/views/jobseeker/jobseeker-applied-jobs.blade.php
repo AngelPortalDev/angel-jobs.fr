@@ -52,12 +52,12 @@
 								<li>
 									<div class="post-bx">
 										<div class="job-post-info m-a0">
-											<h4><a href='{{ url('job-details-view', $id)}}' target="_blank">{{htmlspecialchars_decode($data->job_title)}}</a></h4>
+											<h4><a href='{{ url('job-details-view', $id)}}' target="_blank">{!! htmlspecialchars_decode($data->job_title) !!}</a></h4>
 											<ul>
 												<li>{{htmlspecialchars_decode($data->company_name)}}</li>
 												<li><i class="fas fa-map-marker-alt"></i> {{htmlspecialchars_decode($data->location_hiring_name)}}</li>
-												@if ($data->salary_hide === 'No')
-												<li><i class="far fa-money-bill-alt"></i> {{ empty($data->job_salary_to_name) ? 'Not Disclosed' : htmlspecialchars_decode($data->job_salary_to_name) }}</li>
+												@if (isset($data->job_type_name) && !empty($data->job_type_name) )
+													<li> <i class='fas fa-tasks'></i><span>{{ $data->job_type_name}}</span></li>
 												@endif
 											</ul>
 											{{-- <div class="job-time m-t15 m-b10">
@@ -71,6 +71,9 @@
 												{{-- <a href="jobs-my-resume.html" class="site-button button-sm float-end">Apply Job</a> --}}
 											</div>
 										</div>
+
+
+
 									</div>
 								</li>
 									@endforeach

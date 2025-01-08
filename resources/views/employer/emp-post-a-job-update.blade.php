@@ -255,7 +255,7 @@
 									</div>
 									<div class="col-lg-3 col-md-3">
 										<div class="form-group">
-											<label>Salary Range</label>
+											<label>Salary Range (Monthly)</label>
 											<select class="slec" id="job_sal"  name="job_sal">
 												@if (isset($jobDatas->job_salary_to_name))
 														<option value="{{ $jobDatas->job_salary_to}}" selected>{{ $jobDatas->job_salary_to_name}}</option>

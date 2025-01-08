@@ -27,7 +27,7 @@ class commonController extends Controller
         $this->JobView = new Jobs;
         $this->EmpPlan = new EmpPlan;
         $this->JsPlan = new JsPlan;
-        $this->currentDate = Carbon::now('Asia/Kolkata');
+        $this->currentDate = Carbon::now('Europe/Paris');
         $this->time = $this->currentDate->format('Y-m-d H:i:s');
         $this->date = $this->currentDate->format('Y-m-d');
     }
@@ -617,7 +617,7 @@ class commonController extends Controller
                     'created_at' => now()
                 ];        
                 
-                $currentDate = Carbon::now('Asia/Kolkata');
+                $currentDate = Carbon::now('Europe/Paris');
                 if (session()->has('js_username')) {
                     $data['js_id'] = $user_id;
                     $plan_details = $this->JsPlan->planDetails($request->plan, ['highlight_job_limit', 'plan_duration', 'plan_name']);

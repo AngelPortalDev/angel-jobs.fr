@@ -186,7 +186,7 @@
 
                                                     <div class="  ">
                                                         <label>Mobile No: </label>
-                                                        <span>{{ $job->contact_phone }}</span>
+                                                        <span>+33 {{ $job->contact_phone }}</span>
                                                     </div>
 
                                                     <div class="  ">
@@ -257,7 +257,7 @@
                                                     @if ($job->job_salary_to_name != '' && $job->salary_hide === 'No')
                                                         <li><i class="fas fa-euro-sign"></i><strong
                                                                 class="font-weight-700 text-black">Salary</strong>
-                                                            {{ $job->job_salary_to_name }} ANNUALLY </li>
+                                                            {{ $job->job_salary_to_name }} MONTHLY </li>
                                                     @endif
                                                     <li><i class="fa-solid fa-location-dot"></i><strong
                                                             class="font-weight-700 text-black">Location for

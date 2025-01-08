@@ -166,7 +166,7 @@
                                                     <ul>
                                                         <li><i
                                                                 class="fas fa-map-marker-alt"></i>
-                                                                {{ isset($data->prefered_location_name) && $data->prefered_location_name ? $data->prefered_location_name . ', India' : 'Not Disclosed' }}</li>
+                                                                {{ isset($data->prefered_location_name) && $data->prefered_location_name ? $data->prefered_location_name . ', France' : 'Not Disclosed' }}</li>
                                                         <li> <i class="fas fa-euro-sign" style="font-size: 12px"></i>
                                                             {{ isset($data->expected_salary_name) ? $data->expected_salary_name : 'Not Disclosed' }}
                                                         </li>

@@ -26,7 +26,7 @@ class JobPostingController extends Controller
         $this->JobPosting = new JobPosting;
         $this->username = Session::get('js_username');
         $this->js_user_id = Session::get('js_user_id');
-        $this->currentDate = Carbon::now('Asia/Kolkata');
+        $this->currentDate = Carbon::now('Europe/Paris');
         $this->time = $this->currentDate->format('Y-m-d H:i:s');
         $this->date = $this->currentDate->format('Y-m-d');
     }
@@ -86,7 +86,7 @@ class JobPostingController extends Controller
 
             
 
-            $currentDate = Carbon::now('Asia/Kolkata');
+            $currentDate = Carbon::now('Europe/Paris');
             $booking_date = $currentDate->format('Y-m-d');
             $booking_time = $currentDate->format('H:i:s');
             $time = $booking_date . " " . $booking_time;
@@ -113,7 +113,7 @@ class JobPostingController extends Controller
                         'job_educ' => 'required|numeric',
                         'vacancy_count' => 'required|numeric|min:1',
                         'job_con_person' => 'required|string|max:225',
-                        'job_con_phone' => 'required|string|max:10|min:8',
+                        'job_con_phone' => 'required|string|max:9|min:9',
                         'job_con_email' => 'required|email|max:225',
                         'job_indus' => 'required|numeric|min:1',
                         'job_lang' => 'required|array|min:1|max:5',

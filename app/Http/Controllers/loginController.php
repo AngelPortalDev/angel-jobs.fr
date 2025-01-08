@@ -51,7 +51,7 @@ class loginController extends Controller
             $password = isset($req->c_password) ? htmlspecialchars($req->input('c_password')) : '';
             $tnc = isset($req->tnc) ? htmlspecialchars($req->input('tnc')) : '';
             $mob_code = isset($req->mob_code) ? htmlspecialchars($req->input('mob_code')) : '';
-            $currentDate = Carbon::now('Asia/Kolkata');
+            $currentDate = Carbon::now('Europe/Paris');
             $booking_date = $currentDate->format('Y-m-d');
             $booking_time = $currentDate->format('H:i:s');
             $time = $booking_date . " " . $booking_time;
@@ -200,7 +200,7 @@ class loginController extends Controller
             $password = isset($req->c_password) ? htmlspecialchars($req->input('c_password')) : '';
             $tnc = isset($req->tnc) ? htmlspecialchars($req->input('tnc')) : '';
             $mob_code = isset($req->mob_code) ? htmlspecialchars($req->input('mob_code')) : '';
-            $currentDate = Carbon::now('Asia/Kolkata');
+            $currentDate = Carbon::now('Europe/Paris');
             $booking_date = $currentDate->format('Y-m-d');
             $booking_time = $currentDate->format('H:i:s');
             $time = $booking_date . " " . $booking_time;
@@ -593,7 +593,7 @@ class loginController extends Controller
             $token = isset($req->passType3) ? $req->input('passType3') : '';
             $newpass = isset($req->newpass) ? $req->input('newpass') : '';
             $newpasscon = isset($req->newpasscon) ? $req->input('newpasscon') : '';
-            $currentDate = Carbon::now('Asia/Kolkata');
+            $currentDate = Carbon::now('Europe/Paris');
             $booking_date = $currentDate->format('Y-m-d');
             $booking_time = $currentDate->format('H:i:s');
             $datetime = $booking_date . " " . $booking_time;

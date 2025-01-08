@@ -331,7 +331,7 @@
                                         <div class="col-lg-6 col-md-6">
                                             <div class="form-group">
                                                 <label>Current Salary (<i class="fa fa-euro" aria-hidden="true"
-                                                        style="font-size: 10px"></i>) (Annually) </label>
+                                                        style="font-size: 10px"></i>) (Monthly) </label>
                                                 <input type="text" class="form-control-plaintext" name="curr_sal"
                                                     id="curr_sal" value="{{ $data->curr_salary }}"
                                                     placeholder="Current Salary">
@@ -340,7 +340,7 @@
                                         <div class="col-lg-6 col-md-6">
                                             <div class="form-group">
                                                 <label>Expected Salary (<i class="fa fa-euro" aria-hidden="true"
-                                                        style="font-size: 10px"></i>) (Annually) <span
+                                                        style="font-size: 10px"></i>) (Monthly) <span
                                                         class="imp-field-star"> *</span></label>
                                                 <select class="slec d-none" id="exp_sal" name="exp_sal">
                                                     @if (!empty($data->expected_salary))

@@ -143,7 +143,7 @@
 									</div> --}}
 									
 
-									<div class="col-lg-6 col-md-6">
+									{{-- <div class="col-lg-6 col-md-6">
 										<div class="form-group">
 											<label>Company GST Number</label>
 											<input type="text" class="form-control-plaintext" value="{{$empData->license_no}}" placeholder="Enter GST Number" name="license_no" id="license_no" readonly>
@@ -153,11 +153,11 @@
 											</small>
 										</span>
 										</div>
-									</div>
+									</div> --}}
 									<div class="col-lg-6 col-md-6">
 										<div class="form-group">
-											<label>Company Pan Number <span class="imp-field-star">*</span></label>
-											<input type="text" class="form-control-plaintext" value="{{$empData->pan_no}}" placeholder="Enter Pan Number" name="pan_no" id="pan_no" readonly>
+											<label>Company Licence Number <span class="imp-field-star">*</span></label>
+											<input type="text" class="form-control-plaintext" value="{{$empData->pan_no}}" placeholder="Enter Licence Number" name="pan_no" id="pan_no" readonly>
 										<span id="pan_no_error" style="color:red;display:none;">
 											<small>
 												<i>Please provide pan number </i>

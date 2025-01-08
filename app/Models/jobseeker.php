@@ -115,6 +115,7 @@ class jobseeker extends Model
             $query->where('email', $username);
         }
         $jobseekerData =  $query->get();
+        
         return $jobseekerData;
     }
     public function searchJobseeker($curr_date, $req, $filters = '')

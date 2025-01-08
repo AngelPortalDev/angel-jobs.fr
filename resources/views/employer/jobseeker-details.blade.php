@@ -389,7 +389,7 @@
                                             </div>
 
                                             <div class="clearfix m-b20">
-                                                <label class="m-b0">Expected Salary</label>
+                                                <label class="m-b0">Expected Salary  (Monthly)</label>
                                                 <span
                                                     class="clearfix font-13">{{ !empty($basic->expected_salary_name) ? $basic->expected_salary_name : '' }}</span>
                                             </div>

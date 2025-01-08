@@ -25,7 +25,7 @@ class adminEmployerController extends Controller
         $this->JobPosting = new JobPosting;
         $this->EmpPlan = new EmpPlan;
         $this->username = session()->get('emp_username');
-        $this->currentDate = Carbon::now('Asia/Kolkata');
+        $this->currentDate = Carbon::now('Europe/Paris');
         $this->time = $this->currentDate->format('Y-m-d H:i:s');
         $this->date = $this->currentDate->format('Y-m-d');
     }
@@ -174,7 +174,7 @@ class adminEmployerController extends Controller
             $email = isset($req->addemail) ? htmlspecialchars($req->input('addemail')) : '';
             $password = isset($req->password) ? htmlspecialchars($req->input('password')) : '';
             $mob_code = "+356";
-            $currentDate = Carbon::now('Asia/Kolkata');
+            $currentDate = Carbon::now('Europe/Paris');
             $booking_date = $currentDate->format('Y-m-d');
             $booking_time = $currentDate->format('H:i:s');
             $time = $booking_date . " " . $booking_time;

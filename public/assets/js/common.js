@@ -369,8 +369,8 @@ $(document).ready(function () {
         //     $("#contact_no_error").show();
         //     return;
         // }
-        if (contact_no.length < 10) {
-            $("#contact_no_error").text("Mobile no should be 10 digits.");
+        if (contact_no.length < 9) {
+            $("#contact_no_error").text("Mobile no should be 9 digits.");
             $("#contact_no_error").show();
             return;
         }
@@ -544,13 +544,13 @@ $(document).ready(function () {
             $("#contact_no_error").show();
             return;
         }
-        if (contact_no.length < 10) {
-            $("#contact_no_error").text("Mobile no should be exactly 10 digits.");
+        if (contact_no.length < 9) {
+            $("#contact_no_error").text("Mobile no should be exactly 9 digits.");
             $("#contact_no_error").show();
             return;
         }
-        if (contact_no.length > 10) {
-            $("#contact_no_error").text("Mobile no should be exactly 10 digits.");
+        if (contact_no.length > 9) {
+            $("#contact_no_error").text("Mobile no should be exactly 9 digits.");
             $("#contact_no_error").show();
             return;
         }

@@ -21,7 +21,7 @@ class adminCommonController extends Controller
     {
 
         $this->username = session()->get('admin_username');
-        $this->currentDate = Carbon::now('Asia/Kolkata');
+        $this->currentDate = Carbon::now('Europe/Paris');
         $this->time = $this->currentDate->format('Y-m-d H:i:s');
         $this->date = $this->currentDate->format('Y-m-d');
     }

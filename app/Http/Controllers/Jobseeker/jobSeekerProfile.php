@@ -368,7 +368,7 @@ class jobSeekerProfile extends Controller
         if (session()->has('js_username')) {
             $username = Session::get('js_username');
 
-            $savedJobs = DB::table('jobseeker_viewed_jobs')->select('jobseeker_viewed_jobs.js_id', 'jobseeker_viewed_jobs.job_id', 'jobseeker_viewed_jobs.saved_on', 'jobseeker_viewed_jobs.employer_id', 'job_posting_view.job_title', 'jobseekers.fullname', 'job_posting_view.company_name', 'job_posting_view.location_hiring_name', 'job_posting_view.salary_hide', 'job_posting_view.job_salary_to_name')->leftJoin('job_posting_view', 'jobseeker_viewed_jobs.job_id', '=', 'job_posting_view.id')->join('jobseekers', 'jobseekers.id', '=', 'jobseeker_viewed_jobs.js_id')->where('jobseekers.email', $username)->where('jobseeker_viewed_jobs.is_saved', 'Yes')->orderBy('jobseeker_viewed_jobs.saved_on', 'DESC')->get();
+            $savedJobs = DB::table('jobseeker_viewed_jobs')->select('jobseeker_viewed_jobs.js_id', 'jobseeker_viewed_jobs.job_id', 'jobseeker_viewed_jobs.saved_on', 'jobseeker_viewed_jobs.employer_id', 'job_posting_view.job_title', 'jobseekers.fullname', 'job_posting_view.company_name', 'job_posting_view.location_hiring_name', 'job_posting_view.salary_hide', 'job_posting_view.job_type_name')->leftJoin('job_posting_view', 'jobseeker_viewed_jobs.job_id', '=', 'job_posting_view.id')->join('jobseekers', 'jobseekers.id', '=', 'jobseeker_viewed_jobs.js_id')->where('jobseekers.email', $username)->where('jobseeker_viewed_jobs.is_saved', 'Yes')->orderBy('jobseeker_viewed_jobs.saved_on', 'DESC')->get();
             return view('jobseeker.jobseeker-saved-jobs', compact('savedJobs'));
         }
         return redirect()->back();
@@ -379,7 +379,7 @@ class jobSeekerProfile extends Controller
         if (session()->has('js_username')) {
             $username = Session::get('js_username');
             $appliedJobs = DB::table('job_application_history')
-            ->select('job_application_history.js_id', 'job_application_history.job_id', 'job_posting_view.job_title', 'jobseekers.fullname', 'job_application_history.is_shortlisted', 'job_posting_view.company_name', 'job_posting_view.location_hiring_name', 'job_posting_view.salary_hide', 'job_application_history.applied_on', 'job_posting_view.job_salary_to_name')
+            ->select('job_application_history.js_id', 'job_application_history.job_id', 'job_posting_view.job_title', 'jobseekers.fullname', 'job_application_history.is_shortlisted', 'job_posting_view.company_name', 'job_posting_view.location_hiring_name', 'job_posting_view.salary_hide', 'job_application_history.applied_on', 'job_posting_view.job_type_name')
             ->leftJoin('job_posting_view', 'job_application_history.job_id', '=', 'job_posting_view.id')
             ->join('jobseekers', 'jobseekers.id', '=', 'job_application_history.js_id')
             ->where('jobseekers.email', $username)

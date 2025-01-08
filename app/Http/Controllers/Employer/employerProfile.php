@@ -25,7 +25,7 @@ class employerProfile extends Controller
         $this->Employer = new employer;
         $this->JobPosting = new JobPosting;
         $this->username = session()->get('emp_username');
-        $this->currentDate = Carbon::now('Asia/Kolkata');
+        $this->currentDate = Carbon::now('Europe/Paris');
         $this->time = $this->currentDate->format('Y-m-d H:i:s');
         $this->date = $this->currentDate->format('Y-m-d');
     }

@@ -153,7 +153,7 @@
                                                             class="form-control" placeholder="Mobile No.">
                                                         <span id="contact_no_error" style="color:red;display:none;">
                                                             <small>
-                                                                <i>Mobile no should be 10 digits.</i>
+                                                                <i>Mobile no should be 9 digits.</i>
                                                             </small>
                                                         </span>
                                                          <span id="mob_exists_error" style="color:red;display:none;">

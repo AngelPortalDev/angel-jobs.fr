@@ -24,7 +24,7 @@ class adminJsController extends Controller
         $this->Jobseeker = new Jobseeker;
         $this->JsPlan = new JsPlan;
         $this->username = session()->get('emp_username');
-        $this->currentDate = Carbon::now('Asia/Kolkata');
+        $this->currentDate = Carbon::now('Europe/Paris');
         $this->time = $this->currentDate->format('Y-m-d H:i:s');
         $this->date = $this->currentDate->format('Y-m-d');
     }
@@ -86,7 +86,7 @@ class adminJsController extends Controller
             $contact_no = isset($req->contact_no) ? htmlspecialchars($req->input('contact_no')) : '';
             $email = isset($req->addemail) ? htmlspecialchars($req->input('addemail')) : '';
             $password = isset($req->password) ? htmlspecialchars($req->input('password')) : '';
-            $currentDate = Carbon::now('Asia/Kolkata');
+            $currentDate = Carbon::now('Europe/Paris');
             $booking_date = $currentDate->format('Y-m-d');
             $booking_time = $currentDate->format('H:i:s');
             $time = $booking_date . " " . $booking_time;

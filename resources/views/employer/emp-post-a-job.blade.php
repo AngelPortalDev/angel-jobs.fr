@@ -166,7 +166,7 @@
                                                 </div>
                                                 <div class="col-lg-3 col-md-3">
                                                     <div class="form-group">
-                                                        <label>Salary Range (Annually)</label>
+                                                        <label>Salary Range (Monthly)</label>
                                                         <select class="slec" id="job_sal" name="job_sal" data-live-search="true">
                                                             <option value="" selected>Select Salary Range</option>
                                                             @foreach (getDropDownlist('salary_ranges', ['salary_range', 'id']) as $salary_range)
@@ -393,11 +393,11 @@
                                                             <div class="col-10">
                                                                 <input type="number" id="job_con_phone" maxlength="8"
                                                                     name="job_con_phone" class="form-control"
-                                                                    placeholder="Enter 10 Digit Mobile No.">
+                                                                    placeholder="Enter 9 Digit Mobile No.">
                                                                 <span id="job_con_phone_error"
                                                                     style="color:red;display:none;">
                                                                     <small>
-                                                                        <i>Please enter 10 digit mobile no. </i>
+                                                                        <i>Please Enter 9 Digit Mobile No. </i>
                                                                     </small>
                                                                 </span>
                                                                 <span id="job_con_phone_limit_error"
@@ -442,7 +442,7 @@
                                         </form>
                                         @else
                                         <div class="container">
-                                            First Update Pan Number <a href="{{ route('company-profile') }}"
+                                            First Update Linence Number <a href="{{ route('company-profile') }}"
                                                 target="blank"> Click Here </a>
                                         </div>
                                         @endif
