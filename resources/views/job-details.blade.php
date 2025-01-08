@@ -255,7 +255,7 @@
                                                     </li>
 
                                                     @if ($job->job_salary_to_name != '' && $job->salary_hide === 'No')
-                                                        <li><i class="fas fa-rupee-sign"></i><strong
+                                                        <li><i class="fas fa-euro-sign"></i><strong
                                                                 class="font-weight-700 text-black">Salary</strong>
                                                             {{ $job->job_salary_to_name }} ANNUALLY </li>
                                                     @endif

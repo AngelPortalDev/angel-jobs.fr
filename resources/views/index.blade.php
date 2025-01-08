@@ -494,7 +494,7 @@
                                                     {{-- <li><i class='far fa-bookmark'></i>{{$lists->job_type_name}} </li> --}}
                                                     <li>
                                                         @if ($lists->salary_hide === 'No')
-                                                            <span> <i class="fa fa-inr"></i>
+                                                            <span> <i class="fa fa-euro"></i>
                                                                 {{ empty($lists->job_salary_to_name) ? 'Not Disclosed' : $lists->job_salary_to_name }}</span>
                                                     </li>
                                                     <li>

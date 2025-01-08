@@ -316,7 +316,7 @@ class commonController extends Controller
 
                 $sal = '';
                 if ($lists->salary_hide === 'No' && isset($lists->job_salary_to_name)) {
-                    $sal =  "<li><i class='fas fa-rupee-sign'></i>".$lists->job_salary_to_name."</li>";
+                    $sal =  "<li><i class='fas fa-euro-sign'></i>".$lists->job_salary_to_name."</li>";
                 }
 
                 $duration = duration($lists->posted_on);

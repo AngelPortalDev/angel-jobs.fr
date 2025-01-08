@@ -166,8 +166,8 @@
                                                 ?>
                                                <div class="form-group" style="display:flex">
                                                 <div class="dropdown bootstrap-select job-reg-mobile-code emp-reg-mob-code" style="width: 40%;">
-                                                    <img src="{{ asset('images/india.png') }}" alt="not found" style="width: 30px; height: auto; margin-right: 0px; border-radius: 0px;"/>
-                                                    <input type="text" class="form-control mob-emp-input" name="mob_code" value="+91" readonly style="right-margin: 1px 2px;">
+                                                    <img src="{{ asset('images/France-Flag.png') }}" alt="not found" style="width: 30px; height: auto; margin-right: 0px; border-radius: 0px;"/>
+                                                    <input type="text" class="form-control mob-emp-input" name="mob_code" value="+33" readonly style="right-margin: 1px 2px;">
                                                     <span id="mob_code_error" style="color:red;display:none;">
                                                         <small><i>Please select country code.</i></small>
                                                     </span>

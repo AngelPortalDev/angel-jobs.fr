@@ -44,7 +44,7 @@
                                             $plan_duration = ceil($plan[0]->plan_duration / 30);
                                         @endphp
                                         <h4 class="font-weight-300 m-t10 m-b0">{{ $plan_name }}</h4>
-                                        <div class="pricingtable-bx"> <i class="fa fa-inr" aria-hidden="true"></i>
+                                        <div class="pricingtable-bx"> <i class="fa fa-euro" aria-hidden="true"></i>
                                             <span>{{ $amount }}</span> / {{ $plan_duration }} Months </div>
                                     </div>
                                     Quick & Easy Job Posting <br>
@@ -111,7 +111,7 @@
 
                                         @endphp
                                         <h4 class="font-weight-300 m-t10 m-b0">{{ $plan_name }}</h4>
-                                        <div class="pricingtable-bx"> <i class="fa fa-inr" aria-hidden="true"></i>
+                                        <div class="pricingtable-bx"> <i class="fa fa-euro" aria-hidden="true"></i>
                                             <span>{{ $amount }}</span> / {{ $plan_duration }} Months </div>
                                     </div>
                                     Quick & Easy Job Posting <br>

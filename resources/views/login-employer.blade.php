@@ -140,8 +140,8 @@
 
                                                 <div class="form-group" style="display:flex">
                                                     <div class="dropdown bootstrap-select job-reg-mobile-code emp-reg-mob-code" >
-                                                        <img src='{{ asset('images/india.png') }}' alt="not found"/>
-                                                      <input type="text" class="form-control mob-emp-input" name="mob_code" value="+91" readonly style="right-margin: 1px 2px;">
+                                                        <img src='{{ asset('images/France-Flag.png') }}' alt="not found"/>
+                                                      <input type="text" class="form-control mob-emp-input" name="mob_code" value="+33" readonly style="right-margin: 1px 2px;">
                                                           <span id="mob_code_error" style="color:red;display:none;">
                                                             <small>
                                                                 <i>Select contry code.</i>

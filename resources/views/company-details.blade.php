@@ -221,7 +221,7 @@
                                                                                 <li><i class='fas fa-map-marker-alt'></i>
                                                                                     {{ $lists->location_hiring_name }}
                                                                                 </li>
-                                                                                <li><i class='fa fa-inr'></i>
+                                                                                <li><i class='fa fa-euro'></i>
                                                                                     {{ empty($lists->job_salary_to_name) ? 'Not Disclosed' : $lists->job_salary_to_name }}
                                                                                 </li>
                                                                                 <br />

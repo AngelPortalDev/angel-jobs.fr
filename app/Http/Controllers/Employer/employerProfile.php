@@ -370,7 +370,7 @@ class employerProfile extends Controller
 												<ul>
 													<li><i class='fas fa-map-marker-alt'></i> " . (!empty($lists->prefered_location_name) ? $lists->prefered_location_name : 'Not Disclosed') . "</li>
 													<li><i class='fa-solid fa-business-time'></i> " . (!empty($lists->experiance_name) ? $lists->experiance_name : 'Not Disclosed')  . "</li>
-													<li><i class='fas fa-rupee-sign'></i> " .(!empty($lists->expected_salary_name) ? $lists->expected_salary_name : 'Not Disclosed')  . "</li>
+													<li><i class='fas fa-euro-sign'></i> " .(!empty($lists->expected_salary_name) ? $lists->expected_salary_name : 'Not Disclosed')  . "</li>
 													 <li><i class='far fa-clock'></i> Active " .  $duration . " ago</li> 
 												</ul>
 											</div>

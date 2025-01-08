@@ -194,13 +194,13 @@
                                         </select>
                                     </div> --}}
                                     <div class="  col-md-4">
-                                        <label for="inputEmail4" class="form-label">Current Salary (<i class="fas fa-rupee-sign" style="font-size: 12px"></i>)
+                                        <label for="inputEmail4" class="form-label">Current Salary (<i class="fas fa-euro-sign" style="font-size: 12px"></i>)
                                             (Annualy) </label>
                                         <input type="text" class="form-control" id="inputEmail4"
                                             placeholder="Current Salary" value="{{ !empty($jsData->curr_salary) ? $jsData->curr_salary : 0 }}" name="curr_sal">
                                     </div>
                                     <div class=" mb-2 col-md-4">
-                                        <label for="exp_sal" class="form-label">Expected Salary (<i class="fas fa-rupee-sign" style="font-size: 12px"></i>)
+                                        <label for="exp_sal" class="form-label">Expected Salary (<i class="fas fa-euro-sign" style="font-size: 12px"></i>)
                                             (Annualy) <span class="imp-field-star"> *</span></label>
                                        
                                              <select class="form-select mb-2" name="exp_sal" id="exp_sal" >

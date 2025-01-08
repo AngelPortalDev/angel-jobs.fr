@@ -382,7 +382,7 @@
                                            <div class="   col-md-4">
                                                 <label for="inputAddress" class="form-label">Mobile No <span class="imp-field-star"> *</span></label>
                                                 <div class="input-group">
-                                                    <input type="text" disabled id="inputState" class="form-select"  value="+91">
+                                                    <input type="text" disabled id="inputState" class="form-select"  value="+33">
                                                     <input class="form-control" type="number" value="{{$jobDatas->contact_phone}}"  id="job_con_phone" maxlength="8" name="job_con_phone" required="" placeholder="+1234567890" style="width: 50%;">
                                                     <span id="job_con_phone_error" style="color:red;display:none;">
 												<small>

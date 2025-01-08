@@ -80,11 +80,11 @@
     <li>
         <a href="javascript:void(0);">Jobs <i class="fa fa-chevron-down"></i></a>
         <ul class="sub-menu mm-show jobs-top-btn">
-            <li class="active">
+            <li>
                 <form class="dezPlaceAni" action="{{ url('top-search-bar') }}" method="GET">
                     @csrf
-                    <input name="search_job_type[]" value='{{base64_encode(19)}}' hidden>
-                    <a class="dez-page"><button class="btn btn-none" type="submit">Full Time</button></a>
+                    <input name="search_job_type[]" value='{{base64_encode(16)}}' hidden>
+                    <a class="dez-page"><button class="btn btn-none" type="submit">Internship</button></a>
                 </form>
             </li>
             
@@ -95,11 +95,11 @@
                     <a class="dez-page"><button class="btn btn-none" type="submit">Part Time</button></a>
                 </form>
             </li>
-            <li>
+            <li class="active">
                 <form class="dezPlaceAni" action="{{ url('top-search-bar') }}" method="GET">
                     @csrf
-                    <input name="search_job_type[]" value='{{base64_encode(16)}}' hidden>
-                    <a class="dez-page"><button class="btn btn-none" type="submit">Internship</button></a>
+                    <input name="search_job_type[]" value='{{base64_encode(19)}}' hidden>
+                    <a class="dez-page"><button class="btn btn-none" type="submit">Full Time</button></a>
                 </form>
             </li>
         </ul>

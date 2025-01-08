@@ -273,7 +273,9 @@ class jobSeekerProfile extends Controller
                             $user_id = JobEdu::insertGetId($fields);
                         }
                         $fullname = session()->get('js_name');
-                         mail_send(9, ['#Name#', '#Cat#'], [ucfirst($fullname), 'Jobseeker Education'], session()->get('js_username'));
+                        //  mail_send(9, ['#Name#', '#Cat#'], [ucfirst($fullname), 'Jobseeker Education'], session()->get('js_username'));
+                         $link=env('APP_URL')."/jobseeker/jobseeker-education";
+                        mail_send(24, ['#Name#', '#Link#'], [ucfirst($fullname), $link], session()->get('js_username'));
                         echo json_encode(array('code' => 200, 'message' => 'Successfully Updated', 'icon' => 'success'));
                     } catch (\Exception $e) {
 
@@ -338,7 +340,9 @@ class jobSeekerProfile extends Controller
                             $user_id = JobExp::insertGetId($fields);
                         }
                         $fullname = session()->get('js_name');
-                         mail_send(9, ['#Name#', '#Cat#'], [ucfirst($fullname), 'Jobseeker Experiance'], session()->get('js_username'));
+                        //  mail_send(9, ['#Name#', '#Cat#'], [ucfirst($fullname), 'Jobseeker Experiance'], session()->get('js_username'));
+                        $link=env('APP_URL')."/jobseeker/jobseeker-experience";
+                        mail_send(25, ['#Name#', '#Link#'], [ucfirst($fullname), $link], session()->get('js_username'));
                         echo json_encode(array('code' => 200, 'message' => 'Successfully Updated', 'icon' => 'success'));
                     } catch (\Exception $e) {
 

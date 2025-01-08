@@ -105,13 +105,13 @@
                                         <input type="text" class="form-control" id="inputAddress" placeholder="" value="{{ !empty($jsUserData[0]->experiance_name) ? $jsUserData[0]->experiance_name : 'NA' }}"disabled>
                                     </div>
                                     <div class="  col-md-4">
-                                        <label for="inputEmail4" class="form-label">Current Salary (<i class="fas fa-rupee-sign" style="font-size: 12px"></i>)
+                                        <label for="inputEmail4" class="form-label">Current Salary (<i class="fas fa-euro-sign" style="font-size: 12px"></i>)
                                             (Annualy) </label>
                                         <input type="text" class="form-control" id="inputEmail4"
                                             placeholder="Current Salary (Annualy)" value="{{ !empty($jsUserData[0]->curr_salary) ? $jsUserData[0]->curr_salary : 'NA' }}"disabled>
                                     </div>
                                     <div class=" mb-2 col-md-4">
-                                        <label for="inputEmail4" class="form-label">Expected Salary (<i class="fas fa-rupee-sign" style="font-size: 12px"></i>)
+                                        <label for="inputEmail4" class="form-label">Expected Salary (<i class="fas fa-euro-sign" style="font-size: 12px"></i>)
                                             (Annualy) </label>
                                         <input type="text" class="form-control" id="inputEmail4"
                                             placeholder="Expected Salary (Annualy)" value="{{ !empty($jsUserData[0]->expected_salary_name) ? $jsUserData[0]->expected_salary_name : 'NA' }}"disabled>

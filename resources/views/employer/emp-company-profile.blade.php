@@ -187,7 +187,7 @@
 										<div class="col-lg-6 col-md-6">
 											<div class="form-group">
 												<label>Mobile</label>
-												<input type="text" class="form-control-plaintext" value="+91 {{ $empData->mobile}}"  placeholder="+91 123 456 7890" disabled>
+												<input type="text" class="form-control-plaintext" value="+33 {{ $empData->mobile}}"  placeholder="+33 123 456 7890" disabled>
 														
 												</div>
 										</div>

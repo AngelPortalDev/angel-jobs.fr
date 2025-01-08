@@ -62,7 +62,7 @@
                                                         <ul>
                                                             <li><i class='fas fa-map-marker-alt'></i> {{ (!empty($shortlist->prefered_location_name) ? $shortlist->prefered_location_name : 'Not Disclosed') }}</li>
                                                             <li><i class='fa-solid fa-business-time'></i> {{ (!empty($shortlist->experiance_name) ? $shortlist->experiance_name : 'Not Disclosed')  }}</li>
-                                                            <li><i class='fas fa-rupee-sign'></i> {{(!empty($shortlist->expected_salary_name) ? $shortlist->expected_salary_name : 'Not Disclosed')  }}</li>
+                                                            <li><i class='fas fa-euro-sign'></i> {{(!empty($shortlist->expected_salary_name) ? $shortlist->expected_salary_name : 'Not Disclosed')  }}</li>
                                                              <li><i class='far fa-clock'></i> Active {{  $duration }} ago</li> 
                                                         </ul>
                                                     </div>
