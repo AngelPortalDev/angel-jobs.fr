@@ -585,10 +585,9 @@ class commonController extends Controller
         $currencyTo = $callbackData['data']['currency_to'] ?? null;
         $reason = $callbackData['data']['reason'] ?? null;
         $clientReason = $callbackData['data']['client_reason'] ?? null;
-        $studentFirstName = $callbackData['data']['fields']['student_first_name'] ?? null;
-        $studentLastName = $callbackData['data']['fields']['student_last_name'] ?? null;
-        $studentEmail = $callbackData['data']['fields']['student_email'] ?? null;
-        $passportNumber = $callbackData['data']['fields']['passport_number'] ?? null;
+        $firstName = $callbackData['data']['fields']['first_name'] ?? null;
+        $lastName = $callbackData['data']['fields']['last_name'] ?? null;
+        $email = $callbackData['data']['fields']['email'] ?? null;
 
         // Log the extracted data for debugging
         Log::info("Event Type: $eventType");
@@ -598,7 +597,7 @@ class commonController extends Controller
         Log::info("Amount To: $amountTo $currencyTo");
         Log::info("Reason: $reason");
         Log::info("Client Reason: $clientReason");
-        Log::info("Student: $studentFirstName $studentLastName, Email: $studentEmail, Passport: $passportNumber");
+        Log::info("Student: $firstName $lastName, Email: $email");
         $status = $callbackData['data']['status'];
         $checkoutSessionId = $paymentId;
 
@@ -656,24 +655,20 @@ class commonController extends Controller
                     }
                     $where = ['order_id' => $payment->order_id];
                     $select = [
-                        'status' => '0',
-                        'transaction_id' => $transaction,
-                        'payment_type' => $type,
-                        'card_type' => $brand,
-                        'exp_month' => $exp_month,
-                        'exp_year' => $exp_year,
-                        'payment_intent_id' => $paymentId,
-                        'payment_status' => '0',
-                        'pay_date' => $formattedDate,
-                        'hold_date' => $currentDate->toDateString()
-
-                    ];  
+                        'status' => '3',
+                    ];
 
                     $updatePayment = processData([$table, 'id'], $select, $where);
 
-                    return $this->success();
+                    // return $this->success();
                     break;
                 case 'delivered':
+                    
+                    if (session()->has('js_username')) {
+                        $table = 'jobseeker_payments';
+                    } elseif (session()->has('emp_username')) {
+                        $table = 'employer_payments';
+                    }
         
                     $payment = DB::table($table)
                     ->where('status', '1')
@@ -706,40 +701,35 @@ class commonController extends Controller
                     }
                     $where = ['order_id' => $payment->order_id];
                     $select = [
-                        'status' => '0',
-                        'transaction_id' => $transaction,
-                        'payment_type' => $type,
-                        'card_type' => $brand,
-                        'exp_month' => $exp_month,
-                        'exp_year' => $exp_year,
-                        'payment_intent_id' => $paymentId,
-                        'payment_status' => '0',
-                        'pay_date' => $formattedDate,
-                        'hold_date' => $currentDate->toDateString()
-
+                        'status' => '3',
                     ];  
 
                     $updatePayment = processData([$table, 'id'], $select, $where);
 
-                    return $this->success();
+                    // return $this->success();
                         
                     break;
                 case 'failed':
                     Log::error('Failed to update payment or order status for failed payment.');
-                    return $this->success();
+                    // return $this->success();
 
                     break;
                 case 'cancelled':
+                    if (session()->has('js_username')) {
+                        $table = 'jobseeker_payments';
+                    } elseif (session()->has('emp_username')) {
+                        $table = 'employer_payments';
+                    }
                     $where = ['order_id' => $order_id];
                     $select = [
-                        'status' => '1',
+                        'status' => '2',
                     ];
                     $updatePayment = processData([$table, 'id'], $select, $where);
-                    if(isset($updatePayment) && $updatePayment['status'] == TRUE){
-                        return redirect()->route('payment-unsuccessful');
-                    }
+                    // if(isset($updatePayment) && $updatePayment['status'] == TRUE){
+                    //     return redirect()->route('payment-unsuccessful');
+                    // }
                     Log::error('Failed to update payment or order status for cancelled payment.');
-                    return $this->success();
+                    // return $this->success();
                     
                     break;
                 default:
@@ -749,7 +739,7 @@ class commonController extends Controller
         
         } catch (\Exception $e) {
             \Log::error("Payment processing error: " . $e->getMessage());
-            return view('frontend.payment.payment-unsuccessful', ['message' => $e->getMessage()]);
+            // return view('frontend.payment.payment-unsuccessful', ['message' => $e->getMessage()]);
         }
     }
 
