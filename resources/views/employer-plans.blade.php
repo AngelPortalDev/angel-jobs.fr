@@ -80,8 +80,9 @@
                                                         <input type="hidden" name="plan" id ="plan"
                                                             value="{{ $plan_id }}" class="form-control plan">
                                                     </div>
-                                                    <button id="rzp-button1" class="site-button radius-xl rzp-button1" style="white-space: normal;">Buy
-                                                        Now</button>
+                                                    {{-- <button id="rzp-button1" class="site-button radius-xl rzp-button1" style="white-space: normal;">Buy
+                                                        Now</button> --}}
+                                                        <a class="site-button radius-xl" href="{{ route('emp_buy_plan', ['plan_id' => $plan_id, 'amount' => $amount])}}"><span class="p-lr30">Buy Now</span></a>
                                                 </div>
                                             </form>
                                             @endif
@@ -153,8 +154,9 @@
                                                         <input type="hidden" name="plan" id ="plan"
                                                             value="{{ $plan_id }}" class="form-control plan">
                                                     </div>
-                                                    <button id="rzp-button1" class="site-button radius-xl rzp-button1"
-                                                        style="background: white;color: #3a9df1;">Buy Now</button>
+                                                    {{-- <button id="rzp-button1" class="site-button radius-xl rzp-button1"
+                                                        style="background: white;color: #3a9df1;">Buy Now</button> --}}
+                                                    <a class="site-button radius-xl" href="{{  route('emp_buy_plan', ['plan_id' => $plan_id, 'amount' => $amount])}}"  style="background: white;color: #3a9df1;"><span class="p-lr30">Buy Now</span></a>
                                                 </div>
                                             </form>
                                             @endif
