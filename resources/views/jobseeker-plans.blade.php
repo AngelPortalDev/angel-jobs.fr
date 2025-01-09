@@ -75,12 +75,10 @@
                                                                 <a class="site-button radius-xl">Purchased</a>
                                                             @endif
                                                         @else
-                                                            <button id="rzp-button1"
-                                                                class="site-button radius-xl rzp-button1">Buy Now</button>
+                                                            <a class="site-button radius-xl" href="{{ route('js_buy_plan', ['plan_id' => $plan_id, 'amount' => $amount])}}"><span class="p-lr30">Buy Now</span></a>
                                                         @endif
                                                     </div>
                                                 </form>
-                                                {{-- <a class="site-button radius-xl" href="{{ route('js_buy_plan', ['plan_id' => $plan_id, 'amount' => $amount])}}"><span class="p-lr30">Buy Now</span></a> --}}
                                             @else
                                                 <a class="site-button radius-xl" style="white-space: normal;" href="{{ route('js_login') }}"><span
                                                         class="p-lr30">Buy Now</span></a>
@@ -139,13 +137,10 @@
                                                                     style="background: white;color: #3a9df1;">Purchased</a>
                                                             @endif
                                                         @else
-                                                            <button id="rzp-button1"
-                                                                class="site-button radius-xl rzp-button1"
-                                                                style="background: white;color: #3a9df1;white-space: normal;">Buy Now</button>
+                                                            <a class="site-button radius-xl" href="{{ route('js_buy_plan', ['plan_id' => $plan_id, 'amount' => $amount])}}" ><span class="p-lr30">Buy Now</span></a>
                                                         @endif
                                                     </div>
                                                 </form>
-                                                {{-- <a class="site-button radius-xl" href="{{ route('js_buy_plan', ['plan_id' => $plan_id, 'amount' => $amount])}}" ><span class="p-lr30">Buy Now</span></a> --}}
                                             @else
                                                 <a class="site-button radius-xl" href="{{ route('js_login') }}"
                                                     style="background: white;color: #3a9df1;white-space: normal;"><span class="p-lr30">Buy

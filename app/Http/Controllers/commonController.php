@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\{job_posting_view as Jobs,employer_plan as EmpPlan,jobseeker_plan as JsPlan, employer as Employer, employer_payment as EmpPayments, jobseeker_profile as JobseekerProf, jobseeker_payment as JsPayement};
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Session, Http, DB, Validator, Storage};
+use Illuminate\Support\Facades\{Session, Http, DB, Validator, Storage, Log};
 use Carbon\Carbon;
 use Razorpay\Api\Api;
 
@@ -468,217 +468,290 @@ class commonController extends Controller
     }
 
 
-    // public function buy_plan($plan, $amount)
-    // {
-    //     if (isset($plan) && !empty($plan) && isset($amount) && !empty($plan) && session()->has('emp_username') || session()->has('js_username')) {
-
-
-    //         if (session()->has('js_username')) {
-    //             $username = session()->get('js_username');
-    //             $table = 'jobseeker_view';
-    //             $select = ['js_id', 'fullname', 'dob'];
-    //             $where = ['email' => $username, 'is_delete' => 'No'];
-    //         } elseif (session()->has('emp_username')) {
-    //             $username = session()->get('emp_username');
-    //             $table = 'employer_view';
-    //             $select = ['id', 'fullname'];
-    //             $where = ['email' => $username, 'is_deleted' => 'No'];
-    //         } else {
-
-    //             return redirect()->back()->with('msg', 'Someting Went Wrong');
-    //         }
-
-    //         $userData = getData($table, $select, $where);
-
-    //         $id = !empty($userData[0]->id) ? base64_encode($userData[0]->id) : base64_encode($userData[0]->js_id);
-    //         $fullname = $userData[0]->fullname;
-    //         $dob = isset($userData[0]->dob) ? $userData[0]->dob : 'NA';
-    //         $order_id = $this->currentDate->format('YmdHis');
-    //         try {
-    //             $payex = $amount * 100;
-    //             $data = [
-    //                 "provider" => "OMK",
-    //                 "payment_destination" => "oliasi-malta",
-    //                 "amount" => $payex,
-    //                 "callback_url" => env('APP_URL'),
-    //                 "callback_id" => $order_id,
-    //                 "return_cta" => env('APP_URL'),
-    //                 "return_cta_name" => "Return to Angel-Jobs.mt",
-    //                 "dynamic_fields" => [
-    //                     "student_id" => $id,
-    //                     "student_first_name" => $fullname,
-    //                     "student_last_name" => ' ',
-    //                     "student_date_of_birth" => $dob,
-    //                     "student_email" => $username,
-    //                 ]
-
-    //             ];
-
-    //             $headers = Http::withHeaders([
-    //                 'X-Flywire-Digest' => 'G6kcHrGlKQGepZMsQ5IVfaykeLW5cwSgGmbz5HMwYHM=',
-    //                 'Content-Type' => 'application/json',
-    //             ]);
-    //             $dataresps = $headers->post('https://gateway.flywire.com/v1/transfers.json', $data);
-
-    //             $url = $dataresps->json();
-    //             $pay_url =  $dataresps['url'];
-
-    //             if (isset($pay_url) && !empty($pay_url)) {
-
-    //                 try {
-
-    //                     $user_id = session()->get('emp_user_id') ?? session()->get('js_user_id');
-    //                     $exists = is_exist($table, $where);
-
-
-    //                     if ($exists === 1 && session()->has('js_username')) {
-
-    //                         $data = ['order_id' => $order_id, 'js_id' => $user_id, 'plan_id' => $plan, 'pay_method' => 'Flywire', 'payment_amount' => $amount, 'status' => 1, 'created_at' => $this->time];
-
-    //                         $create = JsPayement::insertGetId($data);
-    //                     } elseif (
-    //                         $exists === 1 && session()->has('emp_username')
-    //                     ) {
-
-    //                         $data = ['order_id' => $order_id, 'emp_id' => $user_id, 'plan_id' => $plan, 'pay_method' => 'Flywire', 'payment_amount' => $amount, 'status' => 1, 'created_at' => $this->time];
-    //                         $create = EmpPayments::insertGetId($data);
-    //                     }
-
-    //                     if (isset($create) && $create > 0) {
-    //                         // mail_send(9, ['#Name#', '#Cat#'], ['', $cat], session()->get('emp_username'));
-    //                         return redirect($pay_url);
-    //                     } else {
-    //                         return redirect()->back()->with('msg', 'Something Went Wrong1');
-    //                     }
-    //                 } catch (\Throwable $th) {
-    //                     // return "Someting Went Wrong" . $th;
-    //                     return redirect()->back()->with('msg', 'Something Went Wrong');
-    //                 }
-    //             }
-    //         } catch (\Throwable $th) {
-    //             // return "Someting Went Wrong" . $th;
-    //             // return "1 ";
-    //             redirect()->back()->with('msg', 'Something Went Wrong3');
-    //         }
-    //     } else {
-    //         // return "2";
-    //         redirect()->back()->with('msg', 'Something Went Wrong4');
-    //     }
-    // }
-
-    public function payment(Request $request)
+    public function buy_plan($plan, $amount)
     {
-   
-        if (!$request->has('razorpay_payment_id')) {
-            return response()->json(['error' => 'Payment ID is missing'], 400);
-        }
-        
-        try {
-            $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
-            $payment = $api->payment->fetch($request->razorpay_payment_id);
-        
-           
+        if (isset($plan) && !empty($plan) && isset($amount) && !empty($plan) && session()->has('emp_username') || session()->has('js_username')) {
+
+
             if (session()->has('js_username')) {
                 $username = session()->get('js_username');
-                $name= session()->get('js_name');
                 $table = 'jobseeker_view';
                 $select = ['js_id', 'fullname', 'dob'];
                 $where = ['email' => $username, 'is_delete' => 'No'];
             } elseif (session()->has('emp_username')) {
                 $username = session()->get('emp_username');
-                $name = session()->get('emp_name');
                 $table = 'employer_view';
                 $select = ['id', 'fullname'];
                 $where = ['email' => $username, 'is_deleted' => 'No'];
             } else {
-                return redirect()->back()->with('msg', 'Something Went Wrong');          
-          }
-        
-            $user_id = session()->get('emp_user_id') ?? session()->get('js_user_id');
-            $exists = is_exist($table, $where);
-        
-            if ($exists === 1) {
-                $status = 1;
-                $mailtemp = null;  
-              
-                if ($request->payment_status == 'success') {
-                    $status = 3;  
-                    $mailtemp = 38; 
-                } elseif ($request->payment_status == 'failed' && $payment->status == 'failed') {
-                    $mailtemp = 33;
-                }       
-               
-                $data = [
-                    'order_id' => $request->razorpay_payment_id,
-                    'plan_id' => $request->plan,
-                    'pay_method' => $payment->method,
-                    'payment_amount' => $request->amount,
-                    'status' => $status,
-                    'created_at' => now()
-                ];        
-                
-                $currentDate = Carbon::now('Europe/Paris');
-                if (session()->has('js_username')) {
-                    $data['js_id'] = $user_id;
-                    $plan_details = $this->JsPlan->planDetails($request->plan, ['highlight_job_limit', 'plan_duration', 'plan_name']);
-                    $plan_end_duration = $plan_details[0]->plan_duration;
-                    $plan_expired_on = $currentDate->addDays($plan_end_duration)->format('Y-m-d');   
-                   
-                    if ($status === 3) {
-                        $create = JsPayement::insertGetId($data);                               
-                        JobseekerProf::where('js_id', $user_id)->update([
-                            'left_plan_credit_highlight' => \DB::raw('left_plan_credit_highlight + ' . $plan_details[0]->highlight_job_limit),
-                            'plan_expired_on' => $plan_expired_on,
-                        ]);
-                    } else {    
-                        $existingPayment = JsPayement::where('order_id', $request->razorpay_payment_id)->first();  
-                        if (!$existingPayment){                  
-                        $create = JsPayement::insertGetId($data);}
-                    }
-        
-                } elseif (session()->has('emp_username')) {
-                    $data['emp_id'] = $user_id;
-                    $plan_details = $this->EmpPlan->planDetails($request->plan, ['job_post_limit', 'plan_duration', 'plan_name']);
-                    $plan_end_duration = $plan_details[0]->plan_duration;
-                    $plan_expired_on = $currentDate->addDays($plan_end_duration)->format('Y-m-d');       
-                   
-                    if ($status === 3) {
-                        $create = EmpPayments::insertGetId($data); 
-                        Employer::where('id', $user_id)->update([
-                            'left_credit_job_posting_plan' => \DB::raw('left_credit_job_posting_plan + ' . $plan_details[0]->job_post_limit),
-                            'plan_expired_on' => $plan_expired_on,
-                            'plan_id' => $request->plan,
-                        ]);
-                    } else {          
-                        $existingPayment = EmpPayments::where('order_id', $request->razorpay_payment_id)->first();  
-                        if (!$existingPayment){             
-                        $create = EmpPayments::insertGetId($data);}
-                    }
-                }
-        
-                if (isset($create) && $create > 0) {
-                    if ($mailtemp !== null) {mail_send($mailtemp, ['#Name#', '#amount#', '#Transactionid#', '#Plan#', '#method#', '#Date#'], 
-                        [$name, $request->amount, $payment->id, $plan_details[0]->plan_name, $payment->method, $this->time], $username);
-                    }
-                } else {
-                    return redirect()->back()->with('msg', 'Something Went Wrong');
-                }
-               
-                if ($status == 3) {
-                    return response()->json(['success' => 'Payment Successful']);
-                } elseif ($status == 2) {
-                    return response()->json(['error' => 'Payment Failed']);
-                } else {
-                    return response()->json(['success' => 'Payment Pending']);
-                }
+
+                return redirect()->back()->with('msg', 'Someting Went Wrong');
             }
-        } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+
+            $userData = getData($table, $select, $where);
+            
+            $id = !empty($userData[0]->id) ? base64_encode($userData[0]->id) : base64_encode($userData[0]->js_id);
+            $fullname = $userData[0]->fullname;
+            $dob = isset($userData[0]->dob) ? $userData[0]->dob : 'NA';
+            $order_id = $this->currentDate->format('YmdHis');
+            try {
+                $payex = $amount * 100;
+                $data = [
+                    "provider" => "ajf",
+                    "payment_destination" => env('PAYMENT_DESTINATION'),
+                    "amount" => $payex,
+                    "currency" => 'EUR', 
+                    "country" => 'FR',
+                    "callback_url" => env('APP_URL').'/process_callback'.'/'.$order_id,
+                    "callback_version"=> 2,
+                    "callback_id" => $order_id,
+                    "return_cta" => env('APP_URL'),
+                    "return_cta_name" => "Return to angel-jobs.fr",
+                    "dynamic_fields" => [
+                        "id" => $id,
+                        "first_name" => $fullname,
+                        "last_name" => ' ',
+                        "date_of_birth" => $dob,
+                        "email" => $username,
+                    ]
+
+                ];
+
+                $headers = Http::withHeaders([
+                    'X-Flywire-Digest' => 'G6kcHrGlKQGepZMsQ5IVfaykeLW5cwSgGmbz5HMwYHM=',
+                    'Content-Type' => 'application/json',
+                ]);
+                $dataresps = $headers->post(env('PAYMENT_URL'), $data);
+
+                $url = $dataresps->json();
+                $pay_url =  $dataresps['url'];
+
+                if (isset($pay_url) && !empty($pay_url)) {
+
+                    try {
+
+                        $user_id = session()->get('emp_user_id') ?? session()->get('js_user_id');
+                        $exists = is_exist($table, $where);
+
+
+                        if ($exists === 1 && session()->has('js_username')) {
+
+                            $data = ['order_id' => $order_id, 'js_id' => $user_id, 'plan_id' => $plan, 'pay_method' => 'Flywire', 'payment_amount' => $amount, 'status' => 1, 'created_at' => $this->time];
+
+                            $create = JsPayement::insertGetId($data);
+                        } elseif (
+                            $exists === 1 && session()->has('emp_username')
+                        ) {
+
+                            $data = ['order_id' => $order_id, 'emp_id' => $user_id, 'plan_id' => $plan, 'pay_method' => 'Flywire', 'payment_amount' => $amount, 'status' => 1, 'created_at' => $this->time];
+                            $create = EmpPayments::insertGetId($data);
+                        }
+
+                        if (isset($create) && $create > 0) {
+                            return redirect($pay_url);
+                        } else {
+                            return redirect()->back()->with('msg', 'Something Went Wrong1');
+                        }
+                    } catch (\Throwable $th) {
+                        // return "Someting Went Wrong" . $th;
+                        return redirect()->back()->with('msg', 'Something Went Wrong');
+                    }
+                }
+            } catch (\Throwable $th) {
+                // return "Someting Went Wrong" . $th;
+                // return "1 ";
+                redirect()->back()->with('msg', 'Something Went Wrong3');
+            }
+        } else {
+            // return "2";
+            redirect()->back()->with('msg', 'Something Went Wrong4');
         }
     }
+    
+    public function processCallback(Request $request, $order_id)
+    {
+        Log::info('Callback received');
+        // Log::info('Callback received', $request->all());
+        
+        $callbackData = $request->all();   
+        $eventType = $callbackData['event_type'] ?? null;
+        $status = $callbackData['data']['status'] ?? null;
 
+        // Get additional data fields
+        $paymentId = $callbackData['data']['payment_id'] ?? null;
+        $amountFrom = $callbackData['data']['amount_from'] ?? null;
+        $currencyFrom = $callbackData['data']['currency_from'] ?? null;
+        $amountTo = $callbackData['data']['amount_to'] ?? null;
+        $currencyTo = $callbackData['data']['currency_to'] ?? null;
+        $reason = $callbackData['data']['reason'] ?? null;
+        $clientReason = $callbackData['data']['client_reason'] ?? null;
+        $studentFirstName = $callbackData['data']['fields']['student_first_name'] ?? null;
+        $studentLastName = $callbackData['data']['fields']['student_last_name'] ?? null;
+        $studentEmail = $callbackData['data']['fields']['student_email'] ?? null;
+        $passportNumber = $callbackData['data']['fields']['passport_number'] ?? null;
 
+        // Log the extracted data for debugging
+        Log::info("Event Type: $eventType");
+        Log::info("Status: $status");
+        Log::info("Payment ID: $paymentId");
+        Log::info("Amount From: $amountFrom $currencyFrom");
+        Log::info("Amount To: $amountTo $currencyTo");
+        Log::info("Reason: $reason");
+        Log::info("Client Reason: $clientReason");
+        Log::info("Student: $studentFirstName $studentLastName, Email: $studentEmail, Passport: $passportNumber");
+        $status = $callbackData['data']['status'];
+        $checkoutSessionId = $paymentId;
 
+        try{
+
+            switch ($eventType) {
+                case 'initiated':
+                    Log::info("Event Type: $eventType");
+                    Log::info('Payment Initiated', $request->all());
+
+                    break;
+                case 'processed':
+                    Log::info("Event Type: $eventType");
+                    Log::info('Payment Processed', $request->all());
+
+                    break;
+                case 'guaranteed':
+                    Log::info("Event Type: $eventType");
+                    Log::info('Payment Guaranteed', $request->all());
+                    
+                    if (session()->has('js_username')) {
+                        $table = 'jobseeker_payments';
+                    } elseif (session()->has('emp_username')) {
+                        $table = 'employer_payments';
+                    }
+                    
+                    $payment = DB::table($table)
+                    ->where('status', '1')
+                    ->where('order_id', $order_id)
+                    ->latest()
+                    ->first();
+
+                    $carbonDate = Carbon::now();
+                    $formattedDate = $carbonDate->format('Y-m-d');
+                    $currentDate = Carbon::parse($formattedDate);
+                    $addedDays = 0;
+                    while ($addedDays < 7) {
+                        $currentDate->addDay();
+                        if ($currentDate->isWeekday()) {
+                            $addedDays++;
+                        }
+                    }
+                    $transaction = '';
+                    $type = '';
+                    $brand = '';
+                    $exp_month = '';
+                    $exp_year = '';
+
+                    $paymentMethod = $callbackData['data']['payment_method'];
+
+                    $transaction = '';
+                    
+                    if($paymentMethod['type']){
+                        $type = $paymentMethod['type'];
+                    }
+                    $where = ['order_id' => $payment->order_id];
+                    $select = [
+                        'status' => '0',
+                        'transaction_id' => $transaction,
+                        'payment_type' => $type,
+                        'card_type' => $brand,
+                        'exp_month' => $exp_month,
+                        'exp_year' => $exp_year,
+                        'payment_intent_id' => $paymentId,
+                        'payment_status' => '0',
+                        'pay_date' => $formattedDate,
+                        'hold_date' => $currentDate->toDateString()
+
+                    ];  
+
+                    $updatePayment = processData([$table, 'id'], $select, $where);
+
+                    return $this->success();
+                    break;
+                case 'delivered':
+        
+                    $payment = DB::table($table)
+                    ->where('status', '1')
+                    ->where('order_id', $order_id)
+                    ->latest()
+                    ->first();
+                                
+
+                    $carbonDate = Carbon::now();
+                    $formattedDate = $carbonDate->format('Y-m-d');
+                    $currentDate = Carbon::parse($formattedDate);
+                    $addedDays = 0;
+                    while ($addedDays < 7) {
+                        $currentDate->addDay();
+                        if ($currentDate->isWeekday()) {
+                            $addedDays++;
+                        }
+                    }
+                    $transaction = '';
+                    $type = '';
+                    $brand = '';
+                    $exp_month = '';
+                    $exp_year = '';
+
+                    $paymentMethod = $callbackData['data']['payment_method'];
+                    $transaction = '';
+                    
+                    if($paymentMethod['type']){
+                        $type = $paymentMethod['type'];
+                    }
+                    $where = ['order_id' => $payment->order_id];
+                    $select = [
+                        'status' => '0',
+                        'transaction_id' => $transaction,
+                        'payment_type' => $type,
+                        'card_type' => $brand,
+                        'exp_month' => $exp_month,
+                        'exp_year' => $exp_year,
+                        'payment_intent_id' => $paymentId,
+                        'payment_status' => '0',
+                        'pay_date' => $formattedDate,
+                        'hold_date' => $currentDate->toDateString()
+
+                    ];  
+
+                    $updatePayment = processData([$table, 'id'], $select, $where);
+
+                    return $this->success();
+                        
+                    break;
+                case 'failed':
+                    Log::error('Failed to update payment or order status for failed payment.');
+                    return $this->success();
+
+                    break;
+                case 'cancelled':
+                    $where = ['order_id' => $order_id];
+                    $select = [
+                        'status' => '1',
+                    ];
+                    $updatePayment = processData([$table, 'id'], $select, $where);
+                    if(isset($updatePayment) && $updatePayment['status'] == TRUE){
+                        return redirect()->route('payment-unsuccessful');
+                    }
+                    Log::error('Failed to update payment or order status for cancelled payment.');
+                    return $this->success();
+                    
+                    break;
+                default:
+                    Log::info("Unknown Event Type: $eventType");
+                    break;
+            }
+        
+        } catch (\Exception $e) {
+            \Log::error("Payment processing error: " . $e->getMessage());
+            return view('frontend.payment.payment-unsuccessful', ['message' => $e->getMessage()]);
+        }
+    }
 
 
     public function filter_list(Request $req)

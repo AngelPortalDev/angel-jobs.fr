@@ -291,3 +291,42 @@ function getCountryCodeByIp()
     ];
 }
 
+if (!function_exists('processData')) {
+    function processData($tableInfo, $data = [], $where = [])
+    {
+
+        $exists = 0;
+        if (count($where) > 0) {
+            $exists =  is_exist($tableInfo[0], $where);
+        }
+        if (isset($tableInfo) && is_array($tableInfo) && count($tableInfo) === 2) {
+            $query = DB::table($tableInfo[0]);
+            $primarykeyCol = isset($tableInfo[1])  ? $tableInfo[1] : 0;
+
+            if (isset($exists) && is_numeric($exists) && $exists === 0) {
+                if (isset($data) && is_array($data) && count($data) > 0) {
+                    $getId =  $query->insertGetId($data);
+                    if (isset($getId) && is_numeric($getId) && $getId > 0) {
+                        return ['status' => TRUE, 'id' => $getId];
+                    }
+                }
+                return FALSE;
+            } elseif (isset($exists) && is_numeric($exists) && $exists > 0) {
+                if (isset($where) && is_array($where) && count($where) > 0) {
+                    $query->where($where);
+                }
+                $getId = $query->first($primarykeyCol)->$primarykeyCol;
+                if (isset($data) && is_array($data) && count($data) > 0) {
+                    $response = $query->update($data);
+                    if (isset($response) && is_numeric($response)) {
+                        return ['status' => TRUE, 'id' => $getId];
+                    }
+                }
+                return FALSE;
+            }
+            return FALSE;
+        }
+        return FALSE;
+    }
+}
+

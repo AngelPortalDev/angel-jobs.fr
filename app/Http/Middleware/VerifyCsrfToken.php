@@ -13,6 +13,7 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         'verfiy-mail',
-        'reset-password-form'
+        'reset-password-form',
+        '/process_callback/*'
     ];
 }
