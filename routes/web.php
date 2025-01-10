@@ -124,7 +124,7 @@ Route::group(['prefix' => 'employer', 'middleware' => 'EmpAuth'], function () {
  
 });
 Route::post('payment', [commonController::class,'payment'])->name('payment');
-Route::post('process_callback/{order_id}', [commonController::class, 'processCallback']);
+Route::post('process_callback/{order_id}/{session}', [commonController::class, 'processCallback']);
 // Jobseeker Middelware Routes
 Route::group(['prefix' => 'jobseeker', 'middleware' => 'jobSeekerAuth'], function () {
     Route::get('jobseeker-profile', [jobSeekerProfile::class, 'getjsProfileView'])->name('js-profile');

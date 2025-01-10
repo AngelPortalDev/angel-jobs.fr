@@ -478,11 +478,13 @@ class commonController extends Controller
                 $table = 'jobseeker_view';
                 $select = ['js_id', 'fullname', 'dob'];
                 $where = ['email' => $username, 'is_delete' => 'No'];
+                $session = 'jobseeker';
             } elseif (session()->has('emp_username')) {
                 $username = session()->get('emp_username');
                 $table = 'employer_view';
                 $select = ['id', 'fullname'];
                 $where = ['email' => $username, 'is_deleted' => 'No'];
+                $session = 'employer';
             } else {
 
                 return redirect()->back()->with('msg', 'Someting Went Wrong');
@@ -502,7 +504,7 @@ class commonController extends Controller
                     "amount" => $payex,
                     "currency" => 'EUR', 
                     "country" => 'FR',
-                    "callback_url" => env('APP_URL').'/process_callback'.'/'.$order_id,
+                    "callback_url" => env('APP_URL').'/process_callback'.'/'.$order_id.'/'.$session,
                     "callback_version"=> 2,
                     "callback_id" => $order_id,
                     "return_cta" => env('APP_URL'),
@@ -567,12 +569,9 @@ class commonController extends Controller
             redirect()->back()->with('msg', 'Something Went Wrong4');
         }
     }
-    
-    public function processCallback(Request $request, $order_id)
+
+    public function processCallback(Request $request, $order_id, $session)
     {
-        Log::info('Callback received');
-        // Log::info('Callback received', $request->all());
-        
         $callbackData = $request->all();   
         $eventType = $callbackData['event_type'] ?? null;
         $status = $callbackData['data']['status'] ?? null;
@@ -590,14 +589,6 @@ class commonController extends Controller
         $email = $callbackData['data']['fields']['email'] ?? null;
 
         // Log the extracted data for debugging
-        Log::info("Event Type: $eventType");
-        Log::info("Status: $status");
-        Log::info("Payment ID: $paymentId");
-        Log::info("Amount From: $amountFrom $currencyFrom");
-        Log::info("Amount To: $amountTo $currencyTo");
-        Log::info("Reason: $reason");
-        Log::info("Client Reason: $clientReason");
-        Log::info("Student: $firstName $lastName, Email: $email");
         $status = $callbackData['data']['status'];
         $checkoutSessionId = $paymentId;
 
@@ -605,23 +596,24 @@ class commonController extends Controller
 
             switch ($eventType) {
                 case 'initiated':
-                    Log::info("Event Type: $eventType");
-                    Log::info('Payment Initiated', $request->all());
 
                     break;
                 case 'processed':
-                    Log::info("Event Type: $eventType");
-                    Log::info('Payment Processed', $request->all());
 
                     break;
                 case 'guaranteed':
-                    Log::info("Event Type: $eventType");
                     Log::info('Payment Guaranteed', $request->all());
                     
-                    if (session()->has('js_username')) {
+                    if ($session == 'jobseeker') {
                         $table = 'jobseeker_payments';
-                    } elseif (session()->has('emp_username')) {
+                        $mainTable = 'jobseekers';
+                        $plantable = 'jobseeker_plan';
+                        $column  = 'js_id';
+                    } elseif ($session == 'employer') {
                         $table = 'employer_payments';
+                        $mainTable = 'employers';
+                        $plantable = 'employer_plan';
+                        $column  = 'emp_id';
                     }
                     
                     $payment = DB::table($table)
@@ -653,29 +645,73 @@ class commonController extends Controller
                     if($paymentMethod['type']){
                         $type = $paymentMethod['type'];
                     }
-                    $where = ['order_id' => $payment->order_id];
+                    $where = ['order_id' => $order_id];
                     $select = [
                         'status' => '3',
                     ];
 
+                    $plan = DB::table($plantable)->where(['id' => $payment->plan_id])->first();
+                    if($plan){
+                        $planDuration = $plan->plan_duration;
+                        $addedDate = $carbonDate->copy()->addDays($planDuration);
+                        if($plantable == 'employer_plan'){
+                            $jobPostLimit  = $plan->job_post_limit;
+                            $currentLeftCredit = DB::table($mainTable)->where('id', $payment->$column)->value('left_credit_job_posting_plan');
+                            $newLeftCredit = $currentLeftCredit + $jobPostLimit;
+                            $mainTableSelect = [
+                                'plan_id' => $payment->plan_id, 
+                                'plan_start_from' => now(), 
+                                'plan_expired_on' => $addedDate->toDateString(),
+                                'left_credit_job_posting_plan' => $newLeftCredit
+                            ];
+                        }else{
+                            $mainTableSelect = [
+                                'plan_id' => $payment->plan_id,
+                            ];
+
+                            $existingProfile = DB::table('jobseeker_profiles')->where('js_id', $payment->$column)->first();
+                            if ($existingProfile) {
+                                $sel = [
+                                    'plan_start_from' => now(), 
+                                    'plan_expired_on' => $addedDate->toDateString(),
+                                ];
+                                $updateJobSeekerTable = processData(['jobseeker_profiles', 'id'], $sel, ['js_id' => $payment->$column]);
+                            }else{
+                                $newProfileData = [
+                                    'js_id' => $payment->$column,
+                                    'plan_start_from' => now(),
+                                    'plan_expired_on' => $addedDate->toDateString(),
+                                ];
+                                DB::table('jobseeker_profiles')->insert($newProfileData);
+                            }
+                        }
+                    }
+                    
                     $updatePayment = processData([$table, 'id'], $select, $where);
+                    $updateMainTable = processData([$mainTable, 'id'], $mainTableSelect, ['id' => $payment->$column]);
 
                     // return $this->success();
                     break;
                 case 'delivered':
+                    Log::info('Payment Delivered', $request->all());
                     
-                    if (session()->has('js_username')) {
+                    if ($session == 'jobseeker') {
                         $table = 'jobseeker_payments';
-                    } elseif (session()->has('emp_username')) {
+                        $mainTable = 'jobseekers';
+                        $plantable = 'jobseeker_plan';
+                        $column  = 'js_id';
+                    } elseif ($session == 'employer') {
                         $table = 'employer_payments';
+                        $mainTable = 'employers';
+                        $plantable = 'employer_plan';
+                        $column  = 'emp_id';
                     }
-        
+                    
                     $payment = DB::table($table)
                     ->where('status', '1')
                     ->where('order_id', $order_id)
                     ->latest()
                     ->first();
-                                
 
                     $carbonDate = Carbon::now();
                     $formattedDate = $carbonDate->format('Y-m-d');
@@ -694,17 +730,56 @@ class commonController extends Controller
                     $exp_year = '';
 
                     $paymentMethod = $callbackData['data']['payment_method'];
+
                     $transaction = '';
                     
                     if($paymentMethod['type']){
                         $type = $paymentMethod['type'];
                     }
-                    $where = ['order_id' => $payment->order_id];
+                    $where = ['order_id' => $order_id];
                     $select = [
                         'status' => '3',
-                    ];  
+                    ];
 
+                    $plan = DB::table($plantable)->where(['id' => $payment->plan_id])->first();
+                    if($plan){
+                        $planDuration = $plan->plan_duration;
+                        $addedDate = $carbonDate->copy()->addDays($planDuration);
+                        if($plantable == 'employer_plan'){
+                            $jobPostLimit  = $plan->job_post_limit;
+                            $currentLeftCredit = DB::table($mainTable)->where('id', $payment->$column)->value('left_credit_job_posting_plan');
+                            $newLeftCredit = $currentLeftCredit + $jobPostLimit;
+                            $mainTableSelect = [
+                                'plan_id' => $payment->plan_id, 
+                                'plan_start_from' => now(), 
+                                'plan_expired_on' => $addedDate->toDateString(),
+                                'left_credit_job_posting_plan' => $newLeftCredit
+                            ];
+                        }else{
+                            $mainTableSelect = [
+                                'plan_id' => $payment->plan_id,
+                            ];
+
+                            $existingProfile = DB::table('jobseeker_profiles')->where('js_id', $payment->$column)->first();
+                            if ($existingProfile) {
+                                $sel = [
+                                    'plan_start_from' => now(), 
+                                    'plan_expired_on' => $addedDate->toDateString(),
+                                ];
+                                $updateJobSeekerTable = processData(['jobseeker_profiles', 'id'], $sel, ['js_id' => $payment->$column]);
+                            }else{
+                                $newProfileData = [
+                                    'js_id' => $payment->$column,
+                                    'plan_start_from' => now(),
+                                    'plan_expired_on' => $addedDate->toDateString(),
+                                ];
+                                DB::table('jobseeker_profiles')->insert($newProfileData);
+                            }
+                        }
+                    }
+                    
                     $updatePayment = processData([$table, 'id'], $select, $where);
+                    $updateMainTable = processData([$mainTable, 'id'], $mainTableSelect, ['id' => $payment->$column]);
 
                     // return $this->success();
                         
@@ -738,11 +813,10 @@ class commonController extends Controller
             }
         
         } catch (\Exception $e) {
-            \Log::error("Payment processing error: " . $e->getMessage());
+            Log::error("Payment processing error: " . $e->getMessage());
             // return view('frontend.payment.payment-unsuccessful', ['message' => $e->getMessage()]);
         }
     }
-
 
     public function filter_list(Request $req)
     {

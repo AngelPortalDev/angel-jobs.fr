@@ -54,37 +54,37 @@
                                     Featured Employer Spotlight <br>
                                     <div class="m-t20">
                                         @if (session()->has('emp_username'))
-                                        @php
-                                        $payment = getData('employer_payments',['id', 'emp_id', 'plan_id', 'status'],['emp_id' => session()->get('emp_user_id'),'plan_id' => $plan_id,'status' => 3,],1,'id','DESC',);
-                                        $userdata = is_exist('employers',['id' => session()->get('emp_user_id'),['plan_expired_on', '>=', date('Y-m-d')]]);
-                                    @endphp
-                                        @if ($userdata != 0 && !empty($payment[0]->status) && $payment[0]->status == 3)
-                                        <a class="site-button radius-xl"
-                                            style="background: white;color: #3a9df1;">Purchased</a>
-                                          @else                                  
-                                            <form action="" method="post">
-                                                @csrf
+                                            @php
+                                                $payment = getData('employer_payments',['id', 'emp_id', 'plan_id', 'status'],['emp_id' => session()->get('emp_user_id'),'plan_id' => $plan_id,'status' => 3,],1,'id','DESC',);
+                                                $userdata = is_exist('employers',['id' => session()->get('emp_user_id'),['plan_expired_on', '>=', date('Y-m-d')]]);
+                                            @endphp
+                                            @if ($userdata != 0 && !empty($payment[0]->status) && $payment[0]->status == 3)
+                                                <a class="site-button radius-xl"
+                                                    style="background: white;color: #3a9df1;">Purchased</a>
+                                            @else                                  
+                                                <form action="" method="post">
+                                                    @csrf
 
-                                                <div class="card-body text-center">
-                                                    <div class="form-group mt-1 mb-1">
-                                                        <input type="hidden" name="amount" value="{{ $amount }}"
-                                                            class="form-control amount">
-                                                        <input type="hidden" name="apikey"
-                                                            value="{{ env('RAZORPAY_KEY') }}" class="form-control apikey">
-                                                        <input type="hidden" name="email" id ="email"
-                                                            value="{{ session()->get('emp_username') }}"
-                                                            class="form-control email">
-                                                        <input type="hidden" name="name" id ="name"
-                                                            value="{{ session()->get('emp_name') }}"
-                                                            class="form-control name">
-                                                        <input type="hidden" name="plan" id ="plan"
-                                                            value="{{ $plan_id }}" class="form-control plan">
+                                                    <div class="card-body text-center">
+                                                        <div class="form-group mt-1 mb-1">
+                                                            <input type="hidden" name="amount" value="{{ $amount }}"
+                                                                class="form-control amount">
+                                                            <input type="hidden" name="apikey"
+                                                                value="{{ env('RAZORPAY_KEY') }}" class="form-control apikey">
+                                                            <input type="hidden" name="email" id ="email"
+                                                                value="{{ session()->get('emp_username') }}"
+                                                                class="form-control email">
+                                                            <input type="hidden" name="name" id ="name"
+                                                                value="{{ session()->get('emp_name') }}"
+                                                                class="form-control name">
+                                                            <input type="hidden" name="plan" id ="plan"
+                                                                value="{{ $plan_id }}" class="form-control plan">
+                                                        </div>
+                                                        {{-- <button id="rzp-button1" class="site-button radius-xl rzp-button1" style="white-space: normal;">Buy
+                                                            Now</button> --}}
+                                                            <a class="site-button radius-xl" href="{{ route('emp_buy_plan', ['plan_id' => $plan_id, 'amount' => $amount])}}"><span class="p-lr30">Buy Now</span></a>
                                                     </div>
-                                                    {{-- <button id="rzp-button1" class="site-button radius-xl rzp-button1" style="white-space: normal;">Buy
-                                                        Now</button> --}}
-                                                        <a class="site-button radius-xl" href="{{ route('emp_buy_plan', ['plan_id' => $plan_id, 'amount' => $amount])}}"><span class="p-lr30">Buy Now</span></a>
-                                                </div>
-                                            </form>
+                                                </form>
                                             @endif
                                             {{-- <a class="site-button radius-xl" href="{{ route('emp_buy_plan', ['plan_id' => $plan_id, 'amount' => $amount])}}"><span class="p-lr30">Buy Now</span></a> --}}
                                         @else
