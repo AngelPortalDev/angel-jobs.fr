@@ -833,6 +833,8 @@ class commonController extends Controller
     
     public function paymentResponse($order_id, $plantable)
     {
+        $order_id = isset($order_id) ? $order_id : 0;
+        $plantable = isset($plantable) ? $plantable : '';
         $plan = DB::table($plantable)->where(['order_id' => $order_id])->first();
         if ($plan->status == 3) {
             return view('thank-you');
