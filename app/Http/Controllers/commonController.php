@@ -470,7 +470,7 @@ class commonController extends Controller
 
     public function buy_plan($plan, $amount)
     {
-        if (isset($plan) && !empty($plan) && isset($amount) && !empty($plan) && session()->has('emp_username') || session()->has('js_username')) {
+        if (isset($plan) && !empty($plan) && isset($amount) && !empty($amount) && session()->has('emp_username') || session()->has('js_username')) {
 
 
             if (session()->has('js_username')) {
@@ -542,304 +542,322 @@ class commonController extends Controller
                         if ($exists === 1 && session()->has('js_username')) {
 
                             $data = ['order_id' => $order_id, 'js_id' => $user_id, 'plan_id' => $plan, 'pay_method' => 'Flywire', 'payment_amount' => $amount, 'status' => 1, 'created_at' => $this->time];
-
-                            $create = JsPayement::insertGetId($data);
-                            if (!$create) {
-                                return redirect()->back()->with('msg', 'Failed to create payment record');
+                            
+                            $payment = processData(['jobseeker_payments', 'id'], $data);
+                            if (!isset($payment) || $payment['status'] !== true) {
+                                redirect()->back()->with('msg', 'Something Went Wrong');
                             }
+
+                            // $create = JsPayement::insertGetId($data);
+                            // if (!$create) {
+                            //     return redirect()->back()->with('msg', 'Failed to create payment record');
+                            // }
+
                         } elseif ($exists === 1 && session()->has('emp_username')) {
                             $data = ['order_id' => $order_id, 'emp_id' => $user_id, 'plan_id' => $plan, 'pay_method' => 'Flywire', 'payment_amount' => $amount, 'status' => 1, 'created_at' => $this->time];
-                            $create = EmpPayments::insertGetId($data);
-                            if (!$create) {
-                                return redirect()->back()->with('msg', 'Failed to create payment record');
+                            
+                            $payment = processData(['employer_payments', 'id'], $data);
+                            if (!isset($payment) || $payment['status'] !== true) {
+                                redirect()->back()->with('msg', 'Something Went Wrong');
                             }
-                        }
 
-                        if (isset($create) && $create > 0) {
-                            return redirect($pay_url);
-                        } else {
-                            return redirect()->back()->with('msg', 'Something Went Wrong');
+                            // $create = EmpPayments::insertGetId($data);
+                            // if (!$create) {
+                            //     return redirect()->back()->with('msg', 'Failed to create payment record');
+                            // }
                         }
+                        return redirect($pay_url);
                     } catch (\Throwable $th) {
                         return redirect()->back()->with('msg', 'Something Went Wrong');
                     }
                 }
             } catch (\Throwable $th) {
-                redirect()->back()->with('msg', 'Something Went Wrong3');
+                redirect()->back()->with('msg', 'Something Went Wrong');
             }
         } else {
-            // return "2";
-            redirect()->back()->with('msg', 'Something Went Wrong4');
+            redirect()->back()->with('msg', 'Something Went Wrong');
         }
     }
 
     public function processCallback(Request $request, $order_id, $session)
     {
-        $callbackData = $request->all();   
-        $eventType = $callbackData['event_type'] ?? null;
+        if ($request->isMethod('POST') && isset($order_id) && !empty($order_id) && isset($session) && !empty($session)) {
+            $callbackData = $request->all();   
+            $eventType = $callbackData['event_type'] ?? null;
 
-        try{
+            try{
 
-            switch ($eventType) {
-                case 'initiated':
+                switch ($eventType) {
+                    case 'initiated':
 
-                    break;
-                case 'processed':
+                        break;
+                    case 'processed':
 
-                    break;
-                case 'guaranteed':
-                    Log::info('Payment Guaranteed', $request->all());
-                    
-                    if ($session == 'jobseeker') {
-                        $table = 'jobseeker_payments';
-                        $mainTable = 'jobseekers';
-                        $plantable = 'jobseeker_plan';
-                        $column  = 'js_id';
-                    } elseif ($session == 'employer') {
-                        $table = 'employer_payments';
-                        $mainTable = 'employers';
-                        $plantable = 'employer_plan';
-                        $column  = 'emp_id';
-                    }
-                    
-                    $payment = DB::table($table)
-                    ->where('status', '1')
-                    ->where('order_id', $order_id)
-                    ->latest()
-                    ->first();
-
-                    $carbonDate = Carbon::now();
-                    $formattedDate = $carbonDate->format('Y-m-d');
-                    $currentDate = Carbon::parse($formattedDate);
-                    $addedDays = 0;
-                    while ($addedDays < 7) {
-                        $currentDate->addDay();
-                        if ($currentDate->isWeekday()) {
-                            $addedDays++;
-                        }
-                    }
-                    $transaction = '';
-                    $type = '';
-                    $brand = '';
-                    $exp_month = '';
-                    $exp_year = '';
-
-                    $paymentMethod = $callbackData['data']['payment_method'];
-
-                    $transaction = '';
-                    
-                    if($paymentMethod['type']){
-                        $type = $paymentMethod['type'];
-                    }
-                    $where = ['order_id' => $order_id];
-                    $select = [
-                        'status' => '3',
-                    ];
-
-                    $plan = DB::table($plantable)->where(['id' => $payment->plan_id])->first();
-                    if($plan){
-                        $planDuration = $plan->plan_duration;
-                        $addedDate = $carbonDate->copy()->addDays($planDuration);
-                        if($plantable == 'employer_plan'){
-                            $jobPostLimit  = $plan->job_post_limit;
-                            $currentLeftCredit = DB::table($mainTable)->where('id', $payment->$column)->value('left_credit_job_posting_plan');
-                            $newLeftCredit = $currentLeftCredit + $jobPostLimit;
-                            $mainTableSelect = [
-                                'plan_id' => $payment->plan_id, 
-                                'plan_start_from' => now(), 
-                                'plan_expired_on' => $addedDate->toDateString(),
-                                'left_credit_job_posting_plan' => $newLeftCredit
-                            ];
-                        }else{
-                            $mainTableSelect = [
-                                'plan_id' => $payment->plan_id,
-                            ];
-
-                            $existingProfile = DB::table('jobseeker_profiles')->where('js_id', $payment->$column)->first();
-                            if ($existingProfile) {
-                                $sel = [
-                                    'plan_start_from' => now(), 
-                                    'plan_expired_on' => $addedDate->toDateString(),
-                                ];
-                                $updateJobSeekerTable = processData(['jobseeker_profiles', 'id'], $sel, ['js_id' => $payment->$column]);
-                                if (!isset($updateJobSeekerTable) || $updateJobSeekerTable['status'] !== true) {
-                                    return json_encode(['code' => 201, 'title' => "Someting Went Wrong", 'message' => 'Please Try Again', "icon" => "error"]);
-                                }
-
-                            }else{
-                                $newProfileData = [
-                                    'js_id' => $payment->$column,
-                                    'plan_start_from' => now(),
-                                    'plan_expired_on' => $addedDate->toDateString(),
-                                ];
-                                $jobSeekerProfile = DB::table('jobseeker_profiles')->insert($newProfileData);
-                                if (!isset($jobSeekerProfile) || $jobSeekerProfile['status'] !== true) {
-                                    return json_encode(['code' => 201, 'title' => "Someting Went Wrong", 'message' => 'Please Try Again', "icon" => "error"]);
-                                }
-                            }
-                        }
-                    }
-                    
-                    $updatePayment = processData([$table, 'id'], $select, $where);
-                    if (isset($updatePayment) && $updatePayment['status'] === true) {
-                        $updateMainTable = processData([$mainTable, 'id'], $mainTableSelect, ['id' => $payment->$column]);
-                        if (!isset($updateMainTable) || $updateMainTable['status'] !== true) {
-                            return json_encode(['code' => 201, 'title' => "Someting Went Wrong", 'message' => 'Please Try Again', "icon" => "error"]);
-                        }
-                    }else{
-                        return json_encode(['code' => 201, 'title' => "Someting Went Wrong", 'message' => 'Please Try Again', "icon" => "error"]);
-                    }
-
-                    // return $this->success();
-                    break;
-                case 'delivered':
-                    Log::info('Payment Delivered', $request->all());
-                    
-                    if ($session == 'jobseeker') {
-                        $table = 'jobseeker_payments';
-                        $mainTable = 'jobseekers';
-                        $plantable = 'jobseeker_plan';
-                        $column  = 'js_id';
-                    } elseif ($session == 'employer') {
-                        $table = 'employer_payments';
-                        $mainTable = 'employers';
-                        $plantable = 'employer_plan';
-                        $column  = 'emp_id';
-                    }
-                    
-                    $payment = DB::table($table)
-                    ->where('status', '1')
-                    ->where('order_id', $order_id)
-                    ->latest()
-                    ->first();
-
-                    $carbonDate = Carbon::now();
-                    $formattedDate = $carbonDate->format('Y-m-d');
-                    $currentDate = Carbon::parse($formattedDate);
-                    $addedDays = 0;
-                    while ($addedDays < 7) {
-                        $currentDate->addDay();
-                        if ($currentDate->isWeekday()) {
-                            $addedDays++;
-                        }
-                    }
-                    $transaction = '';
-                    $type = '';
-                    $brand = '';
-                    $exp_month = '';
-                    $exp_year = '';
-
-                    $paymentMethod = $callbackData['data']['payment_method'];
-
-                    $transaction = '';
-                    
-                    if($paymentMethod['type']){
-                        $type = $paymentMethod['type'];
-                    }
-                    $where = ['order_id' => $order_id];
-                    $select = [
-                        'status' => '3',
-                    ];
-
-                    $plan = DB::table($plantable)->where(['id' => $payment->plan_id])->first();
-                    if($plan){
-                        $planDuration = $plan->plan_duration;
-                        $addedDate = $carbonDate->copy()->addDays($planDuration);
-                        if($plantable == 'employer_plan'){
-                            $jobPostLimit  = $plan->job_post_limit;
-                            $currentLeftCredit = DB::table($mainTable)->where('id', $payment->$column)->value('left_credit_job_posting_plan');
-                            $newLeftCredit = $currentLeftCredit + $jobPostLimit;
-                            $mainTableSelect = [
-                                'plan_id' => $payment->plan_id, 
-                                'plan_start_from' => now(), 
-                                'plan_expired_on' => $addedDate->toDateString(),
-                                'left_credit_job_posting_plan' => $newLeftCredit
-                            ];
-                        }else{
-                            $mainTableSelect = [
-                                'plan_id' => $payment->plan_id,
-                            ];
-
-                            $existingProfile = DB::table('jobseeker_profiles')->where('js_id', $payment->$column)->first();
-                            if ($existingProfile) {
-                                $sel = [
-                                    'plan_start_from' => now(), 
-                                    'plan_expired_on' => $addedDate->toDateString(),
-                                ];
-                                $updateJobSeekerTable = processData(['jobseeker_profiles', 'id'], $sel, ['js_id' => $payment->$column]);
-                                if (!isset($updateJobSeekerTable) || $updateJobSeekerTable['status'] !== true) {
-                                    return json_encode(['code' => 201, 'title' => "Someting Went Wrong", 'message' => 'Please Try Again', "icon" => "error"]);
-                                }
-
-                            }else{
-                                $newProfileData = [
-                                    'js_id' => $payment->$column,
-                                    'plan_start_from' => now(),
-                                    'plan_expired_on' => $addedDate->toDateString(),
-                                ];
-                                $jobSeekerProfile = DB::table('jobseeker_profiles')->insert($newProfileData);
-                                if (!isset($jobSeekerProfile) || $jobSeekerProfile['status'] !== true) {
-                                    return json_encode(['code' => 201, 'title' => "Someting Went Wrong", 'message' => 'Please Try Again', "icon" => "error"]);
-                                }
-                            }
-                        }
-                    }
-                    
-                    $updatePayment = processData([$table, 'id'], $select, $where);
-                    if (isset($updatePayment) && $updatePayment['status'] === true) {
-                        $updateMainTable = processData([$mainTable, 'id'], $mainTableSelect, ['id' => $payment->$column]);
-                        if (!isset($updateMainTable) || $updateMainTable['status'] !== true) {
-                            return json_encode(['code' => 201, 'title' => "Someting Went Wrong", 'message' => 'Please Try Again', "icon" => "error"]);
-                        }
-                    }else{
-                        return json_encode(['code' => 201, 'title' => "Someting Went Wrong", 'message' => 'Please Try Again', "icon" => "error"]);
-                    }
-
-                    // return $this->success();
+                        break;
+                    case 'guaranteed':
+                        Log::info('Payment Guaranteed', $request->all());
                         
-                    break;
-                case 'failed':
-                    Log::error('Failed to update payment or order status for failed payment.');
-                    // return $this->success();
-
-                    break;
-                case 'cancelled':
-                    if (session()->has('js_username')) {
-                        $table = 'jobseeker_payments';
-                    } elseif (session()->has('emp_username')) {
-                        $table = 'employer_payments';
-                    }
-                    $where = ['order_id' => $order_id];
-                    $select = [
-                        'status' => '2',
-                    ];
-                    $updatePayment = processData([$table, 'id'], $select, $where);
-                    if (!isset($updateMainTable) || $updateMainTable['status'] !== true) {
-                        return json_encode(['code' => 201, 'title' => "Someting Went Wrong", 'message' => 'Please Try Again', "icon" => "error"]);
-                    }
-                    Log::error('Failed to update payment or order status for cancelled payment.');
-                    // return $this->success();
+                        if ($session == 'jobseeker') {
+                            $table = 'jobseeker_payments';
+                            $mainTable = 'jobseekers';
+                            $plantable = 'jobseeker_plan';
+                            $column  = 'js_id';
+                        } elseif ($session == 'employer') {
+                            $table = 'employer_payments';
+                            $mainTable = 'employers';
+                            $plantable = 'employer_plan';
+                            $column  = 'emp_id';
+                        }
+                        
+                        // $payment = DB::table($table)
+                        // ->where('status', '1')
+                        // ->where('order_id', $order_id)
+                        // ->latest()
+                        // ->first();
                     
-                    break;
-                default:
-                    Log::info("Unknown Event Type: $eventType");
-                    break;
+                        $payment = getData($table, [$column, 'plan_id'], ['status' => '1', 'order_id' => $order_id], '1', 'id', 'DESC');
+                        if (isset($payment) && !empty($payment)) {
+
+                            $carbonDate = Carbon::now();
+                            $formattedDate = $carbonDate->format('Y-m-d');
+                            $currentDate = Carbon::parse($formattedDate);
+                            $addedDays = 0;
+                            while ($addedDays < 7) {
+                                $currentDate->addDay();
+                                if ($currentDate->isWeekday()) {
+                                    $addedDays++;
+                                }
+                            }
+                            $transaction = '';
+                            $type = '';
+                            $brand = '';
+                            $exp_month = '';
+                            $exp_year = '';
+
+                            $paymentMethod = $callbackData['data']['payment_method'];
+
+                            $transaction = '';
+                            
+                            if($paymentMethod['type']){
+                                $type = $paymentMethod['type'];
+                            }
+                            $where = ['order_id' => $order_id];
+                            $select = [
+                                'status' => '3',
+                            ];
+
+                            // $plan = DB::table($plantable)->where(['id' => $payment->plan_id])->first();
+
+                            $plan = getData($plantable, ['plan_duration'], ['id' => $payment[0]->plan_id]);
+                            if (isset($plan) && !empty($plan)) {
+                                $planDuration = isset($plan[0]->plan_duration) ? $plan[0]->plan_duration : 0;
+                                $addedDate = $carbonDate->copy()->addDays($planDuration);
+                                if($plantable == 'employer_plan'){
+                                    $plan = getData($plantable, ['job_post_limit', 'plan_duration'], ['id' => $payment[0]->plan_id]);
+                                    if (isset($plan) && !empty($plan)) {
+                                        $jobPostLimit  = isset($plan[0]->job_post_limit) ? $plan[0]->job_post_limit : 0;
+                                        $currentLeftCredit = getData($mainTable, ['left_credit_job_posting_plan'], ['id' => $payment[0]->$column]);
+                                        // $currentLeftCredit = DB::table($mainTable)->where('id', $payment->$column)->value('left_credit_job_posting_plan');
+                                        if (isset($currentLeftCredit) && !empty($currentLeftCredit)) {
+                                            $newLeftCredit = $currentLeftCredit[0]->left_credit_job_posting_plan + $jobPostLimit;
+                                            $mainTableSelect = [
+                                                'plan_id' => $payment[0]->plan_id, 
+                                                'plan_start_from' => now(), 
+                                                'plan_expired_on' => $addedDate->toDateString(),
+                                                'left_credit_job_posting_plan' => $newLeftCredit
+                                            ];
+                                        }
+                                    }
+                                }else{
+                                    $mainTableSelect = [
+                                        'plan_id' => $payment[0]->plan_id,
+                                    ];
+
+                                    // $existingProfile = DB::table('jobseeker_profiles')->where('js_id', $payment->$column)->first();
+                                    $existingProfile = getData('jobseeker_profiles', ['js_id'], ['js_id' => $payment[0]->$column]);
+                                    if (isset($existingProfile) && !empty($existingProfile)) {
+                                        $sel = [
+                                            'plan_start_from' => now(), 
+                                            'plan_expired_on' => $addedDate->toDateString(),
+                                        ];
+                                        $updateJobSeekerTable = processData(['jobseeker_profiles', 'id'], $sel, ['js_id' => $payment[0]->$column]);
+
+                                    }else{
+                                        $newProfileData = [
+                                            'js_id' => $payment[0]->$column,
+                                            'plan_start_from' => now(),
+                                            'plan_expired_on' => $addedDate->toDateString(),
+                                        ];
+                                        // $jobSeekerProfile = DB::table('jobseeker_profiles')->insert($newProfileData);
+                                        
+                                        $jobSeekerProfile = processData(['jobseeker_profiles', 'id'], $newProfileData);
+                                    }
+                                }
+                            }
+                            
+                            $updatePayment = processData([$table, 'id'], $select, $where);
+                            if (isset($updatePayment) && $updatePayment['status'] === true) {
+                                $updateMainTable = processData([$mainTable, 'id'], $mainTableSelect, ['id' => $payment[0]->$column]);
+                            }
+                        }
+                        // return $this->success();
+                        break;
+                    case 'delivered':
+                        Log::info('Payment Delivered', $request->all());
+                        
+                        if ($session == 'jobseeker') {
+                            $table = 'jobseeker_payments';
+                            $mainTable = 'jobseekers';
+                            $plantable = 'jobseeker_plan';
+                            $column  = 'js_id';
+                        } elseif ($session == 'employer') {
+                            $table = 'employer_payments';
+                            $mainTable = 'employers';
+                            $plantable = 'employer_plan';
+                            $column  = 'emp_id';
+                        }
+                        
+                        // $payment = DB::table($table)
+                        // ->where('status', '1')
+                        // ->where('order_id', $order_id)
+                        // ->latest()
+                        // ->first();
+                    
+                        $payment = getData($table, [$column, 'plan_id'], ['status' => '1', 'order_id' => $order_id], '1', 'id', 'DESC');
+                        if (isset($payment) && !empty($payment)) {
+
+                            $carbonDate = Carbon::now();
+                            $formattedDate = $carbonDate->format('Y-m-d');
+                            $currentDate = Carbon::parse($formattedDate);
+                            $addedDays = 0;
+                            while ($addedDays < 7) {
+                                $currentDate->addDay();
+                                if ($currentDate->isWeekday()) {
+                                    $addedDays++;
+                                }
+                            }
+                            $transaction = '';
+                            $type = '';
+                            $brand = '';
+                            $exp_month = '';
+                            $exp_year = '';
+
+                            $paymentMethod = $callbackData['data']['payment_method'];
+
+                            $transaction = '';
+                            
+                            if($paymentMethod['type']){
+                                $type = $paymentMethod['type'];
+                            }
+                            $where = ['order_id' => $order_id];
+                            $select = [
+                                'status' => '3',
+                            ];
+
+                            // $plan = DB::table($plantable)->where(['id' => $payment->plan_id])->first();
+
+                            $plan = getData($plantable, ['plan_duration'], ['id' => $payment[0]->plan_id]);
+                            if (isset($plan) && !empty($plan)) {
+                                $planDuration = isset($plan[0]->plan_duration) ? $plan[0]->plan_duration : 0;
+                                $addedDate = $carbonDate->copy()->addDays($planDuration);
+                                if($plantable == 'employer_plan'){
+                                    $plan = getData($plantable, ['job_post_limit', 'plan_duration'], ['id' => $payment[0]->plan_id]);
+                                    if (isset($plan) && !empty($plan)) {
+                                        $jobPostLimit  = isset($plan[0]->job_post_limit) ? $plan[0]->job_post_limit : 0;
+                                        $currentLeftCredit = getData($mainTable, ['left_credit_job_posting_plan'], ['id' => $payment[0]->$column]);
+                                        // $currentLeftCredit = DB::table($mainTable)->where('id', $payment->$column)->value('left_credit_job_posting_plan');
+                                        if (isset($currentLeftCredit) && !empty($currentLeftCredit)) {
+                                            $newLeftCredit = $currentLeftCredit[0]->left_credit_job_posting_plan + $jobPostLimit;
+                                            $mainTableSelect = [
+                                                'plan_id' => $payment[0]->plan_id, 
+                                                'plan_start_from' => now(), 
+                                                'plan_expired_on' => $addedDate->toDateString(),
+                                                'left_credit_job_posting_plan' => $newLeftCredit
+                                            ];
+                                        }
+                                    }
+                                }else{
+                                    $mainTableSelect = [
+                                        'plan_id' => $payment[0]->plan_id,
+                                    ];
+
+                                    // $existingProfile = DB::table('jobseeker_profiles')->where('js_id', $payment->$column)->first();
+                                    $existingProfile = getData('jobseeker_profiles', ['js_id'], ['js_id' => $payment[0]->$column]);
+                                    if (isset($existingProfile) && !empty($existingProfile)) {
+                                        $sel = [
+                                            'plan_start_from' => now(), 
+                                            'plan_expired_on' => $addedDate->toDateString(),
+                                        ];
+                                        $updateJobSeekerTable = processData(['jobseeker_profiles', 'id'], $sel, ['js_id' => $payment[0]->$column]);
+
+                                    }else{
+                                        $newProfileData = [
+                                            'js_id' => $payment[0]->$column,
+                                            'plan_start_from' => now(),
+                                            'plan_expired_on' => $addedDate->toDateString(),
+                                        ];
+                                        // $jobSeekerProfile = DB::table('jobseeker_profiles')->insert($newProfileData);
+                                        
+                                        $jobSeekerProfile = processData(['jobseeker_profiles', 'id'], $newProfileData);
+                                    }
+                                }
+                            }
+                            
+                            $updatePayment = processData([$table, 'id'], $select, $where);
+                            if (isset($updatePayment) && $updatePayment['status'] === true) {
+                                $updateMainTable = processData([$mainTable, 'id'], $mainTableSelect, ['id' => $payment[0]->$column]);
+                            }
+                        }
+                        // return $this->success();
+                            
+                        break;
+                    case 'failed':
+                        Log::error('Failed to update payment or order status for failed payment.');
+                        // return $this->success();
+
+                        break;
+                    case 'cancelled':
+                        if (session()->has('js_username')) {
+                            $table = 'jobseeker_payments';
+                        } elseif (session()->has('emp_username')) {
+                            $table = 'employer_payments';
+                        }
+                        $where = ['order_id' => $order_id];
+                        $select = [
+                            'status' => '2',
+                        ];
+                        $updatePayment = processData([$table, 'id'], $select, $where);
+                        Log::error('Failed to update payment or order status for cancelled payment.');
+                        // return $this->success();
+                        
+                        break;
+                    default:
+                        Log::info("Unknown Event Type: $eventType");
+                        break;
+                }
+            
+            } catch (\Exception $e) {
+                Log::error("Payment processing error: " . $e->getMessage());
             }
-        
-        } catch (\Exception $e) {
-            Log::error("Payment processing error: " . $e->getMessage());
+        }else {
+            Log::error("Invalid Paramater");
         }
     }
     
     public function paymentResponse($order_id, $plantable)
     {
-        $order_id = isset($order_id) ? $order_id : 0;
-        $plantable = isset($plantable) ? $plantable : '';
-        $plan = DB::table($plantable)->where(['order_id' => $order_id])->first();
-        if ($plan->status == 3) {
-            return view('thank-you');
-        } else {
-            return view('thank-you');
+        if (isset($order_id) && !empty($order_id) && isset($plantable) && !empty($plantable)) {
+            $order_id = isset($order_id) ? $order_id : 0;
+            $plantable = isset($plantable) ? $plantable : '';
+            // $plan = DB::table($plantable)->where(['order_id' => $order_id])->first();
+            $plan = getData($plantable, ['status'], ['order_id' => $order_id]);
+            if (isset($plan) && !empty($plan) && $plan[0]->status == '3') {
+                return view('greet-payment-success');
+            } else {
+                return view('oops-payment-failed');
+            }
+        }else{
+            redirect()->back()->with('msg', 'Invalid Parameters'); 
         }
     }
 

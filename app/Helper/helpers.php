@@ -330,3 +330,34 @@ if (!function_exists('processData')) {
     }
 }
 
+
+if (!function_exists('saveData')) {
+    function saveData($modelInstance, $data = [], $where = [])
+    {
+        $exists = 0;
+        if (count($where) > 0) {
+            $exists =  is_exists($modelInstance, $where);
+        }
+        if (isset($modelInstance)) {
+            if (isset($exists) && is_numeric($exists) && $exists === 0) {
+                if (isset($data) && is_array($data) && count($data) > 0) {
+                    $getId =  $modelInstance->create($data);
+                    if (isset($getId) && is_numeric($getId->getKey()) && $getId->getKey() > 0) {
+                        return ['status' => TRUE, 'id' => $getId->getKey()];
+                    }
+                }
+                return FALSE;
+            } elseif (isset($exists) && is_numeric($exists) && $exists > 0 && isset($where) && is_array($where) && count($where) > 0) {
+                $getData = $modelInstance->where($where)->first();
+                if (isset($data) && is_array($data) && count($data) > 0) {
+                    $getData->update($data);
+                    if (isset($getData) && is_numeric($getData->getKey()) && $getData->getKey() > 0) {
+                        return ['status' => TRUE, 'id' => $getData->getKey()];
+                    }
+                }
+                return FALSE;
+            }
+            return FALSE;
+        }
+    }
+}

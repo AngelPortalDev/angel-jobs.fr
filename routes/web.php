@@ -126,6 +126,8 @@ Route::group(['prefix' => 'employer', 'middleware' => 'EmpAuth'], function () {
 Route::post('payment', [commonController::class,'payment'])->name('payment');
 Route::post('process_callback/{order_id}/{session}', [commonController::class, 'processCallback']);
 Route::get('/payment_response/{order_id}/{plantable}', [commonController::class, 'paymentResponse'])->name('payment.response');
+Route::view('greet-payment-success', 'greet-payment-success')->name('greet-payment-success');
+Route::view('oops-payment-failed', 'oops-payment-failed')->name('oops-payment-failed');
 // Jobseeker Middelware Routes
 Route::group(['prefix' => 'jobseeker', 'middleware' => 'jobSeekerAuth'], function () {
     Route::get('jobseeker-profile', [jobSeekerProfile::class, 'getjsProfileView'])->name('js-profile');
