@@ -479,12 +479,15 @@ class commonController extends Controller
                 $select = ['js_id', 'fullname', 'dob'];
                 $where = ['email' => $username, 'is_delete' => 'No'];
                 $session = 'jobseeker';
+                $plantable = 'jobseeker_payments';
             } elseif (session()->has('emp_username')) {
                 $username = session()->get('emp_username');
                 $table = 'employer_view';
                 $select = ['id', 'fullname'];
                 $where = ['email' => $username, 'is_deleted' => 'No'];
                 $session = 'employer';
+                $plantable = 'employer_payments';
+
             } else {
 
                 return redirect()->back()->with('msg', 'Someting Went Wrong');
@@ -507,7 +510,7 @@ class commonController extends Controller
                     "callback_url" => env('APP_URL').'/process_callback'.'/'.$order_id.'/'.$session,
                     "callback_version"=> 2,
                     "callback_id" => $order_id,
-                    "return_cta" => env('APP_URL'),
+                    "return_cta" => route('payment.response', ['order_id' => $order_id, 'plantable' => $plantable]),
                     "return_cta_name" => "Return to angel-jobs.fr",
                     "dynamic_fields" => [
                         "id" => $id,
@@ -541,27 +544,27 @@ class commonController extends Controller
                             $data = ['order_id' => $order_id, 'js_id' => $user_id, 'plan_id' => $plan, 'pay_method' => 'Flywire', 'payment_amount' => $amount, 'status' => 1, 'created_at' => $this->time];
 
                             $create = JsPayement::insertGetId($data);
-                        } elseif (
-                            $exists === 1 && session()->has('emp_username')
-                        ) {
-
+                            if (!$create) {
+                                return redirect()->back()->with('msg', 'Failed to create payment record');
+                            }
+                        } elseif ($exists === 1 && session()->has('emp_username')) {
                             $data = ['order_id' => $order_id, 'emp_id' => $user_id, 'plan_id' => $plan, 'pay_method' => 'Flywire', 'payment_amount' => $amount, 'status' => 1, 'created_at' => $this->time];
                             $create = EmpPayments::insertGetId($data);
+                            if (!$create) {
+                                return redirect()->back()->with('msg', 'Failed to create payment record');
+                            }
                         }
 
                         if (isset($create) && $create > 0) {
                             return redirect($pay_url);
                         } else {
-                            return redirect()->back()->with('msg', 'Something Went Wrong1');
+                            return redirect()->back()->with('msg', 'Something Went Wrong');
                         }
                     } catch (\Throwable $th) {
-                        // return "Someting Went Wrong" . $th;
                         return redirect()->back()->with('msg', 'Something Went Wrong');
                     }
                 }
             } catch (\Throwable $th) {
-                // return "Someting Went Wrong" . $th;
-                // return "1 ";
                 redirect()->back()->with('msg', 'Something Went Wrong3');
             }
         } else {
@@ -574,23 +577,6 @@ class commonController extends Controller
     {
         $callbackData = $request->all();   
         $eventType = $callbackData['event_type'] ?? null;
-        $status = $callbackData['data']['status'] ?? null;
-
-        // Get additional data fields
-        $paymentId = $callbackData['data']['payment_id'] ?? null;
-        $amountFrom = $callbackData['data']['amount_from'] ?? null;
-        $currencyFrom = $callbackData['data']['currency_from'] ?? null;
-        $amountTo = $callbackData['data']['amount_to'] ?? null;
-        $currencyTo = $callbackData['data']['currency_to'] ?? null;
-        $reason = $callbackData['data']['reason'] ?? null;
-        $clientReason = $callbackData['data']['client_reason'] ?? null;
-        $firstName = $callbackData['data']['fields']['first_name'] ?? null;
-        $lastName = $callbackData['data']['fields']['last_name'] ?? null;
-        $email = $callbackData['data']['fields']['email'] ?? null;
-
-        // Log the extracted data for debugging
-        $status = $callbackData['data']['status'];
-        $checkoutSessionId = $paymentId;
 
         try{
 
@@ -676,19 +662,33 @@ class commonController extends Controller
                                     'plan_expired_on' => $addedDate->toDateString(),
                                 ];
                                 $updateJobSeekerTable = processData(['jobseeker_profiles', 'id'], $sel, ['js_id' => $payment->$column]);
+                                if (!isset($updateJobSeekerTable) || $updateJobSeekerTable['status'] !== true) {
+                                    return json_encode(['code' => 201, 'title' => "Someting Went Wrong", 'message' => 'Please Try Again', "icon" => "error"]);
+                                }
+
                             }else{
                                 $newProfileData = [
                                     'js_id' => $payment->$column,
                                     'plan_start_from' => now(),
                                     'plan_expired_on' => $addedDate->toDateString(),
                                 ];
-                                DB::table('jobseeker_profiles')->insert($newProfileData);
+                                $jobSeekerProfile = DB::table('jobseeker_profiles')->insert($newProfileData);
+                                if (!isset($jobSeekerProfile) || $jobSeekerProfile['status'] !== true) {
+                                    return json_encode(['code' => 201, 'title' => "Someting Went Wrong", 'message' => 'Please Try Again', "icon" => "error"]);
+                                }
                             }
                         }
                     }
                     
                     $updatePayment = processData([$table, 'id'], $select, $where);
-                    $updateMainTable = processData([$mainTable, 'id'], $mainTableSelect, ['id' => $payment->$column]);
+                    if (isset($updatePayment) && $updatePayment['status'] === true) {
+                        $updateMainTable = processData([$mainTable, 'id'], $mainTableSelect, ['id' => $payment->$column]);
+                        if (!isset($updateMainTable) || $updateMainTable['status'] !== true) {
+                            return json_encode(['code' => 201, 'title' => "Someting Went Wrong", 'message' => 'Please Try Again', "icon" => "error"]);
+                        }
+                    }else{
+                        return json_encode(['code' => 201, 'title' => "Someting Went Wrong", 'message' => 'Please Try Again', "icon" => "error"]);
+                    }
 
                     // return $this->success();
                     break;
@@ -767,19 +767,33 @@ class commonController extends Controller
                                     'plan_expired_on' => $addedDate->toDateString(),
                                 ];
                                 $updateJobSeekerTable = processData(['jobseeker_profiles', 'id'], $sel, ['js_id' => $payment->$column]);
+                                if (!isset($updateJobSeekerTable) || $updateJobSeekerTable['status'] !== true) {
+                                    return json_encode(['code' => 201, 'title' => "Someting Went Wrong", 'message' => 'Please Try Again', "icon" => "error"]);
+                                }
+
                             }else{
                                 $newProfileData = [
                                     'js_id' => $payment->$column,
                                     'plan_start_from' => now(),
                                     'plan_expired_on' => $addedDate->toDateString(),
                                 ];
-                                DB::table('jobseeker_profiles')->insert($newProfileData);
+                                $jobSeekerProfile = DB::table('jobseeker_profiles')->insert($newProfileData);
+                                if (!isset($jobSeekerProfile) || $jobSeekerProfile['status'] !== true) {
+                                    return json_encode(['code' => 201, 'title' => "Someting Went Wrong", 'message' => 'Please Try Again', "icon" => "error"]);
+                                }
                             }
                         }
                     }
                     
                     $updatePayment = processData([$table, 'id'], $select, $where);
-                    $updateMainTable = processData([$mainTable, 'id'], $mainTableSelect, ['id' => $payment->$column]);
+                    if (isset($updatePayment) && $updatePayment['status'] === true) {
+                        $updateMainTable = processData([$mainTable, 'id'], $mainTableSelect, ['id' => $payment->$column]);
+                        if (!isset($updateMainTable) || $updateMainTable['status'] !== true) {
+                            return json_encode(['code' => 201, 'title' => "Someting Went Wrong", 'message' => 'Please Try Again', "icon" => "error"]);
+                        }
+                    }else{
+                        return json_encode(['code' => 201, 'title' => "Someting Went Wrong", 'message' => 'Please Try Again', "icon" => "error"]);
+                    }
 
                     // return $this->success();
                         
@@ -800,9 +814,9 @@ class commonController extends Controller
                         'status' => '2',
                     ];
                     $updatePayment = processData([$table, 'id'], $select, $where);
-                    // if(isset($updatePayment) && $updatePayment['status'] == TRUE){
-                    //     return redirect()->route('payment-unsuccessful');
-                    // }
+                    if (!isset($updateMainTable) || $updateMainTable['status'] !== true) {
+                        return json_encode(['code' => 201, 'title' => "Someting Went Wrong", 'message' => 'Please Try Again', "icon" => "error"]);
+                    }
                     Log::error('Failed to update payment or order status for cancelled payment.');
                     // return $this->success();
                     
@@ -814,7 +828,16 @@ class commonController extends Controller
         
         } catch (\Exception $e) {
             Log::error("Payment processing error: " . $e->getMessage());
-            // return view('frontend.payment.payment-unsuccessful', ['message' => $e->getMessage()]);
+        }
+    }
+    
+    public function paymentResponse($order_id, $plantable)
+    {
+        $plan = DB::table($plantable)->where(['order_id' => $order_id])->first();
+        if ($plan->status == 3) {
+            return view('thank-you');
+        } else {
+            return view('thank-you');
         }
     }
 
