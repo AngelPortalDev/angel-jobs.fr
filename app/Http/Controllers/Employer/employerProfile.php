@@ -108,7 +108,7 @@ class employerProfile extends Controller
                             'is_deleted' => 'No',
                         ]);
                         if ($user_id > 0) {
-                             mail_send(9, ['#Name#', '#Cat#'], [ucfirst(session()->get('emp_name')), 'Employer'], session()->get('emp_username'));
+                             mail_send(9, ['#Name#', '#Cat#'], [ucfirst(session()->get('emp_name')), 'Company'], session()->get('emp_username'));
                             echo json_encode(array('code' => 200, 'message' => 'Successfully Updated', 'icon' => 'success'));
                         } else {
                             echo json_encode(['code' => 201, 'message' => 'Unble to Add Details', "icon" => "error"]);

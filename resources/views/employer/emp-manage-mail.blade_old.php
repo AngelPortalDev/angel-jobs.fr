@@ -54,7 +54,6 @@
 										</tr>
 									</thead>
 									<tbody>
-										@foreach ($emailTem as $emailtepm)
 										<tr>
 											<td class="feature">
 												<div class="form-check">
@@ -63,24 +62,41 @@
 												</div>
 											</td>
 											<td class="job-name">
-												<a href="{{route('empedit-template',[base64_encode($id=$emailtepm->id)])}}">{!! htmlspecialchars_decode($emailtepm->template_name) !!}</a>
+												<a href="javascript:void(0);">Social Media Expert</a>
 											</td>
-											@if ($emailtepm->status == 'APPROVED')
-											<td> <span class="badge bg-success">{{$emailtepm->status}}</span></td>
-												@else
-												<td> <span class="badge bg-warning">{{$emailtepm->status}}</span></td>
-											@endif
-											
+											<td > <span class="badge bg-success">Accepted</span></td>
                                         </tr>
-										@endforeach
-										
 
                                         
-										
+										<tr>
+											<td class="feature">
+												<div class="form-check">
+													<input type="checkbox" class="form-check-input" id="check1" name="example1">
+													<label class="form-check-label" for="check1"></label>
+												</div>
+											</td>
+											<td class="job-name">
+												<a href="javascript:void(0);">Social Media Expert</a>
+											</td>
+											<td> <span class="badge bg-danger"> Rejected</span></td>
+                                        </tr>
+
+										<tr>
+											<td class="feature">
+												<div class="form-check">
+													<input type="checkbox" class="form-check-input" id="check1" name="example1">
+													<label class="form-check-label" for="check1"></label>
+												</div>
+											</td>
+											<td class="job-name">
+												<a href="javascript:void(0);">Social Media Expert</a>
+											</td>
+											<td> <span class="badge bg-warning"> Pending</span></td>
+                                        </tr>
 										
 									</tbody>
 								</table>
-								{{-- <div class="pagination-bx m-t30 float-end">
+								<div class="pagination-bx m-t30 float-end">
 									<ul class="pagination">
 										<li class="previous"><a href="javascript:void(0);"><i class="ti-arrow-left"></i> Prev</a></li>
 										<li class="active"><a href="javascript:void(0);">1</a></li>
@@ -88,7 +104,7 @@
 										<li><a href="javascript:void(0);">3</a></li>
 										<li class="next"><a href="javascript:void(0);">Next <i class="ti-arrow-right"></i></a></li>
 									</ul>
-								</div> --}}
+								</div>
 								<!-- Modal -->
 								<div class="modal fade modal-bx-info" id="exampleModalLong" tabindex="-1" role="dialog" aria-hidden="true">
 									<div class="modal-dialog" role="document">

@@ -18,9 +18,9 @@
 .dropdown.bootstrap-select.ql-header{
     display:none;
 }
-.job-bx{
+/* .job-bx{
     height:600px;
-}
+} */
     </style>
 
     <!-- Content -->
@@ -43,7 +43,10 @@
 									<div class="float-end" style="display: flex;align-items: center;"></div>
 								</div>
 								<div class="form">
+                                   
                                     <div class="container">
+                                        <form action="{{ route('emp-add-template') }}" method="POST">
+                                            @csrf
                                         <div class="row g-2">
                                             <div class="  col-md-6">
                                                 <label for="inputAddress" class="form-label">Select Type</label>
@@ -64,7 +67,7 @@
                                                     <span style="color:red;text-transform:capitalize">{{ $message }}</span>
                                                 @enderror
                                             </div>
-                                            <div class="col-md-6">
+                                            {{-- <div class="col-md-6">
                                                 <label for="inputAddress" class="form-label">Select Jobseekers <span class="imp-field-star"> *</span></label>
                                                 <select class=" mb-2" id="job_type" name="job_type" multiple>
                                                           <option value="" disabled selected>Select jobseekers</option>
@@ -72,8 +75,8 @@
                                                             <option value="one">two@gmail.com</option>
                                                             <option value="one">three@gmail.com</option>
                                               </select>
-                                            </div>
-                                            <div class="col-md-6">
+                                            </div> --}}
+                                            <div class="col-md-12">
                                                 <label for="inputAddress" class="form-label">Email Subject</label>
                                                 <input type="text" class="form-control" id="inputAddress" placeholder=""
                                                     name="email_subject" value="{{ old('email_subject') }}">
@@ -84,17 +87,23 @@
                                             <div class="col-md-12">
                                                 <label for="inputAddress" class="form-label">Email Content</label>
                                                 <!-- Div for Quill editor -->
-                                                <div id="editor" style="min-height: 80px;"></div>
-
+                                                {{-- <div id="editor" style="min-height: 80px;"></div> --}}
+                                                <div id="quill-editor" class="mb-3" style="height: 300px;">
+														
+													</div>
+													
+													<input type="hidden" name="email_content" id="email_content" value=''>
                                             </div>
-                                                <div class="mt-5 pt-5">
+                                                <div class="">
                                                     <button type="submit" class="btn btn-primary mb-4 me-2">Add</button>
                                                     <a href="{{ route('email-view') }}">
                                                         <button type="button" class="btn btn-secondary mb-4">Back</button>
                                                     </a>
                                                 </div>
                                         </div>
+                                    </form>
                                     </div>
+                                  
                                 </div>
 								{{-- <div class="pagination-bx m-t30 float-end">
 									<ul class="pagination">
@@ -118,22 +127,34 @@
 
 
 
-
+    <script>
+    
+        function myFunction() {
+          var x = document.getElementById("myDIV");
+          if (x.style.display === "none") {
+            x.style.display = "block";
+          } else {
+            x.style.display = "none";
+          }
+        }
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            if (document.getElementById('email_content')) {
+                var editor = new Quill('#quill-editor', {
+                    theme: 'snow'
+                });
+                var quillEditor = document.getElementById('email_content');
+                editor.on('text-change', function() {
+                    quillEditor.value = editor.root.innerHTML;
+                });
+    
+                quillEditor.addEventListener('input', function() {
+                    editor.root.innerHTML = quillEditor.value;
+                });
+            }
+        });
+    
+    
+    </script>
 <!-- Import footer  -->
 @endsection()
-
-<script>
-    
-    function myFunction() {
-      var x = document.getElementById("myDIV");
-      if (x.style.display === "none") {
-        x.style.display = "block";
-      } else {
-        x.style.display = "none";
-      }
-    }
-
-    
-
-
-</script>
