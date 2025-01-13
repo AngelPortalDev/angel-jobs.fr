@@ -502,7 +502,7 @@ class commonController extends Controller
             try {
                 $payex = $amount * 100;
                 $data = [
-                    "provider" => "ajf",
+                    "provider" => "AJF",
                     "payment_destination" => env('PAYMENT_DESTINATION'),
                     "amount" => $payex,
                     "currency" => 'EUR', 
