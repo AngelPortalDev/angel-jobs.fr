@@ -391,7 +391,7 @@
 													</div> --}}
                                                             </div>
                                                             <div class="col-10">
-                                                                <input type="number" id="job_con_phone" maxlength="8"
+                                                                <input type="number" id="job_con_phone" maxlength="9"
                                                                     name="job_con_phone" class="form-control"
                                                                     placeholder="Enter 9 Digit Mobile No.">
                                                                 <span id="job_con_phone_error"
@@ -403,7 +403,7 @@
                                                                 <span id="job_con_phone_limit_error"
                                                                     style="color:red;display:none;">
                                                                     <small>
-                                                                        <i>Mobile no. must be 10 Digits. </i>
+                                                                        <i>Mobile no. must be 9 Digits. </i>
                                                                     </small>
                                                                 </span>
                                                             </div>

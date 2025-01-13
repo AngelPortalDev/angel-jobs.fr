@@ -155,28 +155,28 @@ $(document).ready(function () {
         //     $("#license_no")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
         //     return;
         // }
-        if(license_no != ""){
-            if(license_no.length < 15){
-                $("#license_no_error").text("GST No should be at least 15 characters");
-                $("#license_no_error").show();
-                $("#license_no")[0].scrollIntoView({ behavior:'smooth', block: 'center' });
-                return;
-            }
-            if(license_no.length > 15){
-                $("#license_no_error").text("GST No should not be more than 15 characters");
-                $("#license_no_error").show();
-                $("#license_no")[0].scrollIntoView({ behavior:'smooth', block: 'center' });
-                return;
-            }
-        }        
-        if(pan_no.length < 10){
-            $("#pan_no_error").text("PAN No should be at least 10 characters");
-            $("#pan_no_error").show();
-            $("#pan_no")[0].scrollIntoView({ behavior:'smooth', block: 'center' });
-            return;
-        }
-        if(pan_no.length>10){
-            $("#pan_no_error").text("PAN No should not be more than 10 characters");
+        // if(license_no != ""){
+        //     if(license_no.length < 15){
+        //         $("#license_no_error").text("GST No should be at least 15 characters");
+        //         $("#license_no_error").show();
+        //         $("#license_no")[0].scrollIntoView({ behavior:'smooth', block: 'center' });
+        //         return;
+        //     }
+        //     if(license_no.length > 15){
+        //         $("#license_no_error").text("GST No should not be more than 15 characters");
+        //         $("#license_no_error").show();
+        //         $("#license_no")[0].scrollIntoView({ behavior:'smooth', block: 'center' });
+        //         return;
+        //     }
+        // }        
+        // if(pan_no.length < 10){
+        //     $("#pan_no_error").text("Licence No should be at least 10 characters");
+        //     $("#pan_no_error").show();
+        //     $("#pan_no")[0].scrollIntoView({ behavior:'smooth', block: 'center' });
+        //     return;
+        // }
+        if(pan_no.length>14){
+            $("#pan_no_error").text("Licence No should not be more than 14 characters");
             $("#pan_no_error").show();
             $("#pan_no")[0].scrollIntoView({ behavior:'smooth', block: 'center' });
             return;
@@ -679,7 +679,7 @@ $(document).ready(function () {
             $("#job_con_phone")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
-        if (job_con_phone.length < 8 || job_con_phone.length > 10) {
+        if (job_con_phone.length < 9 || job_con_phone.length > 9) {
             $("#job_con_phone_error").show();
             return;
         }

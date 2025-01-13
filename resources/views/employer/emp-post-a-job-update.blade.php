@@ -482,7 +482,7 @@
 
 											<span id="job_con_phone_error" style="color:red;display:none;">
 												<small>
-													<i>Please Provide 8 Digit Mobile No </i>
+													<i>Please Provide 9 Digit Mobile No </i>
 												</small></span>
 
 										</div>

@@ -374,6 +374,11 @@ $(document).ready(function () {
             $("#contact_no_error").show();
             return;
         }
+        if (contact_no.length > 9) {
+            $("#contact_no_error").text("Mobile no should be 9 digits.");
+            $("#contact_no_error").show();
+            return;
+        }
         if (password.trim() === "") {
             $("#password_error").show();
             return;
@@ -719,8 +724,13 @@ $(document).ready(function () {
             $("#js_contact_no_error").show();
             return;
         }
-        if (contact_no.length < 10) {
-            $("#js_contact_no_error").text("Mobile no should be atleast 10 digits");
+        if (contact_no.length < 6) {
+            $("#js_contact_no_error").text("Mobile number should be at least 6 digits.");
+            $("#js_contact_no_error").show();
+            return;
+        }
+        if (contact_no.length > 15) {
+            $("#js_contact_no_error").text("Mobile number should not exceed 15 digits.");
             $("#js_contact_no_error").show();
             return;
         }

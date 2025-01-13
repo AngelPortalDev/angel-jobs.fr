@@ -195,7 +195,7 @@ $(document).ready(function () {
             $("#job_con_phone_error").show();
             return;
         }
-        if (job_con_phone.length < 8 || job_con_phone.length > 10) {
+        if (job_con_phone.length < 9 || job_con_phone.length > 9) {
             $("#job_con_phone_error").show();
             return;
         }

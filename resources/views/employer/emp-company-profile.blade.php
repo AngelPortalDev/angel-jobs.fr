@@ -160,7 +160,7 @@
 											<input type="text" class="form-control-plaintext" value="{{$empData->pan_no}}" placeholder="Enter Licence Number" name="pan_no" id="pan_no" readonly>
 										<span id="pan_no_error" style="color:red;display:none;">
 											<small>
-												<i>Please provide pan number </i>
+												<i>Please provide licence number </i>
 											</small>
 										</span>
 										</div>

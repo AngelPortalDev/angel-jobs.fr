@@ -159,7 +159,8 @@
                                             class="ti-email"></i></a> </div>
                                 <div class="icon-content">
                                     <h6 class="text-uppercase m-tb0 dez-tilte">Email:</h6>
-                                    <p>info@angel-jobs.fr</p>
+                                    <a href="mailto:info@angel-jobs.fr">info@angel-jobs.fr</a>
+
                                 </div>
                             </li>
                             <!-- <li class="icon-bx-wraper left">
@@ -172,8 +173,8 @@
                         </ul>
                         <div class="m-t20">
                             <ul class="dez-social-icon dez-social-icon-lg">
-                                <li><a target="_blank" href="https://www.facebook.com/people/Angel-Jobs-Malta/61555632533346/" class="fab fa-facebook-f bg-primary"></a></li>
-                                <li><a target="_blank" href="https://www.instagram.com/angeljobsmalta/" class="fab fa-instagram bg-primary"></a></li>
+                                <li><a target="_blank" href="https://www.facebook.com/angeljobsfrance/" class="fab fa-facebook-f bg-primary"></a></li>
+                                <li><a target="_blank" href="https://www.instagram.com/angeljobsfrance/" class="fab fa-instagram bg-primary"></a></li>
                             </ul>
                         </div>
                     </div>

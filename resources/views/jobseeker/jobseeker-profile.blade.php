@@ -576,7 +576,7 @@
                                             </select>
                                         </div>
                                     </div> --}}
-                                        {{-- <div class="col-lg-6 col-md-6">
+                                        <div class="col-lg-6 col-md-6">
                                             <div class="form-group">
                                                 <label>Have Work Permit ?</label>
                                                 <select class="slec d-none" id="work_permit" name="work_permit">
@@ -593,7 +593,7 @@
                                                     value="{{ $data->work_permit }}" placeholder="Select Work permit"
                                                     readonly>
                                             </div>
-                                        </div> --}}
+                                        </div>
                                     </div>
                                     <!-- Contact Information -->
                                     <div class="job-bx-title clearfix">

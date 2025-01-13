@@ -174,7 +174,7 @@
                                                 </div>
                                             
                                                 <div style="width: 80%;">
-                                                    <input type="tel" id="js_contact_no" name="contact_no" class="form-control" placeholder="Mobile No." maxlength="10">
+                                                    <input type="tel" id="js_contact_no" name="contact_no" class="form-control" placeholder="Mobile No." minlength="6" maxlength="15">
                                                     <span id="js_contact_no_error" style="color:red;display:none;">
                                                         <small><i>Please provide mobile no.</i></small>
                                                     </span>
