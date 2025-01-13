@@ -801,6 +801,213 @@ $(document).ready(function () {
             },
         });
     });
+    
+    $("#postemail").click(function (event) {
+        event.preventDefault();    
+    
+    
+        $("#select_type_error").hide();    
+        $("#template_name_error").hide();
+        $("#email_subject_error").hide();
+        $("#email_content_error").hide();
+        var type = $("#type").val();
+        var template_name = $("#template_name").val();
+        var email_subject = $("#email_subject").val();
+        var email_content = $("#email_content").val();
+
+        if (type === "") {
+            $("#select_type_error").show();
+            $("#type")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        } 
+        if (template_name === "") {
+            $("#template_name_error").show();
+            $("#template_name")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        } 
+        if (email_subject === "") {
+            $("#email_subject_error").show();
+            $("#email_subject")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        } 
+        if (email_content === "") {
+            $("#email_content_error").show();
+            $("#email_content")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+
+        var form = $("#updateemail").serialize();
+        $("#loader").fadeIn();
+        $.ajax({
+            url: baseUrl + "/employer/update-email-template",
+            type: "POST",
+            data: form,
+            dataType: "json",
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+            },
+            success: function (response) {
+                $("#loader").fadeOut();
+
+                if (response.code == 200) {
+                    $("#updateemail")[0].reset();
+                    swal({
+                        title: response.message,
+                        text: "",
+                        icon: "success",
+                    }).then(function () {
+                        window.location.href = baseUrl + "/employer/email-view";
+                    });
+                } else {
+                    swal({
+                        title: response.message,
+                        text: "Please Try Again",
+                        icon: "error",
+                    });
+                }
+            },
+            // error: function (xhr) {
+            //     // Handle the error response
+            //     console.log(xhr.responseText);
+            //     alert("An error occurred while inserting data.");
+            // },
+        });
+    });
+    let quill;
+    function decodeHTMLEntities(text) {
+        var textArea = document.createElement('textarea');
+        textArea.innerHTML = text;
+        return textArea.value;
+    }
+    $("#email_template").change(function (event) {
+        event.preventDefault();
+        
+        if ($(this).val() != 0 && $(this).val() != "") {
+            
+            $("#loader").fadeIn();
+            $.ajax({
+                url: baseUrl + "/employer/emptemplate-content",
+                type: "POST",
+                data: { tempalte_id: $(this).val() },
+                dataType: "json",
+                headers: {
+                    "X-CSRF-TOKEN": csrfToken,
+                },
+                success: function (response) {
+                    $("#loader").fadeOut();
+                    if (!quill) {
+                        quill = new Quill('#quill_editor', {
+                        
+                        });
+        
+                        quill.on('text-change', function() {
+                            var content = quill.root.innerHTML;
+                            $('#email_content').val(content);
+                        });
+
+                    }
+                    if (response.code == 200) {
+                        
+                        $("#email_subject").val(response.subject);
+                        // ckeditor.insertHtml(response.containt);
+                    
+                        let template = response.containt || '';
+                        var decodedContent = decodeHTMLEntities(template);
+                        quill.clipboard.dangerouslyPasteHTML(decodedContent);
+                        $('#email_content').val(decodedContent);
+                    } else {
+                        $("#email_subject").val("");
+                        $('#email_content').val("")
+                        let template = response.containt || '';
+                        var decodedContent = decodeHTMLEntities(template);
+                        quill.clipboard.dangerouslyPasteHTML(decodedContent);
+                    }
+                },
+            });
+        }
+    });
+
+
+    $("#send-mails").click(function (event) {
+            event.preventDefault();    
+        $("#select_type_error").hide();
+        $("#email_subject_error").hide();    
+        $("#email_template_error").hide();        
+        $("#select_user_error").hide();
+        $("#email_content_error").hide();
+        
+        // var type = $("#type").val();
+        var email_template = $("#email_template").val();
+        var select_user = $("#select_user").val();      
+        var email_subject = $("#email_subject").val();
+    var email_content = $("#email_content").val();
+    
+        //  if (type === "") {
+        //     $("#select_type_error").show();
+        //     $("#type")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        //     return;
+        // } 
+        if (email_template === "") {
+            $("#email_template_error").show();
+            $("#email_template")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        } 
+        if (select_user.length  === 0) {
+            $("#select_user_error").show();
+            $("#select_user")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+        if (email_subject === "") {
+            $("#email_subject_error").show();
+            $("#email_subject")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        } 
+            
+    
+        if (email_content === "") {
+            $("#email_content_error").show();
+            $("#email_content")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+    
+        var form = $("#sendbulkmails").serialize();
+        $("#loader").fadeIn();
+        $.ajax({
+            url: baseUrl + "/employer/sending-mails",
+            type: "POST",
+            data: form,
+            dataType: "json",
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+            },
+            success: function (response) {
+                $("#loader").fadeOut();
+
+                if (response.code == 200) {
+                
+                    swal({
+                        title: response.message,
+                        text: "",
+                        icon: "success",
+                    }).then(function () {
+                        window.location.href = baseUrl + "/employer/email-view";
+                    });
+                } else {
+                    swal({
+                        title: response.message,
+                        text: "Please Try Again",
+                        icon: "error",
+                    });
+                }
+            },
+            // error: function (xhr) {
+            //     // Handle the error response
+            //     console.log(xhr.responseText);
+            //     alert("An error occurred while inserting data.");
+            // },
+        });
+    });
+
 });
 
 // Function to fetch jobs for a specific page

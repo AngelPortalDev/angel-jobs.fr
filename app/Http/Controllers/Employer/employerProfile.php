@@ -409,4 +409,61 @@ class employerProfile extends Controller
             return view('employer/browse-jobseeker', $data);
         }
     }
+    
+    public function sendmail(Request $req){
+        if (session()->has('emp_username')) {
+            $id=session()->get('emp_user_id');       
+            
+            $templateData=getData('email_templates',['id','template_name'],['is_deleted' => 'No', 'added_by' => $id,'status' =>'APPROVED']);
+           
+            $query = DB::table('job_application_history')
+            ->select('jobseeker_view.fullname', 'jobseeker_view.email','jobseeker_view.js_id') 
+            ->leftJoin('job_posting_view', 'job_application_history.job_id', '=', 'job_posting_view.id')
+            ->leftJoin('jobseeker_view', 'jobseeker_view.js_id', '=', 'job_application_history.js_id')
+            ->where(function($query) {
+                $query->whereNotNull('job_application_history.applied_on') 
+                      ->orWhere('job_application_history.is_shortlisted', 'Yes'); 
+            })
+            ->where('job_application_history.employer_id', $id) 
+            ->orderBy('job_application_history.applied_on', 'DESC')
+            ->get();  
+                   
+           return view('employer.send-bulk-mail',compact('templateData','query'));
+        }
+    }
+
+    public function bulkmail(Request $req){
+        
+      
+        if ($req->isMethod('POST') && session()->has('emp_username')) {
+                    
+            $selected_emails = is_array($req->select_user) ? implode(',', $req->select_user) : '';
+            $emails_subject = isset($req->email_subject) ? htmlspecialchars($req->input('email_subject')) : '';
+            $email_content = isset($req->email_content) ? htmlspecialchars_decode($req->input('email_content')) : '';
+            $ids = explode(',', $selected_emails);
+           
+            $employer_data = getEmails('jobseeker_view', ['js_id', 'fullname', 'email'], ['js_id', 'IN', $ids]);
+           
+            if (isset($employer_data) && !empty($employer_data)) {
+                foreach ($employer_data as $employer) {
+                   
+                    $personalized_content = str_replace('#Name#', $employer->fullname, $email_content);
+        
+                    SendEmailJob::dispatch($emails_subject, $personalized_content, $employer->fullname, $employer->email);
+                }
+        
+                return response()->json(['code' => 200, 'message' => 'Emails are being sent.']);
+            } else {
+                return response()->json(['code' => 203, 'message' => 'Employer data not found.']);
+            }
+
+        } else {
+            echo json_encode([
+                'code' => 203, 'message' => 'Something Went Wrong',
+            ]);
+        }
+
+    }
+
+
 }

@@ -67,6 +67,26 @@
 						@endif>
 								<i class="fa fa-random" aria-hidden="true"></i>
 								<span>Transactions</span></a></li>
+								
+<li class="side-nav-item">
+	<a data-bs-toggle="collapse" href="#emails" aria-expanded="false" aria-controls="emails" class="side-nav-link collapsed">
+		<i class="fa fa-envelope" aria-hidden="true"></i>
+		<span> Email</span>
+		<span class="fa fa-angle-down float-end"></span>
+	</a>
+	<div class="collapse" id="emails" style="">
+		<ul class="side-nav-second-level">
+			<li>
+				<a href="{{route('manage-mails')}}" class="px-xl-5"><i class="fa fa-envelope-open" aria-hidden="true"></i>Email Templates</a>
+			</li>
+			<li>
+				<a href="{{route('sendmail')}}" class="px-xl-5"><i class="fa fa-envelopes-bulk" aria-hidden="true"></i>Send Bulk Email</a>
+			</li>
+
+		</ul>
+	</div>
+</li>
+
 							{{-- <li><a href="{{route('manage-mails')}}" @if ($route == 'manage-mails')
 							class="active"
 						@endif>

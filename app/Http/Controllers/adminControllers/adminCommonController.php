@@ -545,6 +545,7 @@ class adminCommonController extends Controller
         session()->flush();
         return redirect('/admin-login');
     }
+    
     public function addEmailTemplate(Request $req)
     {
       
@@ -566,11 +567,11 @@ class adminCommonController extends Controller
                 $addedvy=session()->has('admin_user_id');
                 $redirect='admin/email-view';
             }
-        //    else{
-        //         $status='UNAPPROVED';
-        //         $addedvy=Session::get('emp_user_id');
-        //         $redirect='employer/emp-manage-mail';
-        //    }
+           else{
+                $status='UNAPPROVED';
+                $addedvy=Session::get('emp_user_id');
+                $redirect='employer/emp-manage-mail';
+           }
         
             $validate = validator::make($req->all(), $rules);
             if (!$validate->fails()) {
@@ -588,15 +589,17 @@ class adminCommonController extends Controller
             return redirect()->back()->with('msg', 'Something Went Wrong');
         }
     }
+
+
     public function updateEmailTemplate(Request $req)
     {
-        if ($req->isMethod('POST') && session()->has('admin_username')) {
+        if ($req->isMethod('POST') && session()->has('admin_username') || session()->has('emp_username')) {
             $type = isset($req->type) ? htmlspecialchars($req->input('type')) : '';
             $template_name = isset($req->template_name) ? htmlspecialchars($req->input('template_name')) : '';
             $email_subject = isset($req->email_subject) ? htmlspecialchars($req->input('email_subject')) : '';
             $email_content = isset($req->email_content) ? htmlspecialchars($req->input('email_content')) : '';
             $temp_id = isset($req->temp_id) ? base64_decode($req->input('temp_id')) : '';
-
+           
 
             $rules = [
                 "type" => "required|numeric|min:1",
@@ -605,10 +608,24 @@ class adminCommonController extends Controller
                 "email_content" => "required|string|min:3"
             ];
             $validate = validator::make($req->all(), $rules);
+            if(session()->has('admin_username')){
+                $status='APPROVED';
+            }
+            else{
+                $status='UNAPPROVED';
+            }
             if (!$validate->fails()) {
                 try {
-                    DB::table('email_templates')->where('id', $temp_id)->update(['status' => 'APPROVED', 'template_name' => $template_name, 'email_subject' => $email_subject, 'email_content' => $email_content, 'type' => $type]);
-                    return redirect('admin/email-view')->with('msg', 'Successfully Updated');
+                    $insert = DB::table('email_templates')->where('id', $temp_id)->update(['status' => $status, 'template_name' => $template_name, 'email_subject' => $email_subject, 'email_content' => $email_content, 'type' => $type]);
+
+                    if(session()->has('admin_username')){
+                        
+                        return redirect('admin/email-view')->with('msg', 'Successfully Updated');
+
+                    }else{
+                        echo json_encode(array('code' => 200, 'message' => 'Successfully update', 'icon' => 'success'));
+
+                    }
                 } catch (\Exception $th) {
 
                     return redirect()->back()->with('error', 'Unable to Create');
@@ -730,11 +747,13 @@ class adminCommonController extends Controller
             ]);
         }
     }
+    
     public function templateContent(Request $req)
     {
-        if (session()->has('admin_username')) {
+        
+        if (session()->has('admin_username') || session()->has('emp_username') ) {
             $tempalte_id = isset($req->tempalte_id) ? base64_decode($req->input('tempalte_id')) : '';
-
+            
             if ($tempalte_id != '0') {
                 $templateData = DB::table('email_templates')->select('email_subject', 'email_content')->where(['is_deleted' => 'No', 'id' => $tempalte_id])->get();
                 echo json_encode([
@@ -751,6 +770,7 @@ class adminCommonController extends Controller
             ]);
         }
     }
+
     public function fetchMailersList(Request $req)
     {
         if (session()->has('admin_username')) {
@@ -793,13 +813,19 @@ class adminCommonController extends Controller
             ]);
         }
     }
-    public function getEmailTemplate()
+    public function getEmailTemplate(Request $req)
     {
 
         if (session()->has('admin_username')) {
 
             $emailTem = DB::table('email_templates')->where('is_deleted', 'No')->get();
             return view('admin.email-view', compact('emailTem'));
+        }
+        if(session()->has('emp_username')){
+            $id=session()->get('emp_user_id');
+            $emailTem = DB::table('email_templates')->where('is_deleted', 'No')->where('added_by',$id)->get();
+            
+            return view('employer/emp-manage-mail', compact('emailTem'));
         }
     }
     public function editTemplate($temp_id)
@@ -1039,4 +1065,8 @@ class adminCommonController extends Controller
             return json_encode(['data' => $templData, 'code' => 200]);
         }
     }
+
+
+
+    
 }

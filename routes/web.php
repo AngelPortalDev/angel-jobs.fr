@@ -121,6 +121,16 @@ Route::group(['prefix' => 'employer', 'middleware' => 'EmpAuth'], function () {
     Route::get('receipt/{id}', [jobSeekerProfile::class,'downloadInvoice'])->name('receiptemp');
     Route::view('add-email-template', 'employer/add-email-template')->name('add-email-template');
     //Route::post('add-email-template',[AdminCommon::class, 'addEmailTemplate'])->name('emp-add-template');
+    
+    Route::view('add-email-template', 'employer/add-email-template')->name('add-email-template');
+    Route::post('emp-email-template',[AdminCommon::class, 'addEmailTemplate'])->name('emp-add-template');
+    Route::get('email-view', [AdminCommon::class, 'getEmailTemplate'])->name('manage-mails');
+    Route::get('email-edit-view/{temp_id}', [AdminCommon::class, 'editTemplate'])->name('empedit-template');
+    Route::post('update-email-template', [AdminCommon::class, 'updateEmailTemplate'])->name('update-template');  
+    Route::get('send-bulk-mail', [employerProfile::class, 'sendmail'])->name('sendmail');
+    Route::post('emptemplate-content',[AdminCommon::class, 'templateContent']);
+    Route::post('sending-mails',[employerProfile::class, 'bulkmail'])->name('bulkmail');
+
  
 });
 Route::post('payment', [commonController::class,'payment'])->name('payment');

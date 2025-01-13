@@ -361,3 +361,23 @@ if (!function_exists('saveData')) {
         }
     }
 }
+
+if (!function_exists('getEmails')) {
+    function getEmails($table, $columns, $where = [])
+    {
+
+        $query = DB::table($table)->select($columns);
+
+        if (!empty($where)) {
+
+            if (isset($where[1]) && $where[1] === 'IN' && is_array($where[2])) {
+                $query->whereIn($where[0], $where[2]);
+            } else {
+
+                $query->where($where[0], $where[1], $where[2]);
+            }
+        }
+
+        return $query->get();
+    }
+}
