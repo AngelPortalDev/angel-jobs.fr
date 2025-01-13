@@ -233,6 +233,8 @@ class employerProfile extends Controller
 
     public function getJobseekers(Request $req)
     {
+        // dd(session('selectedEducations'), session('selectedLocations'));
+        // dd(session('selectedLocations'));
         $curr_date = $this->date;
         $data = [];
 

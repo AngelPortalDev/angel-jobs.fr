@@ -891,7 +891,17 @@ class commonController extends Controller
                     $class = 'main_edu_list';
                     $html .= "<div class='form-check old_list'>
 						<input class='form-check-input edu_fil' name='left_edu_fil[]' id='education$list->id'
-							type='checkbox' value='$list->id'>
+							type='checkbox' value='$list->id'";
+                            
+                    $selectedEducations = session()->get('selectedEducations', []);
+                    if (!is_array($selectedEducations)) {
+                        $selectedEducations = [];
+                    }
+                    
+                    if (in_array((string)$list->id, $selectedEducations)) {
+                        $html .= "checked";
+                    }
+                    $html .= ">
 						<label class='form-check-label' for='education$list->id'
 							id='left_edu_fil'>$list->educational_qualification
 						</label>
@@ -908,16 +918,38 @@ class commonController extends Controller
 					</div>";
                 }
 
-                if ($req->list === '3') {
+                // if ($req->list === '3') {
+                //     $class = 'main_city_list';
+                //     $html .= "<div class='form-check old_list'>
+				// 		<input class='form-check-input loc_fil' name='left_loc_fil[]' id='location$list->id'
+				// 			type='checkbox' value='$list->id'>
+				// 		<label class='form-check-label' for='location$list->id'
+				// 			id='left_loc_fil'>$list->city_name
+				// 		</label>
+				// 	</div>";
+                // }
+
+                if ($req->list === '3'){
                     $class = 'main_city_list';
                     $html .= "<div class='form-check old_list'>
-						<input class='form-check-input loc_fil' name='left_loc_fil[]' id='location$list->id'
-							type='checkbox' value='$list->id'>
-						<label class='form-check-label' for='location$list->id'
-							id='left_loc_fil'>$list->city_name
-						</label>
-					</div>";
+                        <input class='form-check-input loc_fil' name='left_loc_fil[]' id='location$list->id'
+                            type='checkbox' value='$list->id' 
+                            ";
+                            
+                    $selectedLocations = session()->get('selectedLocations', []);
+                    if (!is_array($selectedLocations)) {
+                        $selectedLocations = [];
+                    }
+                    if (in_array((string)$list->id, $selectedLocations)) {
+                        $html .= "checked";
+                    }
+
+                    $html .= ">
+                        <label class='form-check-label' for='location$list->id' id='left_loc_fil'>$list->city_name
+                        </label>
+                    </div>";
                 }
+
 
                 if ($req->list === '4') {
                     $class = 'main_desig_list';
@@ -1002,4 +1034,13 @@ class commonController extends Controller
             }
         }
     }
+
+public function sessionStore(Request $request)
+{
+    $selectedLocations = $request->input('selectedLocations');
+    $selectedEducations = $request->input('selectedEducations');
+    session(['selectedLocations' => $selectedLocations]);
+    session(['selectedEducations' => $selectedEducations]);
+    return response()->json(['message' => 'Locations saved in session!']);
+}
 }

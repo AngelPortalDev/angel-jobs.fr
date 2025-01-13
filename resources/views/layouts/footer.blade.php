@@ -274,6 +274,72 @@
     //   Add Search Filter
 </script>
 <script>
+    $(document).ready(function () {
+        
+        <?php 
+            session()->forget('selectedLocations'); 
+            session()->forget('selectedEducations'); 
+        ?>
+        
+        function saveSelectedLocations() {
+            const locations = $(".form-check-input:checked.loc_fil")
+                .map(function () {
+                    return $(this).val();
+                })
+                .get();
+
+            const educations = $(".form-check-input:checked.edu_fil")
+                .map(function () {
+                    return $(this).val();
+                })
+                .get();
+
+            
+            $.ajax({
+                url: '/store-sessions', 
+                method: 'POST',
+                data: {
+                    selectedLocations: locations,
+                    selectedEducations: educations,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    // console.log('Data saved in Laravel session:', response);
+                },
+                error: function(error) {
+                    // console.log('Error:', error);
+                }
+            });
+        }
+
+        // Handle click event on checkboxes
+        $(document).on("click", ".form-check-input.loc_fil", function () {
+            const label = $(this).siblings("label").text();
+
+            saveSelectedLocations();
+        });
+        
+        $(document).on("click", ".form-check-input.edu_fil", function () {
+            const label = $(this).siblings("label").text();
+
+            saveSelectedLocations();
+        });
+        
+        $('.loc_fil').on('change', function() {
+            const selectedLocations = $('.loc_fil:checked').map(function() {
+                return $(this).val();
+            }).get();
+            sessionStorage.setItem("selectedLocations", JSON.stringify(selectedLocations));
+        });
+        
+        $(window).on("beforeunload", function () {
+            localStorage.removeItem(localStorageKey);
+        });
+    });
+
+
+</script>
+<script>
     // $(document).ready(function() {
     //     var csrfToken = $('meta[name="csrf-token"]').attr("content");
     //     var baseUrl = window.location.origin;

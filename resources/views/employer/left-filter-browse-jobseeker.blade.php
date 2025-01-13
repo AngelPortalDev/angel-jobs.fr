@@ -105,17 +105,16 @@
 											</div>
 											</div>
 											<div id="main_loc_list">
-											@foreach (getDropDownlist('cities', ['id', 'city_name'], 5) as $data)
-											<div class="form-check">
-												<input class="form-check-input loc_fil" name="left_loc_fil[]" id="location{{$data->id}}"
-													type="checkbox" value="{{$data->id}}">
-												<label class="form-check-label" for="location{{$data->id}}"
-													id="left_loc_fil">{{$data->city_name}}
-													{{-- <span>(0)</span>  --}}
-												</label>
+												@foreach (getDropDownlist('cities', ['id', 'city_name'], 5) as $data)
+													<div class="form-check">
+														<input class="form-check-input loc_fil" name="left_loc_fil[]" id="location{{$data->id}}"
+															type="checkbox" value="{{$data->id}}" >
+														<label class="form-check-label" for="location{{$data->id}}"
+															id="left_loc_fil">{{$data->city_name}}
+														</label>
+													</div>
+												@endforeach
 											</div>
-											@endforeach
-										</div>
 										</div>
 									</div>
 								</div>

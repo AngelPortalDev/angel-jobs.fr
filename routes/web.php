@@ -93,6 +93,7 @@ Route::middleware(['guest'])->group(function () {
     );
 });
 
+Route::post('/store-sessions', [commonController::class, 'sessionStore']);
 
 
 //   Employer Middelware Routes
