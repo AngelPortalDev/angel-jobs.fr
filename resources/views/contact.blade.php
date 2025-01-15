@@ -84,11 +84,22 @@
                                         <div class="col-4" style="padding-right: 0;">
                                             <div class="form-group">
                                                 <div class="dropdown bootstrap-select mob-code">
-                                                    <select class="" id="contry_contact_no" >
+                                                    {{-- <select class="" id="contry_contact_no" >
                                                     @foreach (getDropDownlist('country_master', ['id','country_code','country_name']) as $code)
                                                     <option value="{{ $code->id}}" >{{ $code->country_code}}</option>
                                                     @endforeach 
+                                                    </select> --}}
+                                                    
+                                                    <select class="" id="contry_contact_no" name="contry_contact_no" data-live-search="true">
+                                                        <option value="" >Select Country Code</option>
+                                                        @foreach (getDropDownlist('country_master', ['id','country_code','country_name','country_flag']) as $code)
+                                                            @if($code->id == '')
+                                                                <option value="+33" data-content="{{asset('images/country_flags/france.png')}}">+33</option>
+                                                            @endif 
+                                                            <option value="{{$code->country_code}}" data-content='<img src="{{ asset('images/country_flags/'.$code->country_flag) }}" style="width: 20px; height: 15px; margin-right: 5px; border-radius: 0px;"> {{$code->country_code}} {{$code->country_name}}' @selected($code->id == 74)></option>
+                                                        @endforeach  
                                                     </select>
+
                                                 </div>
                                                      <span id="code_contact_no_error" style="color:red;display:none;">
                                                     <small>

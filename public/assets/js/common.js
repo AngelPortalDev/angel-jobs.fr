@@ -258,13 +258,13 @@ $(document).ready(function () {
             return;
         }
 
-        if (contact_no.length < 10) {
-            $("#contact_no_error").text("mobile number should be at least 10 digits");
+        if (contact_no.length < 6) {
+            $("#contact_no_error").text("mobile number should be at least 6 digits");
             $("#contact_no_error").show();
             return;
         }
-        if (contact_no.length > 10) {
-            $("#contact_no_error").text("mobile number should not exceed 10 digits");
+        if (contact_no.length > 14) {
+            $("#contact_no_error").text("mobile number should not exceed 14 digits");
             $("#contact_no_error").show();
             return;
         }

@@ -165,13 +165,30 @@
                                                 
                                                 ?>
                                                <div class="form-group" style="display:flex">
-                                                <div class="dropdown bootstrap-select job-reg-mobile-code emp-reg-mob-code" style="width: 40%;">
+                                                {{-- <div class="dropdown bootstrap-select job-reg-mobile-code emp-reg-mob-code" style="width: 40%;">
                                                     <img src="{{ asset('images/France-Flag.png') }}" alt="not found" style="width: 30px; height: auto; margin-right: 0px; border-radius: 0px;"/>
                                                     <input type="text" class="form-control mob-emp-input" name="mob_code" value="+33" readonly style="right-margin: 1px 2px;">
                                                     <span id="mob_code_error" style="color:red;display:none;">
                                                         <small><i>Please select country code.</i></small>
                                                     </span>
+                                                </div> --}}
+                                                
+                                                <div class="dropdown bootstrap-select job-reg-mobile-code"  style="width: 60%;">
+                                                    <select class="" id="mob_code" name="mob_code" data-live-search="true">
+                                                        <option value="" >Select Country Code</option>
+                                                        @foreach (getDropDownlist('country_master', ['id','country_code','country_name','country_flag']) as $code)
+                                                                @if($code->id == '')
+                                                                    <option value="+33" data-content="{{asset('images/country_flags/france.png')}}">+33</option>
+                                                            @endif 
+                                                            <option value="{{$code->country_code}}" data-content='<img src="{{ asset('images/country_flags/'.$code->country_flag) }}" style="width: 20px; height: 15px; margin-right: 5px; border-radius: 0px;"> {{$code->country_code}} - {{$code->country_name}}' @selected($code->id == 74)></option>
+                                                        @endforeach  
+                                                    </select>
+                                                    <span id="mob_code_error" style="color:red;display:none;">
+                                                        <small><i>Please Select Country code. </i>
+                                                        </small>
+                                                    </span>
                                                 </div>
+
                                             
                                                 <div style="width: 80%;">
                                                     <input type="tel" id="js_contact_no" name="contact_no" class="form-control" placeholder="Mobile No." minlength="6" maxlength="15">

@@ -40,7 +40,14 @@
 						</div>
 						
 						<div class="col-xl-9 col-lg-9 m-b30">
+                            @php
+						 $select = ['free_assign_job_posting', 'left_credit_job_posting_plan', 'plan_id', 'plan_start_from', 'plan_expired_on','license_no','pan_no'];
+						$plan_details = getData('employers', $select, ['email' => session()->get('emp_username')]);
+						// print_r($plan_details);
+						@endphp
+						
 							<div class="job-bx clearfix">
+                                @if(isset($plan_details) && $plan_details[0]->plan_id != 1 && $plan_detail[0]->plan_expired_on >= date('Y-m-d'))
 								<div class="job-bx-title clearfix">
 									<h5 class="font-weight-700 float-start text-uppercase">Send Bulk Mails</h5>
 									<div class="float-end" style="display: flex;align-items: center;"></div>
@@ -153,7 +160,14 @@
 										<li class="next"><a href="javascript:void(0);">Next <i class="ti-arrow-right"></i></a></li>
 									</ul>
 								</div> --}}
+                                @else
+                                <div class="container">
+                                    Get Started with Our Employer Plan : <a href="{{ route('employer-plans') }}"
+                                        target="blank"> Buy Now </a>
+                                </div>
+                                @endif
 							</div>
+                           
 						</div>
 					</div>
 				</div>

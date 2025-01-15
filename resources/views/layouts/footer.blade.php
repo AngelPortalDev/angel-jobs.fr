@@ -63,47 +63,62 @@
                 </div>
                 <div class="col-xl-2 col-md-3 col-sm-4">
                     <div class="widget widget-categories style-1 border-0">
-                        <h5 class="m-b15">Jobseeker</h5>
-                        <ul class="list-line jobs-bottom-btn">
-                            <li>
-                                <form class="dezPlaceAni" action="{{ url('top-search-bar') }}" method="GET">
-                                    @csrf
-                                    {{-- <a href="{{route('browse-jobs')}}">Browse All Jobs</a> --}}
-                                    <button class=" btn browse-job-btn" type="submit"
-                                        style="text-transform: capitalize">Browse Jobs</button>
-                                </form>
-                            </li>
-                            <li>
-                                <form class="dezPlaceAni" action="{{ url('top-search-bar') }}" method="GET">
-                                    @csrf
-                                    <input name="search_job_type[]" value="{{ base64_encode('16') }}" hidden>
-                                    <a><button class="btn btn-none" type="submit">Internship</button></a>
-                                </form>
+                        @if (session()->has('emp_username'))
+                            <h5 class="m-b15">Employer</h5>
+                        @else
+                            <h5 class="m-b15">Jobseeker</h5>
+                        @endif
+                            <ul class="list-line jobs-bottom-btn">
+                                @if (session()->has('emp_username'))
+                                    <li>
+                                        <form class="dezPlaceAni" action="{{ route('browse-jobseeker') }}" method="GET">
+                                            @csrf
+                                            {{-- <a href="{{route('browse-jobs')}}">Browse All Jobs</a> --}}
+                                            <button class=" btn browse-job-btn" type="submit"
+                                                style="text-transform: capitalize">Browse Jobseeker</button>
+                                        </form>
+                                    </li>
+                                @else
+                                    <li>
+                                        <form class="dezPlaceAni" action="{{ url('top-search-bar') }}" method="GET">
+                                            @csrf
+                                            {{-- <a href="{{route('browse-jobs')}}">Browse All Jobs</a> --}}
+                                            <button class=" btn browse-job-btn" type="submit"
+                                                style="text-transform: capitalize">Browse Jobs</button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form class="dezPlaceAni" action="{{ url('top-search-bar') }}" method="GET">
+                                            @csrf
+                                            <input name="search_job_type[]" value="{{ base64_encode('16') }}" hidden>
+                                            <a><button class="btn btn-none" type="submit">Internship</button></a>
+                                        </form>
 
-                                {{-- <a href="{{ url('top-search-bar', ['search_job_type'=>16])}}" target="_blank">Internship</a> --}}
-                            </li>
+                                        {{-- <a href="{{ url('top-search-bar', ['search_job_type'=>16])}}" target="_blank">Internship</a> --}}
+                                    </li>
 
-                            <li>
-                                <form class="dezPlaceAni" action="{{ url('top-search-bar') }}" method="GET">
-                                    @csrf
-                                    <input name="search_job_type[]" value="{{ base64_encode('17') }}" hidden>
-                                    <a class="dez-page"><button class="btn btn-none" type="submit">Part
-                                            Time</button></a>
-                                </form>
-                            </li>
+                                    <li>
+                                        <form class="dezPlaceAni" action="{{ url('top-search-bar') }}" method="GET">
+                                            @csrf
+                                            <input name="search_job_type[]" value="{{ base64_encode('17') }}" hidden>
+                                            <a class="dez-page"><button class="btn btn-none" type="submit">Part
+                                                    Time</button></a>
+                                        </form>
+                                    </li>
 
-                            <li>
-                                <form class="dezPlaceAni" action="{{ url('top-search-bar') }}" method="GET">
-                                    @csrf
-                                    <input name="search_job_type[]" value="{{ base64_encode('19') }}" hidden>
-                                    <a class="dez-page"><button class="btn btn-none" type="submit">Full
-                                            Time</button></a>
-                                </form>
-                            </li>
+                                    <li>
+                                        <form class="dezPlaceAni" action="{{ url('top-search-bar') }}" method="GET">
+                                            @csrf
+                                            <input name="search_job_type[]" value="{{ base64_encode('19') }}" hidden>
+                                            <a class="dez-page"><button class="btn btn-none" type="submit">Full
+                                                    Time</button></a>
+                                        </form>
+                                    </li>
+                                @endif
 
 
-                            {{-- <li><a href="{{route('jobs-locations')}}" target="_blank">Jobs By Location</a></li> --}}
-                        </ul>
+                                {{-- <li><a href="{{route('jobs-locations')}}" target="_blank">Jobs By Location</a></li> --}}
+                            </ul>
                     </div>
                 </div>
 
@@ -279,6 +294,8 @@
         <?php 
             session()->forget('selectedLocations'); 
             session()->forget('selectedEducations'); 
+            session()->forget('selectedIndustries'); 
+            session()->forget('selectedDesignations'); 
         ?>
         
         function saveSelectedLocations() {
@@ -293,6 +310,18 @@
                     return $(this).val();
                 })
                 .get();
+                
+            const industries = $(".form-check-input:checked.indus_fil")
+                .map(function () {
+                    return $(this).val();
+                })
+                .get();
+
+            const designations = $(".form-check-input:checked.desig_fil")
+                .map(function () {
+                    return $(this).val();
+                })
+                .get();
 
             
             $.ajax({
@@ -301,6 +330,8 @@
                 data: {
                     selectedLocations: locations,
                     selectedEducations: educations,
+                    selectedIndustries: industries,
+                    selectedDesignations: designations,
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
@@ -312,29 +343,159 @@
             });
         }
 
-        // Handle click event on checkboxes
-        $(document).on("click", ".form-check-input.loc_fil", function () {
-            const label = $(this).siblings("label").text();
+        // $(document).on("click", ".form-check-input", function () {
+        //     saveSelectedLocations();
+        // });
 
-            saveSelectedLocations();
-        });
-        
-        $(document).on("click", ".form-check-input.edu_fil", function () {
-            const label = $(this).siblings("label").text();
+        function removeFromSession(arrayType, value) {
+            $.ajax({
+                url: '/remove-from-session', 
+                method: 'POST',
+                data: {
+                    arrayType: arrayType,
+                    value: value,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    console.log('Data removed from session:', response);
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                }
+            });
+        }
 
-            saveSelectedLocations();
+        $(document).on("click", ".form-check-input", function () {
+            const arrayType = $(this).hasClass('loc_fil') ? 'selectedLocations' :
+                            $(this).hasClass('edu_fil') ? 'selectedEducations' :
+                            $(this).hasClass('indus_fil') ? 'selectedIndustries' : 'selectedDesignations';
+            
+            const value = $(this).val();
+
+            if ($(this).is(":checked")) {
+                saveSelectedLocations();
+            } else {
+                removeFromSession(arrayType, value);
+            }
         });
         
-        $('.loc_fil').on('change', function() {
-            const selectedLocations = $('.loc_fil:checked').map(function() {
-                return $(this).val();
-            }).get();
-            sessionStorage.setItem("selectedLocations", JSON.stringify(selectedLocations));
-        });
+        // Define elements for each section
+        const $searchLocation = $('#search-location');
+        const $clearButtonLocation = $('#clear-search-location');
+        const $locationItems = $('#main_loc_list .location-item');
+        const $showMoreLocation = $('#show-more-location');
+
+        const $searchIndustry = $('input[data-classfil="main_indus_list"]');
+        const $clearButtonIndustry = $('#clear-search-industry');
+        const $industryItems = $('#main_indus_list .indus-item');
+        const $showMoreIndustry = $('#show-more-industry');
+
+        const $searchEducation = $('input[data-classfil="main_edu_list"]');
+        const $clearButtonEducation = $('#clear-search-education');
+        const $educationItems = $('#main_edu_list .edu-item');
+        const $showMoreEducation = $('#show-more-education');
         
-        $(window).on("beforeunload", function () {
-            localStorage.removeItem(localStorageKey);
+        const $searchDesignation = $('input[data-classfil="main_desig_list"]');
+        const $clearButtonDesignation = $('#clear-search-designation');
+        const $designationItems = $('#main_desig_list .design-item');
+        const $showMoreDesignation = $('#show-more-designation');
+
+        // Show/Hide logic for show-more button
+        $showMoreLocation.toggle($locationItems.filter(':hidden').length > 0);
+        $showMoreIndustry.toggle($industryItems.filter(':hidden').length > 0);
+        $showMoreEducation.toggle($educationItems.filter(':hidden').length > 0);
+        $showMoreDesignation.toggle($designationItems.filter(':hidden').length > 0);
+
+        // Search and filtering logic
+        function searchFilter($input, $items, $showMoreButton) {
+            let searchValue = $input.val().toLowerCase();
+            let hasValue = searchValue.trim().length > 0;
+
+            $items.each(function () {
+                const itemName = $(this).find('label').text().toLowerCase();
+                $(this).toggle(itemName.includes(searchValue));
+            });
+
+            $showMoreButton.hide();
+            $(`#clear-search-wrapper-${$input.data('classfil')}`).toggle(hasValue);
+        }
+
+        // Handle search for location
+        $searchLocation.on('keyup', function () {
+            searchFilter($searchLocation, $locationItems, $showMoreLocation);
         });
+
+        // Handle search for industry
+        $searchIndustry.on('keyup', function () {
+            searchFilter($searchIndustry, $industryItems, $showMoreIndustry);
+        });
+
+        // Handle search for education
+        $searchEducation.on('keyup', function () {
+            searchFilter($searchEducation, $educationItems, $showMoreEducation);
+        });
+        // Handle search for designation
+        $searchDesignation.on('keyup', function () {
+            searchFilter($searchDesignation, $designationItems, $showMoreDesignation);
+        });
+
+        // Show more button click behavior
+        function showMore($items, $showMoreButton, event) {
+            event.preventDefault();
+
+            $items.filter(':hidden').slice(0, 5).slideDown();
+            if ($items.filter(':hidden').length === 0) {
+                $showMoreButton.hide();
+            }
+        }
+
+        // Show more location
+        $showMoreLocation.on('click', function (event) {
+            showMore($locationItems, $showMoreLocation, event);
+        });
+
+        // Show more industry
+        $showMoreIndustry.on('click', function (event) {
+            showMore($industryItems, $showMoreIndustry, event);
+        });
+
+        // Show more education
+        $showMoreEducation.on('click', function (event) {
+            showMore($educationItems, $showMoreEducation, event);
+        });
+
+        // Show more designation
+        $showMoreDesignation.on('click', function (event) {
+            showMore($designationItems, $showMoreDesignation, event);
+        });
+
+
+        // Clear button logic for all sections
+        function resetDropdown($input, $items, $clearButtonWrapper, $showMoreButton) {
+            $input.val('');
+            $clearButtonWrapper.hide();
+            $items.hide().slice(0, 5).show();
+            $showMoreButton.toggle($items.filter(':hidden').length > 0);
+        }
+
+        // Handle clearing for industry
+        $clearButtonIndustry.on('click', function () {
+            resetDropdown($searchIndustry, $industryItems, $('#clear-search-wrapper-industry'), $showMoreIndustry);
+        });
+
+        $clearButtonEducation.on('click', function () {
+            resetDropdown($searchEducation, $educationItems, $('#clear-search-wrapper-education'), $showMoreEducation);
+        });
+
+        $clearButtonLocation.on('click', function () {
+            resetDropdown($searchLocation, $locationItems, $('#clear-search-wrapper-location'), $showMoreLocation);
+        });
+
+        $clearButtonDesignation.on('click', function () {
+            resetDropdown($searchDesignation, $designationItems, $('#clear-search-wrapper-designation'), $showMoreDesignation);
+        });
+
+
     });
 
 
