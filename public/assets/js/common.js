@@ -924,16 +924,16 @@ $(document).ready(function () {
         }, 300);  
     });
 
-  $(".input-group-btn button").click(function () {
-    var inputField = $(this).closest('.input-group').find('input');
-    inputField.val(''); 
+//   $(".input-group-btn button").click(function () {
+//     var inputField = $(this).closest('.input-group').find('input');
+//     inputField.val(''); 
 
-    $(this).parent().hide();  
+//     $(this).parent().hide();  
     
-    inputField.trigger('keyup');
+//     inputField.trigger('keyup');
 
-    $("#" + inputField.data("classfil")).empty();  
-});
+//     $("#" + inputField.data("classfil")).empty();  
+// });
 
     // Filter Search List (View More Details)
     // $(".left_filters").on("change", function (e) {
@@ -1059,7 +1059,7 @@ $(document).ready(function () {
     $("#newsletterSend").on("click", function (e) {
         e.preventDefault();
 
-        $("#newmail_error").hide();
+        $(".newmail_error").hide();
 
         var newsemail = $(".newsemail").val();
         var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
