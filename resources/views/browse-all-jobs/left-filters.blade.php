@@ -50,7 +50,7 @@
 						</div>
 					</div>
 					<div id="main_edu_list">
-						@foreach (getDropDownlist('qualifications', ['id', 'educational_qualification'], 5) as $index => $data)
+						@foreach (getDropDownlist('qualifications', ['id', 'educational_qualification']) as $index => $data)
 							<div class="form-check edu-item" style="{{ $index >= 5 ? 'display: none;' : '' }}">
 								<input class="form-check-input edu_fil" name="left_edu_fil[]" id="education{{$data->id}}" type="checkbox" value="{{$data->id}}">
 								<label class="form-check-label" for="education{{$data->id}}">{{$data->educational_qualification}}</label>
@@ -96,7 +96,7 @@
 						</div>
 					</div>
 					<div id="main_indus_list">
-						@foreach (getDropDownlist('industries', ['id', 'industries_name'], 5) as $index =>  $data)
+						@foreach (getDropDownlist('industries', ['id', 'industries_name']) as $index =>  $data)
 							<div class="form-check indus-item" style="{{ $index >= 5 ? 'display: none;' : '' }}">
 								<input class="form-check-input indus_fil" name="left_indus_fil[]" id="industry{{$data->id}}" type="checkbox" value="{{$data->id}}">
 								<label class="form-check-label" for="industry{{$data->id}}">{{$data->industries_name}}</label>
@@ -310,7 +310,7 @@
 				</div>
 				
 				<div id="main_desig_list">
-					@foreach (getDropDownlist('designations', ['role_name', 'id'], 5) as $data)
+					@foreach (getDropDownlist('designations', ['role_name', 'id']) as $data)
 						<div class="form-check design-item" style="{{ $loop->index >= 5 ? 'display: none;' : '' }}">
 							<input class="form-check-input desig_fil" name="left_desig_fil[]" id="desig{{$data->id}}" type="checkbox" value="{{$data->id}}">
 							<label class="form-check-label" for="desig{{$data->id}}" id="left_desig_fil">{{$data->role_name}}</label>
