@@ -1,1 +1,1 @@
-ALTER TABLE employers CHANGE country country INT(11) NOT NULL DEFAULT '31';
+ALTER TABLE employers CHANGE country country INT(11) NOT NULL DEFAULT '74';
