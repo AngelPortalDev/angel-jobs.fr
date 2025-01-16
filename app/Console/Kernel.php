@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('subscription:mail')->dailyAt('01:00');
+        $schedule->command('jobSeekerUpdateProfile --limit=')->dailyAt('10:00');
     }
 
     /**
