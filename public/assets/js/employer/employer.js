@@ -14,23 +14,49 @@ $(document).ready(function () {
             </li>`;
         } else {
             paginationHtml += `<li class="page-item disabled">
-                <a class="btn btn-primary disabled">Previous</a>
+                <a class="disabled">Previous</a>
             </li>`;
-        }       
-        for (let i = 1; i <= lastPage; i++) {
+        }
+        const range = 3;  
+    
+        if (page > range + 1) {
+            paginationHtml += `<li class="page-item">
+                <a href="#" class="btn btn-primary page-linkem" data-page="1">1</a>
+            </li>`;
+        }    
+        
+        if (page > range + 2) {
+            paginationHtml += `<li class="page-item">
+                <a href="#" class="btn btn-primary page-linkem" data-page="...">...</a>
+            </li>`;
+        }    
+      
+        for (let i = Math.max(1, page - range); i <= Math.min(lastPage, page + range); i++) {
             paginationHtml += `<li class="page-item ${i === page ? 'active' : ''}">
                 <a href="#" class="btn btn-primary page-linkem" data-page="${i}">${i}</a>
             </li>`;
-        } 
+        }    
+        
+        if (page < lastPage - range - 1) {
+            paginationHtml += `<li class="page-item">
+                <a href="#" class="btn btn-primary page-linkem" data-page="...">...</a>
+            </li>`;
+        }   
+
+        if (page < lastPage - range) {
+            paginationHtml += `<li class="page-item">
+                <a href="#" class="btn btn-primary page-linkem" data-page="${lastPage}">${lastPage}</a>
+            </li>`;
+        }    
         if (page < lastPage) {
             paginationHtml += `<li class="page-item">
                 <a href="#" class="btn btn-primary page-linkem next-page" data-page="${page + 1}">Next</a>
             </li>`;
         } else {
             paginationHtml += `<li class="page-item disabled">
-                <a class="btn btn-primary disabled">Next</a>
+                <a class="disabled">Next</a>
             </li>`;
-        }    
+        }  
         paginationHtml += "</ul>";    
         $("#paginationLinks").html(paginationHtml);
 

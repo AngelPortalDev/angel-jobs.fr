@@ -168,7 +168,7 @@ class employerProfile extends Controller
                 ->join('jobseeker_view', 'jobseeker_view.js_id', '=', 'job_application_history.js_id')
                 ->where('job_application_history.employer_id', $emp_user_id)
                 ->where('job_application_history.is_shortlisted', 'Yes')
-                ->orderBy('id', 'ASC');
+                ->orderBy('id', 'DESC');
             
             
             $shortlisted = $query->get();

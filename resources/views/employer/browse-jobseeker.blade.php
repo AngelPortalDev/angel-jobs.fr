@@ -47,11 +47,27 @@
                                         @endif
                                 
                                         <!-- Page Numbers -->
-                                        @for ($i = 1; $i <= $paginate->lastPage(); $i++)
-                                            <li class="page-item {{ $i == $paginate->currentPage() ? 'active' : '' }}">
+                                        @php
+                                        $currentPage = $paginate->currentPage();
+                                        $lastPage = $paginate->lastPage();
+                                        $range = 3; 
+                                    @endphp
+
+                                    @for ($i = 1; $i <= $lastPage; $i++)
+                                        @if ($i <= 3 || ($i >= $currentPage - $range && $i <= $currentPage + $range) || $i > $lastPage - 3 || $i == 1 || $i == $lastPage)
+                                            <li class="page-item {{ $i == $currentPage ? 'active' : '' }}">
                                                 <a href="#" class="btn btn-primary page-linkem" data-page="{{ $i }}">{{ $i }}</a>
                                             </li>
-                                        @endfor
+                                        @elseif ($i == 4 && $currentPage > 4)
+                                            <li class="page-item">
+                                                <a href="#" class="btn btn-primary page-linkem" data-page="...">...</a>
+                                            </li>
+                                        @elseif ($i == $lastPage - 3 && $currentPage < $lastPage - 3)
+                                            <li class="page-item">
+                                                <a href="#" class="btn btn-primary page-linkem" data-page="...">...</a>
+                                            </li>
+                                        @endif
+                                    @endfor
                                 
                                         <!-- Next Button -->
                                         @if ($paginate->currentPage() < $paginate->lastPage())

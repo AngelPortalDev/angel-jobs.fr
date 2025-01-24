@@ -74,14 +74,16 @@ class JobPostingController extends Controller
                 
                 $emp_id = session('emp_user_id');
                 $where = ['email' => session()->get('emp_username')];
-                $sendto = array_unique([trim(strtolower(session()->get('emp_username'))), trim(strtolower($job_con_email))]);
+                $sendto = array_unique([trim(strtolower($job_con_email))]);
+                $sendcc=array_unique([trim(strtolower(session()->get('emp_username')))]);
             } elseif (session()->has('admin_user_id')) {
                 $admin_posted = session()->has('admin_username') ? session()->get('admin_username') : 'No';
                 $emp_id = isset($req->emp_id) ? base64_decode($req->input('emp_id')) : 0;
                 $where = ['id' => $emp_id];
-                $sendto = array_unique([trim(strtolower(session()->get('admin_username'))), trim(strtolower($job_con_email))]);
+                $sendto = array_unique([ trim(strtolower($job_con_email))]);
                 $approval_status = $req->approval_status === "1" ? 'APPROVED' : 'UNAPPROVED';
                 $job_highlighted = $req->job_highlighted === "1" ? 'Yes' : 'No';
+                $sendcc=array_unique([trim(strtolower(session()->get('admin_username')))]);
             }
 
             
@@ -168,9 +170,9 @@ class JobPostingController extends Controller
                                     $dyc_id = base64_encode($job_id);
                                     $link =  env('APP_URL') . "/job-details-view/" . $dyc_id;
                                     if($approval_status === 'APPROVED'){
-                                        mail_send(31, ['#Name#', '#Link#','#Job_title#','#Cate#'], [ucfirst($job_con_person), $link, $jobtitle->job_title,$approval_status], $sendto);
+                                        mail_send(31, ['#Name#', '#Link#','#Job_title#','#Cate#'], [ucfirst($job_con_person), $link, $jobtitle->job_title,$approval_status], $sendto,$sendcc);
                                     }else{
-                                     mail_send(23, ['#Name#', '#Link#','#Job_title#','#Cate#'], [ucfirst($job_con_person), $link, $jobtitle->job_title,$approval_status], $sendto);
+                                     mail_send(23, ['#Name#', '#Link#','#Job_title#','#Cate#'], [ucfirst($job_con_person), $link, $jobtitle->job_title,$approval_status], $sendto,$sendcc);
                                     }
                                     echo json_encode(array('code' => 200, 'message' => 'Successfully Updated', 'icon' => 'success'));
                                 } else {
