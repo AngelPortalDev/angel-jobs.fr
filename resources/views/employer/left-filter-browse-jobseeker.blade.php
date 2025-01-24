@@ -70,22 +70,21 @@
 										<div class="acod-content">
 											<div class="search-bx style-1 search-field-js">
 												<div class="input-group">
-													<input class="form-control list_filt" value="" data-classfil="main_edu_list" placeholder="Search Education" data-list="1" type="text">
-													<span class="input-group-btn">
-													</span> 
+													<input class="form-control" value="" data-classfil="main_edu_list" placeholder="Search Education" data-list="1" type="text">
+													<button type="button" class="btn btn-primary btn-sm" id="clear-search-education">Clear</button>
 												</div>
-										</div>
-										<div id="main_edu_list">
-											@foreach (getDropDownlist('qualifications', ['id', 'educational_qualification'], 5) as $data)
-										<div class="form-check old_list">
-											<input class="form-check-input edu_fil" name="left_edu_fil[]" id="education{{$data->id}}"
-												type="checkbox" value="{{$data->id}}">
-											<label class="form-check-label" for="education{{$data->id}}"
-												id="left_edu_fil">{{$data->educational_qualification}}
-											</label>
-										</div>
-										@endforeach
-										</div>
+											</div>
+											<div id="main_edu_list">
+												@foreach (getDropDownlist('qualifications', ['id', 'educational_qualification'], 5) as $index => $data)
+													<div class="form-check edu-item" style="{{ $index >= 5 ? 'display: none;' : '' }}">
+														<input class="form-check-input edu_fil" name="left_edu_fil[]" id="education{{$data->id}}" type="checkbox" value="{{$data->id}}">
+														<label class="form-check-label" for="education{{$data->id}}">{{$data->educational_qualification}}</label>
+													</div>
+												@endforeach
+											</div>
+											@if (count(getDropDownlist('qualifications', ['id', 'educational_qualification'])) > 5)
+												<button id="show-more-education" class="btn btn-primary btn-sm mt-2">Show More</button>
+											@endif
 										</div>
 									</div>
 								</div>
@@ -99,22 +98,24 @@
 									</div>
 									<div id="location" class="acod-body collapse">
 										<div class="acod-content">
+											
 											<div class="search-bx style-1 search-field-js">
-											<div class="input-group">
-												<input class="form-control list_filt" value="" data-classfil="main_loc_list" placeholder="Search Location" data-list="3" type="text">
-											</div>
+												<div class="input-group">
+													<input class="form-control" id="search-location" placeholder="Search Location" data-classfil="main_loc_list" data-list="3" type="text">
+													<button type="button" class="btn btn-primary btn-sm" id="clear-search-location">Clear</button>
+												</div>
 											</div>
 											<div id="main_loc_list">
-												@foreach (getDropDownlist('cities', ['id', 'city_name'], 5) as $data)
-													<div class="form-check">
-														<input class="form-check-input loc_fil" name="left_loc_fil[]" id="location{{$data->id}}"
-															type="checkbox" value="{{$data->id}}" >
-														<label class="form-check-label" for="location{{$data->id}}"
-															id="left_loc_fil">{{$data->city_name}}
-														</label>
+												@foreach (getDropDownlist('cities', ['id', 'city_name']) as $index => $data)
+													<div class="form-check location-item" style="{{ $index >= 5 ? 'display: none;' : '' }}">					
+														<input class="form-check-input loc_fil" name="left_loc_fil[]" id="location{{$data->id}}" type="checkbox" value="{{$data->id}}">
+														<label class="form-check-label" for="location{{$data->id}}">{{$data->city_name}}</label>
 													</div>
 												@endforeach
 											</div>
+											@if (count(getDropDownlist('cities', ['id', 'city_name'])) > 5)
+												<button id="show-more-location" class="btn btn-primary btn-sm mt-2">Show More</button>
+											@endif
 										</div>
 									</div>
 								</div>

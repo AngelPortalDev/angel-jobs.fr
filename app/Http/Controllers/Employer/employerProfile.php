@@ -163,11 +163,12 @@ class employerProfile extends Controller
             $username = Session::get('emp_username');
 
             $query = DB::table('job_application_history')
-                ->select('job_application_history.js_id', 'job_application_history.job_id', 'jobseeker_view.fullname', 'jobseeker_view.profile_img','jobseeker_view.updated_at', 'jobseeker_view.prefered_location_name','jobseeker_view.experiance_name','jobseeker_view.expected_salary_name','job_application_history.is_shortlisted')
+                ->select('job_application_history.id', 'job_application_history.js_id', 'job_application_history.job_id', 'jobseeker_view.fullname', 'jobseeker_view.profile_img','jobseeker_view.updated_at', 'jobseeker_view.prefered_location_name','jobseeker_view.experiance_name','jobseeker_view.expected_salary_name','job_application_history.is_shortlisted')
                 ->leftJoin('job_posting_view', 'job_application_history.employer_id', '=', 'job_posting_view.id')
                 ->join('jobseeker_view', 'jobseeker_view.js_id', '=', 'job_application_history.js_id')
                 ->where('job_application_history.employer_id', $emp_user_id)
-                ->where('job_application_history.is_shortlisted', 'Yes');
+                ->where('job_application_history.is_shortlisted', 'Yes')
+                ->orderBy('id', 'ASC');
             
             
             $shortlisted = $query->get();

@@ -218,7 +218,7 @@ if (!function_exists('duration')) {
     function duration($diff_date)
     {
 
-        $date = new Carbon($diff_date, 'Asia/Kolkata');
+        $date = new Carbon($diff_date, 'Europe/Paris');
         if ($date->diffInYears() != 0) {
             if ($date->diffInYears() > 1) {
                 return $date->diffInYears() . " Years";

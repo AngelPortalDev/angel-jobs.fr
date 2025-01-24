@@ -55,7 +55,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container"> 
             @if (!empty(session('status')) && session('status') ==='true')
                 <img class="logo-1" src="{{ asset('images/verified-icon.png')}}" alt="Angel Jobs France Logo" width="80px">
                     <h2><span style="color: #00d97f;font-weight: 600;">
@@ -71,7 +71,7 @@
         
         <p class="message">Thank you for registering on our platform. <br> You are now part of the Angel Jobs France community.</p>
         <a href="https://www.angel-jobs.fr/" class="button" target="_blank">Explore Opportunities</a>
-        <p class="footer">If you have any questions, feel free to contact our support team at <strong>info@angel-jobs.fr</strong></p>
+        <p class="footer">If you have any questions, feel free to contact our support team at <strong><a class="" href="mailto:info@angel-jobs.fr">info@angel-jobs.fr</a></strong></p>
     </div>
 </body>
 </html>

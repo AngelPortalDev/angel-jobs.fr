@@ -59,12 +59,16 @@
                                                 <div class="form-group">
                                                     <div class="dropdown bootstrap-select mob-code">
                                                         <div class="dropdown bootstrap-select">
-                                                            <select class="" tabindex="null" name="country_code" required>
-                                                                  <option>Select Code</option>
-                                                                @foreach (getDropDownlist('country_master', ['country_code']) as $country_master)
-                                                                    <option value="{{$country_master->country_code}}">{{$country_master->country_code}}</option>
-                                                                @endforeach
-                                                        </select>
+                                                           
+                                                            <select class="" id="contry_contact_no" name="contry_contact_no" data-live-search="true">
+                                                                <option value="" >Select Country Code</option>
+                                                                @foreach (getDropDownlist('country_master', ['id','country_code','country_name','country_flag']) as $code)
+                                                                    @if($code->id == '')
+                                                                        <option value="+33" data-content="{{asset('images/country_flags/france.png')}}">+33</option>
+                                                                    @endif 
+                                                                    <option value="{{$code->country_code}}" data-content='<img src="{{ asset('images/country_flags/'.$code->country_flag) }}" style="width: 20px; height: 15px; margin-right: 5px; border-radius: 0px;"> {{$code->country_code}} {{$code->country_name}}' @selected($code->id == 74)></option>
+                                                                @endforeach  
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>

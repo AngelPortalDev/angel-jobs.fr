@@ -258,6 +258,23 @@ class commonController extends Controller
             $filter['sal_fil'] = isset($req->left_sal_fil) ? $req->input('left_sal_fil') : 0;
             $filter['desig_fil'] = isset($req->left_desig_fil) ? $req->input('left_desig_fil') : 0;
             $filter['date_sort'] = isset($req->date_sort) ? Carbon::now()->subDays($req->date_sort)->format('Y-m-d') : $filter['start_date'];
+            
+            $filter['loc_fil'] = !empty(session('selectedLocations')) 
+                ? session('selectedLocations') 
+                : (isset($req->left_loc_fil) ? $req->input('left_loc_fil') : 0);
+
+            $filter['edu_fil'] = !empty(session('selectedEducations')) 
+                ? session('selectedEducations') 
+                : (isset($req->left_edu_fil) ? $req->input('left_edu_fil') : 0);
+
+            $filter['indus_fil'] = !empty(session('selectedIndustries')) 
+                ? session('selectedIndustries') 
+                : (isset($req->left_indus_fil) ? $req->input('left_indus_fil') : 0);
+
+            $filter['desig_fil'] = !empty(session('selectedDesignations')) 
+                ? session('selectedDesignations') 
+                : (isset($req->left_desig_fil) ? $req->input('left_desig_fil') : 0);
+
 
             $query = $this->JobView->topSearchJobs($curr_date, '', $filter);
         } else {
@@ -326,13 +343,13 @@ class commonController extends Controller
                 foreach ($workmode as $index => $mode) {
                     switch ($mode) {
                         case '1':
-                            $workModeText .= 'Remote ';  
+                            $workModeText .= 'Remote';  
                             break;
                         case '2':
-                            $workModeText .= 'WFO ';    
+                            $workModeText .= 'WFO';    
                             break;
                         case '3':
-                            $workModeText .= 'Hybrid '; 
+                            $workModeText .= 'Hybrid'; 
                             break;
                         default:
                             $workModeText .= ''; 
@@ -911,23 +928,23 @@ class commonController extends Controller
                     $class = 'main_indus_list';
                     $html .= "<div class='form-check old_list'>
 						<input class='form-check-input indus_fil' name='left_indus_fil[]' id='industry$list->id'
-							type='checkbox' value='$list->id'>
+							type='checkbox' value='$list->id'
+                            ";
+                            
+                    $selectedIndustries = session()->get('selectedIndustries', []);
+                    if (!is_array($selectedIndustries)) {
+                        $selectedIndustries = [];
+                    }
+                    if (in_array((string)$list->id, $selectedIndustries)) {
+                        $html .= "checked";
+                    }
+
+                    $html .= ">
 						<label class='form-check-label' for='industry$list->id'
 							id='left_indus_fil'>$list->industries_name
 						</label>
 					</div>";
                 }
-
-                // if ($req->list === '3') {
-                //     $class = 'main_city_list';
-                //     $html .= "<div class='form-check old_list'>
-				// 		<input class='form-check-input loc_fil' name='left_loc_fil[]' id='location$list->id'
-				// 			type='checkbox' value='$list->id'>
-				// 		<label class='form-check-label' for='location$list->id'
-				// 			id='left_loc_fil'>$list->city_name
-				// 		</label>
-				// 	</div>";
-                // }
 
                 if ($req->list === '3'){
                     $class = 'main_city_list';
@@ -955,7 +972,18 @@ class commonController extends Controller
                     $class = 'main_desig_list';
                     $html .= "<div class='form-check old_list'>
 						<input class='form-check-input desig_fil' name='left_desig_fil[]' id='desig$list->id'
-							type='checkbox' value='$list->id'>
+							type='checkbox' value='$list->id'
+                            ";
+                            
+                    $selectedDesignations = session()->get('selectedDesignations', []);
+                    if (!is_array($selectedDesignations)) {
+                        $selectedDesignations = [];
+                    }
+                    if (in_array((string)$list->id, $selectedDesignations)) {
+                        $html .= "checked";
+                    }
+
+                    $html .= ">
 						<label class='form-check-label' for='desig$list->id'
 							id='left_desig_fil'>$list->role_name
 						</label>
@@ -1035,12 +1063,55 @@ class commonController extends Controller
         }
     }
 
-public function sessionStore(Request $request)
-{
-    $selectedLocations = $request->input('selectedLocations');
-    $selectedEducations = $request->input('selectedEducations');
-    session(['selectedLocations' => $selectedLocations]);
-    session(['selectedEducations' => $selectedEducations]);
-    return response()->json(['message' => 'Locations saved in session!']);
-}
+    public function sessionStore(Request $request)
+    {
+        if ($request->isMethod('POST')) {
+            $selectedLocations = $request->input('selectedLocations');
+            $selectedEducations = $request->input('selectedEducations');
+            $selectedIndustries = $request->input('selectedIndustries');
+            $selectedDesignations = $request->input('selectedDesignations');
+
+            $existingLocations = session('selectedLocations', []);
+            $existingEducations = session('selectedEducations', []);
+            $existingIndustries = session('selectedIndustries', []);
+            $existingDesignations = session('selectedDesignations', []);
+        
+            // Merge new values with existing values, avoiding duplicates
+            $mergedLocations = array_unique(array_merge((array) $existingLocations, (array) $selectedLocations));
+            $mergedEducations = array_unique(array_merge((array) $existingEducations, (array) $selectedEducations));
+            $mergedIndustries = array_unique(array_merge((array) $existingIndustries, (array) $selectedIndustries));
+            $mergedDesignations = array_unique(array_merge((array) $existingDesignations, (array) $selectedDesignations));
+        
+            // Store merged arrays back in the session
+            session(['selectedLocations' => $mergedLocations]);
+            session(['selectedEducations' => $mergedEducations]);
+            session(['selectedIndustries' => $mergedIndustries]);
+            session(['selectedDesignations' => $mergedDesignations]);
+
+            return response()->json(['message' => 'Locations saved in session!']);
+        }else{
+            return response()->json(['message' => 'Something went wrong']);
+        }
+    }
+    
+    public function removeFromSession(Request $request)
+    {
+        $arrayType = $request->input('arrayType');
+        $value = $request->input('value');
+        
+        // Retrieve the existing session array
+        $existingArray = session($arrayType, []);
+    
+        // Remove the value from the session array if it exists
+        if (($key = array_search($value, $existingArray)) !== false) {
+            unset($existingArray[$key]);
+        }
+    
+        // Re-index the array and store it back in the session
+        session([$arrayType => array_values($existingArray)]);
+    
+        return response()->json(['message' => "$value removed from $arrayType session"]);
+    }
+    
+
 }

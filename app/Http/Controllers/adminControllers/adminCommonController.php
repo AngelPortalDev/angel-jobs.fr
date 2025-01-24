@@ -570,15 +570,23 @@ class adminCommonController extends Controller
            else{
                 $status='UNAPPROVED';
                 $addedvy=Session::get('emp_user_id');
-                $redirect='employer/emp-manage-mail';
+                $redirect='employer/add-email-template';
+               
+               
            }
         
             $validate = validator::make($req->all(), $rules);
             if (!$validate->fails()) {
                 try {
                     
-                    DB::table('email_templates')->insert(['status' => $status, 'template_name' => $template_name, 'email_subject' => $email_subject, 'email_content' => $email_content, 'type' => $type, 'added_by' => $addedvy]);
+                    // DB::table('email_templates')->insert(['status' => $status, 'template_name' => $template_name, 'email_subject' => $email_subject, 'email_content' => $email_content, 'type' => $type, 'added_by' => $addedvy]);
+                    // return redirect($redirect)->with('msg', 'Succefully Added');
+                    
+                    $data=DB::table('email_templates')->insert(['status' => $status, 'template_name' => $template_name, 'email_subject' => $email_subject, 'email_content' => $email_content, 'type' => $type, 'added_by' => $addedvy]);
+                    if(isset($data) && $data === true){
                     return redirect($redirect)->with('msg', 'Succefully Added');
+                    }
+
                 } catch (\Exception $th) {
                     return redirect()->back()->with('msg', 'Unable to Create');
                 }
@@ -616,16 +624,35 @@ class adminCommonController extends Controller
             }
             if (!$validate->fails()) {
                 try {
-                    $insert = DB::table('email_templates')->where('id', $temp_id)->update(['status' => $status, 'template_name' => $template_name, 'email_subject' => $email_subject, 'email_content' => $email_content, 'type' => $type]);
+                    // $insert = DB::table('email_templates')->where('id', $temp_id)->update(['status' => $status, 'template_name' => $template_name, 'email_subject' => $email_subject, 'email_content' => $email_content, 'type' => $type]);
 
-                    if(session()->has('admin_username')){
+                    // if(session()->has('admin_username')){
                         
-                        return redirect('admin/email-view')->with('msg', 'Successfully Updated');
+                    //     return redirect('admin/email-view')->with('msg', 'Successfully Updated');
 
-                    }else{
-                        echo json_encode(array('code' => 200, 'message' => 'Successfully update', 'icon' => 'success'));
+                    // }else{
+                    //     echo json_encode(array('code' => 200, 'message' => 'Successfully update', 'icon' => 'success'));
 
+                    // }
+                    
+                    $insert = DB::table('email_templates')->where('id', $temp_id)->update(['status' => $status,'template_name' => $template_name,'email_subject' => $email_subject,'email_content' => $email_content,'type' => $type,]);
+
+                    if (session()->has('admin_username')) {
+                        
+                        if ($insert > 0) { 
+                            return redirect('admin/email-view')->with('msg', 'Successfully Updated');
+                        } else {
+                            return redirect()->back()->with('error', 'Unable to update');
+                        }
+                    } else {
+                        
+                        if ($insert > 0) {
+                            return response()->json(['code' => 200,'message' => 'Successfully updated','icon' => 'success',]);}
+                            else {
+                                return response()->json(['code' => 201,'message' => 'Not updated','icon' => 'warning',]);
+                        }
                     }
+
                 } catch (\Exception $th) {
 
                     return redirect()->back()->with('error', 'Unable to Create');

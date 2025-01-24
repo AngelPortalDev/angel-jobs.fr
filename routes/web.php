@@ -94,6 +94,8 @@ Route::middleware(['guest'])->group(function () {
 });
 
 Route::post('/store-sessions', [commonController::class, 'sessionStore']);
+Route::post('/remove-from-session', [commonController::class, 'removeFromSession']);
+
 
 
 //   Employer Middelware Routes

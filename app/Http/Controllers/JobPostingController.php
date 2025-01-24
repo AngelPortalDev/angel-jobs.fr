@@ -248,7 +248,7 @@ class JobPostingController extends Controller
                     ]);
 
                     $sendto = array_unique([trim(strtolower($email)), trim(strtolower($contact_email))]);
-                    $draftData = mail_send(23, ['#Name#', '#Link#','#Job_title#','#Cate#'], [ucfirst($fullname), $link, $Job_title,'Deleted'], $sendto);
+                    // $draftData = mail_send(23, ['#Name#', '#Link#','#Job_title#','#Cate#'], [ucfirst($fullname), $link, $Job_title,'Deleted'], $sendto);
                     echo json_encode(array('code' => 200, 'message' => 'Successfully Deleted', 'icon' => 'success'));
                 } catch (\Exception $e) {
                     echo json_encode(['code' => 201, 'message' => 'Unble to Deleted Details', "icon" => "error"]);
@@ -285,7 +285,7 @@ class JobPostingController extends Controller
                         'status' => $status,
                     ]);
                     $sendto = array_unique([trim(strtolower($email)), trim(strtolower($contact_email))]);
-                     mail_send(23, ['#Name#', '#Link#','#Job_title#','#Cate#'], [ucfirst($fullname),$link, $job_title, ucfirst($status)], $sendto);
+                    //  mail_send(23, ['#Name#', '#Link#','#Job_title#','#Cate#'], [ucfirst($fullname),$link, $job_title, ucfirst($status)], $sendto);
                     echo json_encode(array('code' => 200, 'message' => $status, 'icon' => 'success'));
                 } catch (\Exception $e) {
                     echo json_encode(['code' => 201, 'message' => 'Unble to Change Status', "icon" => "error"]);

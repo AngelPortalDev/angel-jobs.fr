@@ -258,13 +258,13 @@ $(document).ready(function () {
             return;
         }
 
-        if (contact_no.length < 10) {
-            $("#contact_no_error").text("mobile number should be at least 10 digits");
+        if (contact_no.length < 6) {
+            $("#contact_no_error").text("mobile number should be at least 6 digits");
             $("#contact_no_error").show();
             return;
         }
-        if (contact_no.length > 10) {
-            $("#contact_no_error").text("mobile number should not exceed 10 digits");
+        if (contact_no.length > 14) {
+            $("#contact_no_error").text("mobile number should not exceed 14 digits");
             $("#contact_no_error").show();
             return;
         }
@@ -924,16 +924,16 @@ $(document).ready(function () {
         }, 300);  
     });
 
-  $(".input-group-btn button").click(function () {
-    var inputField = $(this).closest('.input-group').find('input');
-    inputField.val(''); 
+//   $(".input-group-btn button").click(function () {
+//     var inputField = $(this).closest('.input-group').find('input');
+//     inputField.val(''); 
 
-    $(this).parent().hide();  
+//     $(this).parent().hide();  
     
-    inputField.trigger('keyup');
+//     inputField.trigger('keyup');
 
-    $("#" + inputField.data("classfil")).empty();  
-});
+//     $("#" + inputField.data("classfil")).empty();  
+// });
 
     // Filter Search List (View More Details)
     // $(".left_filters").on("change", function (e) {
@@ -1059,7 +1059,7 @@ $(document).ready(function () {
     $("#newsletterSend").on("click", function (e) {
         e.preventDefault();
 
-        $("#newmail_error").hide();
+        $(".newmail_error").hide();
 
         var newsemail = $(".newsemail").val();
         var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
