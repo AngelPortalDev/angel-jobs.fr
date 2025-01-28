@@ -4,64 +4,48 @@ $(document).ready(function () {
     var assets = window.location.origin + "/assets/";
     var reader = new FileReader();
     var img = new Image();
-    function loadJobs(records, page, count, lastPage) {
-        $("#jobCount").html(count + " Jobs Found");
-        $("#jobResults").html(records);    
-
-        let paginationHtml = "<ul class='pagination'>"; 
-       
-        if (page > 1) {
-            paginationHtml += `<li class="page-item">
-                <a href="#" class="btn btn-primary page-link prev-page" data-page="${page - 1}">Previous</a>
-            </li>`;
+    function loadJobs(records, page, count, total_count, perPage) {
+        $("#jobCount").html(`${count} Jobs Found`);
+        // $("#jobResults").html('');      
+        if (records.length > 0) {
+            $("#jobResults").html(records);
         } else {
-            paginationHtml += `<li class="page-item disabled">
-                <a class="btn btn-primary disabled">Previous</a>
-            </li>`;
+            $("#jobResults").html("<li>No Jobs Found</li>");
         }
-        const range = 3;  
-    
-        if (page > range + 1) {
-            paginationHtml += `<li class="page-item">
-                <a href="#" class="btn btn-primary page-link" data-page="1">1</a>
-            </li>`;
-        }    
-        
-        if (page > range + 2) {
-            paginationHtml += `<li class="page-item">
-                <a href="#" class="btn btn-primary page-link" data-page="...">...</a>
-            </li>`;
-        }    
-      
-        for (let i = Math.max(1, page - range); i <= Math.min(lastPage, page + range); i++) {
-            paginationHtml += `<li class="page-item ${i === page ? 'active' : ''}">
-                <a href="#" class="btn btn-primary page-link" data-page="${i}">${i}</a>
-            </li>`;
-        }    
-        
-        if (page < lastPage - range - 1) {
-            paginationHtml += `<li class="page-item">
-                <a href="#" class="btn btn-primary page-link" data-page="...">...</a>
-            </li>`;
-        }   
-
-        if (page < lastPage - range) {
-            paginationHtml += `<li class="page-item">
-                <a href="#" class="btn btn-primary page-link" data-page="${lastPage}">${lastPage}</a>
-            </li>`;
-        }    
-        if (page < lastPage) {
-            paginationHtml += `<li class="page-item">
-                <a href="#" class="btn btn-primary page-link next-page" data-page="${page + 1}">Next</a>
-            </li>`;
-        } else {
-            paginationHtml += `<li class="page-item disabled">
-                <a class="btn btn-primary disabled">Next</a>
-            </li>`;
-        }    
-        paginationHtml += "</ul>";    
-        $("#paginationLinks").html(paginationHtml);
+        generatePagination(total_count, perPage, page);
     }
+    
+    function generatePagination(total_count, perPage, currentPage) {
+        let totalPages = Math.ceil(total_count / perPage);
+        let paginationHtml = '';
+        currentPage = Number(currentPage);
+    
+        if (totalPages > 1) {
+            paginationHtml += '<ul class="pagination">';
+            paginationHtml += currentPage > 1 
+                ? `<li class="page-item"><a href="#" class="page-link" data-page="${currentPage - 1}">« Prev</a></li>` 
+                : `<li class="page-item disabled"><a href="#" class="page-link">« Prev</a></li>`;
+    
+            if (currentPage > 3) 
+                paginationHtml += `<li class="page-item"><a href="#" class="page-link" data-page="1">1</a></li><li class="page-item disabled"><a href="#" class="page-link">...</a></li>`;
+    
+            
+            for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
+                paginationHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}"><a href="#" class="page-link" data-page="${i}">${i}</a></li>`;
+            }
+    
+            if (currentPage < totalPages - 2) 
+                paginationHtml += `<li class="page-item disabled"><a href="#" class="page-link">...</a></li><li class="page-item"><a href="#" class="page-link" data-page="${totalPages}">${totalPages}</a></li>`;
+    
+            paginationHtml += currentPage < totalPages 
+                ? `<li class="page-item"><a href="#" class="page-link" data-page="${currentPage + 1}">Next »</a></li>` 
+                : `<li class="page-item disabled"><a href="#" class="page-link">Next »</a></li>`;
+    
+            paginationHtml += '</ul>';
+        }
+    
+        $("#paginationLinks").html(paginationHtml);
+    }  
     
 
     // $(".jslogincheck").on("click", function () {
@@ -647,6 +631,7 @@ $(document).ready(function () {
             $("#login_pass_error").show();
             return;
         }
+        console.log("CSRF Token:", csrfToken);
         $("#loader").fadeIn();
         $.ajax({
             url: baseUrl + "/employer-Login",
@@ -794,11 +779,13 @@ $(document).ready(function () {
     // Jobseeker  Login
     $("#login_js").click(function (e) {
         e.preventDefault();
+       
         $("#js_login_user_error").hide();
         $("#js_login_pass_error").hide();
         var username = $("#js_username").val();
         var password = $("#js_password").val();
         // var formData = new FormData(form);
+        
         var form = $("#js_LoginForm").serialize();
         if (username.trim() === "") {
             $("#js_login_user_error").show();
@@ -808,7 +795,7 @@ $(document).ready(function () {
             $("#js_login_pass_error").show();
             return;
         }
-
+        console.log("CSRF Token:", csrfToken);
         $.ajax({
             url: baseUrl + "/jobseeker-login",
             type: "POST",
@@ -937,63 +924,80 @@ $(document).ready(function () {
 
     // Filter Search List (View More Details)
     // $(".left_filters").on("change", function (e) {
-    $(".left_filters").on("change", "input[type='checkbox'], input[type='radio']", function (e) {
-        e.preventDefault();
-        $("#loader").fadeIn();
-        var form = $(".left_filters").serialize();
-
-        $("#jobResults li").slideUp();
-        $.ajax({
-            url: "top-search-bar",
-            type: "GET",
-            dataType: "json",
-            data: form,
-            headers: {
-                "X-CSRF-TOKEN": csrfToken,
-            },
-            success: function (res) {
-                $("#loader").fadeOut();
-
-                var records = res.html;
-                var page = res.page;
-                var count = res.count;
-                var lastpage = res.last_page;
-
-                loadJobs(records, page, count, lastpage);
-            },
-            error: function (xhr, status, error) {
-                // Handle errors
-                console.error(error);
-                $("#result").html("An error occurred.");
-            },
-        });
-    }
-    );
-
-    $(document).on("click", ".page-link", function (e) {
-        e.preventDefault();
-        $("#loader").fadeIn();
+        $(".left_filters").on("change", "input[type='checkbox'], input[type='radio']", function (e) {
+            e.preventDefault();
+            $("#loader").fadeIn();
+            var form = $(".left_filters").serialize();
     
-        const page = $(this).data("page");
-        const form = $(".left_filters").serialize() + `&page=${page}`;    
-        $.ajax({
-            url: "top-search-bar",
-            type: "GET",
-            dataType: "json",
-            data: form,
-            headers: {
-                "X-CSRF-TOKEN": csrfToken,
-            },
-            success: function (res) {
-                $("#loader").fadeOut();
-                loadJobs(res.html, res.page, res.count, res.last_page);
-            },
-            error: function () {
-                $("#loader").fadeOut();
-                $("#jobResults").html("<li>No Jobs Found</li>");
-            },
+            $("#jobResults li").slideUp();
+            $.ajax({
+                url: "top-search-bar",
+                type: "GET",
+                dataType: "json",
+                data: form,
+                headers: {
+                    "X-CSRF-TOKEN": csrfToken,
+                },
+                success: function (res) {
+                    $("#loader").fadeOut();
+                    console.log("Pagination AJAX Success:", res);
+                   
+                        loadJobs(res.html, res.page, res.count, res.total_count, res.perPage);
+                  
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors
+                    console.error(error);
+                    $("#result").html("An error occurred.");
+                },
+            });
+        }
+        );
+        // $(".checkedbox").on("change", "input[type='checkbox'], input[type='radio']", function (e) {
+        //     e.preventDefault();
+        //     $("#loader").fadeIn();
+        //     var form = $(".left_filters").serialize();
+        // });
+        
+        $(document).on("click", ".page-link", function (e) {
+            e.preventDefault();
+        
+            //console.log("Clicked Pagination Link:", $(this).data("page")); 
+        
+            if ($(this).parent().hasClass("disabled") || !$(this).data("page")) {
+                console.log("Pagination Click Ignored: Disabled or Missing Data-Page");
+                return;
+            }
+        
+            $("#loader").fadeIn();
+        
+            const page = $(this).data("page");
+            const form = $(".left_filters").serialize() + `&page=${page}`;
+        
+            $.ajax({
+                url: "top-search-bar",
+                type: "GET",
+                dataType: "json",
+                data: form,
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+                success: function (res) {
+                    $("#loader").fadeOut();
+                   //console.log("Pagination AJAX Success:", res);
+                    
+                   loadJobs(res.html, res.page, res.count, res.total_count, res.perPage);
+                    
+                    $(".pagination .page-item").removeClass("active");
+                    $(".pagination .page-link[data-page='" + page + "']").parent().addClass("active");
+                },
+                error: function () {
+                    $("#loader").fadeOut();
+                    $("#jobResults").html("<li>No Jobs Found</li>");
+                },
+            });
         });
-    });
+        
     
 
     // Newsletter Mail Subcrib

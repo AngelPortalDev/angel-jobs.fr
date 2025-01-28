@@ -39,54 +39,38 @@
 		<form class="left_filters">
 			
 			<div id="paginationLinks" class="pagination-bx">
-				<ul class="pagination">
-					<!-- Previous Button -->
-					@if ($paginate->currentPage() > 1)
-					<li class="page-item">
-						<a href="#" class="btn btn-primary page-link prev-page" data-page="{{ $paginate->currentPage() - 1 }}" style="height: 43px; background:#11a1f5; border:0;">Previous</a>
-					</li>
-				@else
-					<li class="page-item disabled">
-						<a class="btn btn-primary disabled">Previous</a>
-					</li>
-				@endif
-
 				
-				@php
-					$currentPage = $paginate->currentPage();
-					$lastPage = $paginate->lastPage();
-					$range = 3; 
-				@endphp
 
-				@for ($i = 1; $i <= $lastPage; $i++)
-					@if ($i <= 3 || ($i >= $currentPage - $range && $i <= $currentPage + $range) || $i > $lastPage - 3 || $i == 1 || $i == $lastPage)
-						<li class="page-item {{ $i == $currentPage ? 'active' : '' }}">
-							<a href="#" class="btn btn-primary page-link" data-page="{{ $i }}">{{ $i }}</a>
-						</li>
-					@elseif ($i == 4 && $currentPage > 4)
-						<li class="page-item">
-							<a href="#" class="btn btn-primary page-link" data-page="...">...</a>
-						</li>
-					@elseif ($i == $lastPage - 3 && $currentPage < $lastPage - 3)
-						<li class="page-item">
-							<a href="#" class="btn btn-primary page-link" data-page="...">...</a>
-						</li>
-					@endif
-				@endfor
-
-				
-				@if ($paginate->currentPage() < $paginate->lastPage())
-					<li class="page-item">
-						<a href="#" class="btn btn-primary page-link next-page" data-page="{{ $paginate->currentPage() + 1 }}" style="height: 43px; background:#11a1f5; border:0;">Next</a>
-					</li>
-				@else
-					<li class="page-item disabled">
-						<a class="btn btn-primary disabled">Next</a>
-					</li>
-				@endif
-
-				
-				</ul>
+				  @php
+                $totalPages = ceil($total_count / $perPage);
+                $currentPage = $page;
+                $range = 3; 
+                
+            @endphp
+            
+            <ul class="pagination">
+                <!-- Previous Button -->
+                <li class="page-item {{ $currentPage == 1 ? 'disabled' : '' }}">
+                    <a class="page-link" href="javascript:void(0);" data-page="{{ $currentPage - 1 }}">Previous</a>
+                </li>
+            
+                @for ($i = 1; $i <= $totalPages; $i++)
+                    @if ($i == 1 || $i == $totalPages || ($i >= $currentPage - $range && $i <= $currentPage + $range))
+                        <li class="page-item {{ $i == $currentPage ? 'active' : '' }}">
+                            <a class="page-link pagination-link" href="javascript:void(0);" data-page="{{ $i }}">{{ $i }}</a>
+                        </li>
+                    @elseif ($i == 2 && $currentPage > $range + 1)
+                        <li class="page-item disabled"><a class="page-link">...</a></li>
+                    @elseif ($i == $totalPages - 1 && $currentPage < $totalPages - $range)
+                        <li class="page-item disabled"><a class="page-link">...</a></li>
+                    @endif
+                @endfor
+            
+                <!-- Next Button -->
+                <li class="page-item {{ $currentPage == $totalPages ? 'disabled' : '' }}">
+                    <a class="page-link" href="javascript:void(0);" data-page="{{ $currentPage + 1 }}">Next</a>
+                </li>
+            </ul>
 			</div>
 			
 		{{-- <ul class="pagination">

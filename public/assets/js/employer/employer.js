@@ -3,65 +3,48 @@ $(document).ready(function () {
     var baseUrl = window.location.origin;
     var reader = new FileReader();
     var img = new Image();
-    function loadJobseeker(records, page, count,lastPage) {
-        $("#jobseekerCount").html(count + " Jobseekers Found");
-        $("#jobseekerResults").html(records);
-        let paginationHtml = "<ul class='pagination'>";   
-       
-        if (page > 1) {
-            paginationHtml += `<li class="page-item">
-                <a href="#" class="btn btn-primary page-linkem prev-page" data-page="${page - 1}">Previous</a>
-            </li>`;
+    function loadJobseeker(records, page, count, total_count, perPage) {
+        $("#jobseekerCount").html(`${count} Jobs Found`);
+        // $("#jobResults").html('');      
+        if (records.length > 0) {
+            $("#jobseekerResults").html(records);
         } else {
-            paginationHtml += `<li class="page-item disabled">
-                <a class="disabled">Previous</a>
-            </li>`;
+            $("#jobseekerResults").html("<li>No Jobs Found</li>");
         }
-        const range = 3;  
-    
-        if (page > range + 1) {
-            paginationHtml += `<li class="page-item">
-                <a href="#" class="btn btn-primary page-linkem" data-page="1">1</a>
-            </li>`;
-        }    
-        
-        if (page > range + 2) {
-            paginationHtml += `<li class="page-item">
-                <a href="#" class="btn btn-primary page-linkem" data-page="...">...</a>
-            </li>`;
-        }    
-      
-        for (let i = Math.max(1, page - range); i <= Math.min(lastPage, page + range); i++) {
-            paginationHtml += `<li class="page-item ${i === page ? 'active' : ''}">
-                <a href="#" class="btn btn-primary page-linkem" data-page="${i}">${i}</a>
-            </li>`;
-        }    
-        
-        if (page < lastPage - range - 1) {
-            paginationHtml += `<li class="page-item">
-                <a href="#" class="btn btn-primary page-linkem" data-page="...">...</a>
-            </li>`;
-        }   
-
-        if (page < lastPage - range) {
-            paginationHtml += `<li class="page-item">
-                <a href="#" class="btn btn-primary page-linkem" data-page="${lastPage}">${lastPage}</a>
-            </li>`;
-        }    
-        if (page < lastPage) {
-            paginationHtml += `<li class="page-item">
-                <a href="#" class="btn btn-primary page-linkem next-page" data-page="${page + 1}">Next</a>
-            </li>`;
-        } else {
-            paginationHtml += `<li class="page-item disabled">
-                <a class="disabled">Next</a>
-            </li>`;
-        }  
-        paginationHtml += "</ul>";    
-        $("#paginationLinks").html(paginationHtml);
-
-
+        generatePagination(total_count, perPage, page);
     }
+    
+    function generatePagination(total_count, perPage, currentPage) {
+        let totalPages = Math.ceil(total_count / perPage);
+        let paginationHtml = '';
+        currentPage = Number(currentPage);
+    
+        if (totalPages > 1) {
+            paginationHtml += '<ul class="pagination">';
+            paginationHtml += currentPage > 1 
+                ? `<li class="page-item"><a href="#" class="page-linkem" data-page="${currentPage - 1}">« Prev</a></li>` 
+                : `<li class="page-item disabled"><a class="page-linkem">« Prev</a></li>`;
+    
+            if (currentPage > 3) 
+                paginationHtml += `<li class="page-item"><a href="#" class="page-linkem" data-page="1">1</a></li><li class="page-item disabled"><a href="#" class="page-link">...</a></li>`;
+    
+            
+            for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
+                paginationHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}"><a href="#" class="page-linkem" data-page="${i}">${i}</a></li>`;
+            }
+    
+            if (currentPage < totalPages - 2) 
+                paginationHtml += `<li class="page-item disabled"><a href="#" class="page-linkem">...</a></li><li class="page-item"><a href="#" class="page-link" data-page="${totalPages}">${totalPages}</a></li>`;
+    
+            paginationHtml += currentPage < totalPages 
+                ? `<li class="page-item"><a href="#" class="page-linkem" data-page="${currentPage + 1}">Next »</a></li>` 
+                : `<li class="page-item disabled"><a class="page-linkem">Next »</a></li>`;
+    
+            paginationHtml += '</ul>';
+        }
+    
+        $("#paginationLinks").html(paginationHtml);
+    }  
     function manageJobs() {
         $.ajax({
             url: baseUrl + "/emp-manage-job",
@@ -773,44 +756,12 @@ $(document).ready(function () {
     // Jobseeker Found on Employer Section Left filter
     $(".jsfound_left_filters").on("change","input[type='checkbox'], input[type='radio']",function (e) {
             
-            e.preventDefault();
-            $("#loader").fadeIn();
-            var form = $(".jsfound_left_filters").serialize();
-          $("#jobseekerResults li").slideUp();
-            $.ajax({
-                url: baseUrl + "/employer/emp-browse-jobseeker",
-                type: "GET",
-                dataType: "json",
-                data: form,
-                headers: {
-                    "X-CSRF-TOKEN": csrfToken,
-                },
-                success: function (res) {
-                    $("#loader").fadeOut();
-                    var records = res.html;
-                    var page = res.page;                    
-                    var count = res.count;           
-                    var lastpage = res.last_page;         // console.warn(page+'<= this is page'+count+'this is count');            
-                    loadJobseeker(records, page, count,lastpage);
-                },
-                error: function (xhr, status, error) {
-                    // Handle errors
-                    console.error(error);
-                    $("#result").html("An error occurred.");
-                },
-            });
-        }
-    );
-
-    $(document).on("click", ".page-linkem", function (e) {
         e.preventDefault();
-       
         $("#loader").fadeIn();
-        
-        const page = $(this).data("page");
-        const form = $(".jsfound_left_filters").serialize() + `&page=${page}`;    
+        var form = $(".jsfound_left_filters").serialize();
+      $("#jobseekerResults li").slideUp();
         $.ajax({
-            url: "/employer/emp-browse-jobseeker",
+            url: baseUrl + "/employer/emp-browse-jobseeker",
             type: "GET",
             dataType: "json",
             data: form,
@@ -819,14 +770,51 @@ $(document).ready(function () {
             },
             success: function (res) {
                 $("#loader").fadeOut();
-                loadJobseeker(res.html, res.page, res.count, res.last_page);
+                var records = res.html;
+                var page = res.page;                    
+                var count = res.count;           
+                var lastpage = res.last_page;         // console.warn(page+'<= this is page'+count+'this is count');            
+                loadJobseeker(res.html, res.page, res.count, res.total_count, res.perPage);
             },
-            error: function () {
-                $("#loader").fadeOut();
-                $("#jobseekerResults").html("<li>No Jobs Found</li>");
+            error: function (xhr, status, error) {
+                // Handle errors
+                console.error(error);
+                $("#result").html("An error occurred.");
             },
         });
+    }
+);
+
+$(document).on("click", ".page-linkem", function (e) {
+    e.preventDefault();
+   
+    if ($(this).parent().hasClass("disabled") || !$(this).data("page")) {
+        console.log("Pagination Click Ignored: Disabled or Missing Data-Page");
+        return;
+    }
+
+    $("#loader").fadeIn();
+    
+    const page = $(this).data("page");
+    const form = $(".jsfound_left_filters").serialize() + `&page=${page}`;    
+    $.ajax({
+        url: "/employer/emp-browse-jobseeker",
+        type: "GET",
+        dataType: "json",
+        data: form,
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+        },
+        success: function (res) {
+            $("#loader").fadeOut();
+            loadJobseeker(res.html, res.page, res.count, res.total_count, res.perPage);
+        },
+        error: function () {
+            $("#loader").fadeOut();
+            $("#jobseekerResults").html("<li>No Jobs Found</li>");
+        },
     });
+});
     
     $("#postemail").click(function (event) {
         event.preventDefault();    

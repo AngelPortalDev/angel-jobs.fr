@@ -70,6 +70,7 @@ class JobPostingController extends Controller
             $approval_status = 'UNAPPROVED';
             $job_highlighted = 'No';
             $admin_posted = 'No';
+
             if (session()->has('emp_user_id')) {
                 
                 $emp_id = session('emp_user_id');
@@ -115,7 +116,7 @@ class JobPostingController extends Controller
                         'job_educ' => 'required|numeric',
                         'vacancy_count' => 'required|numeric|min:1',
                         'job_con_person' => 'required|string|max:225',
-                        'job_con_phone' => 'required|string|max:9|min:9',
+                        'job_con_phone' => 'required|string|max:10|min:8',
                         'job_con_email' => 'required|email|max:225',
                         'job_indus' => 'required|numeric|min:1',
                         'job_lang' => 'required|array|min:1|max:5',
@@ -123,8 +124,9 @@ class JobPostingController extends Controller
                         'select_work_mode' => 'required|array|max:25',
                         // 'job_spec' => 'string|min:225',
                     ];
-
+                   
                     $validate = Validator::make($req->all(), $validate_rules);
+                  
                     if (!$validate->fails()) {
                         $select = [
                             'approval_status' => $approval_status,
@@ -156,7 +158,7 @@ class JobPostingController extends Controller
                         ];
                         
                         try {
-                            
+                               
                             // Mails Defualt Settings
                             if (isset($job_id) && !empty($job_id) && is_numeric($job_id) && !is_array($job_id)) {
                                 $exists =   is_exist('job_postings', ['id' => $job_id, 'posted_by' => $emp_id, 'is_deleted' => 'No']);
@@ -183,10 +185,13 @@ class JobPostingController extends Controller
                                
                                 $select_arr = ['free_assign_job_posting', 'left_credit_job_posting_plan', 'plan_id', 'plan_start_from', 'plan_expired_on'];
                                 $plan_detail = getData('employers', $select_arr, $where);
+                               
                                 $free_limit = $plan_detail[0]->free_assign_job_posting;
                                 $plan_limit =  $plan_detail[0]->left_credit_job_posting_plan;
                                 $newSelect = array_merge($select, ['start_date' => $time, 'job_expired_on' => $job_end, 'posted_on' => $time]);
+                               
                                 $postingID =  JobPosting::insertGetId($newSelect);
+                              
                                 if (is_numeric($postingID) && $postingID != 0) {
                                     $query =   DB::table('employers')->where('id', $emp_id);
 
@@ -206,8 +211,12 @@ class JobPostingController extends Controller
                                 echo json_encode(array('code' => 200, 'message' => 'Successfully Posted', 'icon' => 'success'));
                             }
                         } catch (\Exception $e) {
-
-                            echo json_encode(['code' => 201, 'message' => 'Unable to Add', "icon" => "error"]);
+                            echo json_encode([
+                                'code' => 500,  // Use 500 for general server error
+                                'message' => 'Error: ' . $e->getMessage(),
+                                'icon' => 'error'
+                            ]);
+                            //echo json_encode(['code' => 201, 'message' => 'Unable to Add', "icon" => "error"]);
                         }
                     } else {
                         return $validate->errors();

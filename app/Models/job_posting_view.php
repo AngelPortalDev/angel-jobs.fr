@@ -13,7 +13,7 @@ class job_posting_view extends Model
     use HasFactory;
     public $table = 'job_posting_view';
 
-    public function topSearchJobs($curr_date, $req, $filters = '')
+    public function topSearchJobs($curr_date, $req, $filters = '',$page, $perPage)
     {
 
         $query = DB::table('job_posting_view')->select('id', 'job_title', 'location_hiring', 'job_type_name', 'start_date', 'location_hiring_name', 'country', 'job_salary_to_name', 'profile_img', 'company_name', 'experiance', 'posted_on', 'salary_hide', 'posted_by', 'key_skill_name', 'skill_keyword','status','job_expired_on','work_mode')->where('approval_status', 'APPROVED')->where('status', 'Live')->where('is_deleted', 'No')->whereDate('job_expired_on', '>=', now())->orderBy('posted_on', 'DESC');
@@ -136,7 +136,14 @@ class job_posting_view extends Model
         if (isset($filters['desig_fil']) && $filters['desig_fil'] != 0) {
             $query->whereIn('job_designation', $filters['desig_fil']);
         }
-
-        return  $query;
+        $total=$query->count();
+        $offset = ($page - 1) * $perPage;
+       
+        //$query->offset($offset)->limit($perPage)->get();
+        // dd($query->offset($offset)->limit($perPage)->get());
+        return [
+            'query' => $query->offset($offset)->limit($perPage)->get(),
+            'total'=> $total ];
+        // return  $query;
     }
 }

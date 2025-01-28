@@ -32,9 +32,9 @@
                                 {!! $html !!}
 
                             </ul>
-                            <div class="pagination-bx m-t30">
+                            <div class="pagination-bx m-t30 float-end">
                                 <div id="paginationLinks" class="pagination-bx">
-                                    <ul class="pagination">
+                                    {{-- <ul class="pagination">
                                         <!-- Previous Button -->
                                         @if ($paginate->currentPage() > 1)
                                             <li class="page-item">
@@ -79,7 +79,38 @@
                                                 <a class=" disabled">Next</a>
                                             </li>
                                         @endif
-                                    </ul>
+                                    </ul> --}}
+
+                                    @php
+                                    $totalPages = ceil($total_count / $perPage);
+                                    $currentPage = $page;
+                                    $range = 3; 
+                                    
+                                @endphp
+                                
+                                <ul class="pagination">
+                                    <!-- Previous Button -->
+                                    <li class="page-item {{ $currentPage == 1 ? 'disabled' : '' }}">
+                                        <a class="page-link" href="javascript:void(0);" data-page="{{ $currentPage - 1 }}">Previous</a>
+                                    </li>
+                                
+                                    @for ($i = 1; $i <= $totalPages; $i++)
+                                        @if ($i == 1 || $i == $totalPages || ($i >= $currentPage - $range && $i <= $currentPage + $range))
+                                            <li class="page-item {{ $i == $currentPage ? 'active' : '' }}">
+                                                <a class="page-link pagination-link" href="javascript:void(0);" data-page="{{ $i }}">{{ $i }}</a>
+                                            </li>
+                                        @elseif ($i == 2 && $currentPage > $range + 1)
+                                            <li class="page-item disabled"><a class="page-link">...</a></li>
+                                        @elseif ($i == $totalPages - 1 && $currentPage < $totalPages - $range)
+                                            <li class="page-item disabled"><a class="page-link">...</a></li>
+                                        @endif
+                                    @endfor
+                                
+                                    <!-- Next Button -->
+                                    <li class="page-item {{ $currentPage == $totalPages ? 'disabled' : '' }}">
+                                        <a class="page-link" href="javascript:void(0);" data-page="{{ $currentPage + 1 }}">Next</a>
+                                    </li>
+                                </ul>
                                 </div>
 
                             </div>

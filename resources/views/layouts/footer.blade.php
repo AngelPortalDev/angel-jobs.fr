@@ -501,6 +501,215 @@
 
 </script>
 <script>
+		$(document).ready(function () {
+			
+			<?php 
+				session()->forget('selectedLocations'); 
+				session()->forget('selectedEducations'); 
+				session()->forget('selectedIndustries'); 
+				session()->forget('selectedDesignations'); 
+			?>
+			
+			function saveSelectedLocations() {
+				const locations = $(".form-check-input:checked.loc_fil")
+					.map(function () {
+						return $(this).val();
+					})
+					.get();
+	
+				const educations = $(".form-check-input:checked.edu_fil")
+					.map(function () {
+						return $(this).val();
+					})
+					.get();
+					
+				const industries = $(".form-check-input:checked.indus_fil")
+					.map(function () {
+						return $(this).val();
+					})
+					.get();
+	
+				const designations = $(".form-check-input:checked.desig_fil")
+					.map(function () {
+						return $(this).val();
+					})
+					.get();
+	
+				
+				$.ajax({
+					url: '/store-sessions', 
+					method: 'POST',
+					data: {
+						selectedLocations: locations,
+						selectedEducations: educations,
+						selectedIndustries: industries,
+						selectedDesignations: designations,
+						_token: '{{ csrf_token() }}'
+					},
+					success: function(response) {
+						// console.log('Data saved in Laravel session:', response);
+					},
+					error: function(error) {
+						// console.log('Error:', error);
+					}
+				});
+			}
+	
+			// $(document).on("click", ".form-check-input", function () {
+			//     saveSelectedLocations();
+			// });
+	
+			function removeFromSession(arrayType, value) {
+				$.ajax({
+					url: '/remove-from-session', 
+					method: 'POST',
+					data: {
+						arrayType: arrayType,
+						value: value,
+						_token: '{{ csrf_token() }}'
+					},
+					success: function(response) {
+						console.log('Data removed from session:', response);
+					},
+					error: function(error) {
+						console.log('Error:', error);
+					}
+				});
+			}
+	
+			$(document).on("click", ".form-check-input", function () {
+				const arrayType = $(this).hasClass('loc_fil') ? 'selectedLocations' :
+								$(this).hasClass('edu_fil') ? 'selectedEducations' :
+								$(this).hasClass('indus_fil') ? 'selectedIndustries' : 'selectedDesignations';
+				
+				const value = $(this).val();
+	
+				if ($(this).is(":checked")) {
+					saveSelectedLocations();
+				} else {
+					removeFromSession(arrayType, value);
+				}
+			});
+			
+			// Define elements for each section
+			const $searchLocation = $('#search-location');
+			const $clearButtonLocation = $('#clear-search-location');
+			const $locationItems = $('#main_loc_list .location-item');
+			const $showMoreLocation = $('#show-more-location');
+	
+			const $searchIndustry = $('input[data-classfil="main_indus_list"]');
+			const $clearButtonIndustry = $('#clear-search-industry');
+			const $industryItems = $('#main_indus_list .indus-item');
+			const $showMoreIndustry = $('#show-more-industry');
+	
+			const $searchEducation = $('input[data-classfil="main_edu_list"]');
+			const $clearButtonEducation = $('#clear-search-education');
+			const $educationItems = $('#main_edu_list .edu-item');
+			const $showMoreEducation = $('#show-more-education');
+			
+			const $searchDesignation = $('input[data-classfil="main_desig_list"]');
+			const $clearButtonDesignation = $('#clear-search-designation');
+			const $designationItems = $('#main_desig_list .design-item');
+			const $showMoreDesignation = $('#show-more-designation');
+	
+			// Show/Hide logic for show-more button
+			$showMoreLocation.toggle($locationItems.filter(':hidden').length > 0);
+			$showMoreIndustry.toggle($industryItems.filter(':hidden').length > 0);
+			$showMoreEducation.toggle($educationItems.filter(':hidden').length > 0);
+			$showMoreDesignation.toggle($designationItems.filter(':hidden').length > 0);
+	
+			// Search and filtering logic
+			function searchFilter($input, $items, $showMoreButton) {
+				let searchValue = $input.val().toLowerCase();
+				let hasValue = searchValue.trim().length > 0;
+	
+				$items.each(function () {
+					const itemName = $(this).find('label').text().toLowerCase();
+					$(this).toggle(itemName.includes(searchValue));
+				});
+	
+				$showMoreButton.hide();
+				$(`#clear-search-wrapper-${$input.data('classfil')}`).toggle(hasValue);
+			}
+	
+			// Handle search for location
+			$searchLocation.on('keyup', function () {
+				searchFilter($searchLocation, $locationItems, $showMoreLocation);
+			});
+	
+			// Handle search for industry
+			$searchIndustry.on('keyup', function () {
+				searchFilter($searchIndustry, $industryItems, $showMoreIndustry);
+			});
+	
+			// Handle search for education
+			$searchEducation.on('keyup', function () {
+				searchFilter($searchEducation, $educationItems, $showMoreEducation);
+			});
+			// Handle search for designation
+			$searchDesignation.on('keyup', function () {
+				searchFilter($searchDesignation, $designationItems, $showMoreDesignation);
+			});
+	
+			// Show more button click behavior
+			function showMore($items, $showMoreButton, event) {
+				event.preventDefault();
+	
+				$items.filter(':hidden').slice(0, 5).slideDown();
+				if ($items.filter(':hidden').length === 0) {
+					$showMoreButton.hide();
+				}
+			}
+	
+			// Show more location
+			$showMoreLocation.on('click', function (event) {
+				showMore($locationItems, $showMoreLocation, event);
+			});
+	
+			// Show more industry
+			$showMoreIndustry.on('click', function (event) {
+				showMore($industryItems, $showMoreIndustry, event);
+			});
+	
+			// Show more education
+			$showMoreEducation.on('click', function (event) {
+				showMore($educationItems, $showMoreEducation, event);
+			});
+	
+			// Show more designation
+			$showMoreDesignation.on('click', function (event) {
+				showMore($designationItems, $showMoreDesignation, event);
+			});
+	
+			// Clear button logic for all sections
+			function resetDropdown($input, $items, $clearButtonWrapper, $showMoreButton) {
+				$input.val('');
+				$clearButtonWrapper.hide();
+				$items.hide().slice(0, 5).show();
+				$showMoreButton.toggle($items.filter(':hidden').length > 0);
+			}
+	
+			// Handle clearing for industry
+			$clearButtonIndustry.on('click', function () {
+				resetDropdown($searchIndustry, $industryItems, $('#clear-search-wrapper-industry'), $showMoreIndustry);
+			});
+	
+			$clearButtonEducation.on('click', function () {
+				resetDropdown($searchEducation, $educationItems, $('#clear-search-wrapper-education'), $showMoreEducation);
+			});
+	
+			$clearButtonLocation.on('click', function () {
+				resetDropdown($searchLocation, $locationItems, $('#clear-search-wrapper-location'), $showMoreLocation);
+			});
+	
+			$clearButtonDesignation.on('click', function () {
+				resetDropdown($searchDesignation, $designationItems, $('#clear-search-wrapper-designation'), $showMoreDesignation);
+			});
+	
+		});
+	
+	</script>	
+<script>
     // $(document).ready(function() {
     //     var csrfToken = $('meta[name="csrf-token"]').attr("content");
     //     var baseUrl = window.location.origin;

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\{employer as Employer, job_posting as JobPosting, jobseeker as Jobseeker, employer_payment as EmpPayments};
 use Illuminate\Support\Facades\{Session, DB, Validator, View, Storage, Crypt};
 use Carbon\Carbon;
-
+use App\Jobs\SendEmailJob;
 
 
 class employerProfile extends Controller
@@ -238,7 +238,9 @@ class employerProfile extends Controller
         // dd(session('selectedLocations'));
         $curr_date = $this->date;
         $data = [];
-
+        $page = $req->input('page', 1);
+       
+        $perPage = 5;
         if (
             isset($req->left_jtype_fil) ||
             isset($req->left_edu_fil) || isset($req->notice_type_fil) || isset($req->left_exp_fil) || isset($req->left_sal_fil)
@@ -253,9 +255,9 @@ class employerProfile extends Controller
             $filter['sal_fil'] = isset($req->left_sal_fil) ? $req->input('left_sal_fil') : 0;
             $filter['date_sort'] = isset($req->date_sort) ? Carbon::now()->subDays($req->date_sort)->format('Y-m-d') : $filter['start_date'];
 
-            $query = $this->Jobseeker->searchJobseeker($curr_date, '', $filter);
+            $query = $this->Jobseeker->searchJobseeker($curr_date, '', $filter, $page, $perPage);
         } else {
-            $query = $this->Jobseeker->searchJobseeker($curr_date, $req, '');
+            $query = $this->Jobseeker->searchJobseeker($curr_date, $req, '', $page, $perPage);
         }
 
         // $data['perPage'] = 2; // Number of items per page
@@ -269,13 +271,16 @@ class employerProfile extends Controller
         // // } else {
         // //     $data['paginate'] = $query->paginate(1000);
         // // }
-        $perPage = 5;
-        $data['total_count'] = $query->count();
-        $data['paginate'] = $query->paginate($perPage);
-        $data['list'] = $data['paginate']->items();
-        $data['page'] = $data['paginate']->currentPage();
-        $data['last_page'] = $data['paginate']->lastPage();
-
+        // $perPage = 5;
+        // $data['total_count'] = $query->count();
+        // $data['paginate'] = $query->paginate($perPage);
+        // $data['list'] = $data['paginate']->items();
+        // $data['page'] = $data['paginate']->currentPage();
+        // $data['last_page'] = $data['paginate']->lastPage();
+        $data['total_count'] = $query['total'];
+        $data['list'] = $query['query'];
+        $data['page'] = $page;
+        $data['perPage'] = $perPage;
         // return $data['list'];
 
         $data['count'] = $data['total_count'] ?? 0;
@@ -283,6 +288,126 @@ class employerProfile extends Controller
         $data['html'] = '';
         $saved = '';
 
+        // if (count($data['list']) > 0) {
+        //     $select = ['id', 'email_verified'];
+        //     $where = ['id' => session('emp_user_id')];
+        //     $table = 'employers';
+        //     $emailVerfiy = getData($table, $select, $where);
+        //     foreach ($data['list'] as $lists) {
+
+        //         $where = ['js_id' => $lists->js_id, 'employer_id' => session('emp_user_id'), 'is_shortlisted' => 'Yes'];
+        //         $id = base64_encode($lists->js_id);
+
+
+        //         // if (session()->has('js_username')) {
+        //         $saved = '';
+        //         $action = '';
+        //         if($emailVerfiy[0]->email_verified === 'Yes'){
+        //         if (is_exist('job_application_history', $where) != 0) {
+        //             $action = base64_encode('No');
+        //             $saved =  "<label class='like-btn shortlist' data-is_toggle='No' data-short_action=" . $action . "
+        //                                 data-js_id='$id' data-job_id='' title='Not Shortlist' data-bs-toggle='tooltip' data-placement='right'>
+        //                                 <i class='fa fa-bookmark' style='color: #11a1f5;'></i>
+        //                             </label>";
+        //         } else {
+        //             $action = base64_encode('Yes');
+        //             $saved = "<label class='like-btn shortlist' data-is_toggle='Yes'
+        //                                 data-short_action=" . $action . " data-js_id='$id' data-job_id='' title='Shortlist' data-bs-toggle='tooltip' data-placement='right'>
+        //                                 <i class='far fa-bookmark' style='color: #11a1f5;'></i>
+        //                                 </label> 
+        //                                 ";
+        //         }
+        //     }else{
+        //         $saved = "<label class='like-btn not_verify' data-username=". session('emp_user_id') ."><input type='checkbox'>
+        //         <i class='far fa-bookmark' aria-hidden='true'></i>
+        //     </label>";
+        //         }
+        //         // } else {
+
+        //         //     $saved = "<label class='like-btn jslogincheck'><input type='checkbox'>
+        //         //                   <i class='far fa-bookmark' aria-hidden='true'></i>
+        //         //                 </label>";
+        //         // }
+
+
+        //         // $img = "<img alt='' src='" . Storage::url('images/user_profile.png') . "'>";
+        //         if (!empty($lists->profile_img) && $lists->profile_img !== '') {
+                    
+        //             $imagePath = Storage::path("storage/jobseeker/profile_image/{$lists->profile_img}");
+                  
+        //             if (file_exists($imagePath)) {
+        //                 // If the image exists, display it
+        //                 $img = "<img alt='' src='" . Storage::url("jobseeker/profile_image/{$lists->profile_img}") . "'>";
+        //             } else {
+        //                 // If the image doesn't exist, show default image
+        //                 $img = "<img alt='' src='" . asset('images/user_profile.png') . "'>";
+        //             }
+        //         } else {
+        //             // If no image is available or it is 'Null', show default image
+        //             $img = "<img alt='' src='" . asset('images/user_profile.png') . "'>";
+        //         }
+                
+                
+        //         // $sal = '';
+        //         // if (!empty($lists->salary_hide === 'No')) {
+        //         //     $sal = "<div class='salary-bx'><span>" . $lists->job_salary_to_name . "</span></div>";
+        //         // }
+
+        //         $duration = duration($lists->updated_at);
+
+        //         $data['html'] .= "<li>
+		// 							<div class='post-bx'>
+		// 								<div class='d-flex mb-4'>
+		// 									<div class='job-post-company'>
+		// 										<a href='javascript:void(0);'><span>
+		// 											" . $img . "
+		// 										</span></a>
+		// 									</div>
+		// 									<div class='job-post-info'>
+		// 										<h4>
+        //             <a href='" . route('emp-js-view', $id) . "' class='js-name'>" . $lists->fullname . "</a>";
+
+        //                             if (!empty($lists->status) && $lists->status == 3) {
+        //                                 $data['html'] .= "<img src='" . asset('images/premium_badge_new.svg') . "' alt='Premium Member' class='premium-badge' style='width:25px; height:25px; margin-left: 5px;'>";
+        //                             }
+        //                             $data['html'] .= "</h4>
+		// 										<p class='m-b5 font-13'>
+		// 											<a href='javascript:void(0);' class='text-primary text-decoration-none' style='cursor: auto;'>" . $lists->role_name . " </a>
+													
+		// 										</p>
+		// 										<ul>
+		// 											<li><i class='fas fa-map-marker-alt'></i> " . (!empty($lists->prefered_location_name) ? $lists->prefered_location_name : 'Not Disclosed') . "</li>
+		// 											<li><i class='fa-solid fa-business-time'></i> " . (!empty($lists->experiance_name) ? $lists->experiance_name : 'Not Disclosed')  . "</li>
+		// 											<li><i class='fas fa-euro-sign'></i> " .(!empty($lists->expected_salary_name) ? $lists->expected_salary_name : 'Not Disclosed')  . "</li>
+		// 											 <li><i class='far fa-clock'></i> Active " .  $duration . " ago</li> 
+		// 										</ul>
+		// 									</div>
+		// 								</div>
+		// 								<div class='d-flex'>
+		// 									<div class='job-time me-auto'>
+		// 										<a href='javascript:void(0);'><span>" . $lists->pref_job_type_name . "</span></a>
+		// 										<a href='javascript:void(0);'><span>" . $lists->notice_name . "</span></a>
+		// 									</div>
+
+		// 								</div>
+		// 								" . $saved . "
+		// 							</div>
+		// 						</li>";
+        //     }
+        // } else {
+        //     $data['html'] .= "<li>
+		// 	<div class='post-bx'>
+		// 		<div class='d-flex m-b30'>
+		// 			<div class='job-post-info'>
+		// 				<ul>
+		// 					<li><h4>No Jobseeker Found</h4></li>
+		// 				</ul>
+		// 			</div>
+		// 		</div>
+		// 	</div>
+		// </li>";
+        // }
+      
         if (count($data['list']) > 0) {
             $select = ['id', 'email_verified'];
             $where = ['id' => session('emp_user_id')];
@@ -301,13 +426,13 @@ class employerProfile extends Controller
                 if (is_exist('job_application_history', $where) != 0) {
                     $action = base64_encode('No');
                     $saved =  "<label class='like-btn shortlist' data-is_toggle='No' data-short_action=" . $action . "
-                                        data-js_id='$id' data-job_id='' title='Not Shortlist' data-bs-toggle='tooltip' data-placement='right'>
+                                        data-js_id='$id' data-job_id='' title='Reject candidate' data-bs-toggle='tooltip' data-placement='right'>
                                         <i class='fa fa-bookmark' style='color: #11a1f5;'></i>
                                     </label>";
                 } else {
                     $action = base64_encode('Yes');
                     $saved = "<label class='like-btn shortlist' data-is_toggle='Yes'
-                                        data-short_action=" . $action . " data-js_id='$id' data-job_id='' title='Shortlist' data-bs-toggle='tooltip' data-placement='right'>
+                                        data-short_action=" . $action . " data-js_id='$id' data-job_id='' title='Shortlist candidate' data-bs-toggle='tooltip' data-placement='right'>
                                         <i class='far fa-bookmark' style='color: #11a1f5;'></i>
                                         </label> 
                                         ";
@@ -373,7 +498,7 @@ class employerProfile extends Controller
 												<ul>
 													<li><i class='fas fa-map-marker-alt'></i> " . (!empty($lists->prefered_location_name) ? $lists->prefered_location_name : 'Not Disclosed') . "</li>
 													<li><i class='fa-solid fa-business-time'></i> " . (!empty($lists->experiance_name) ? $lists->experiance_name : 'Not Disclosed')  . "</li>
-													<li><i class='fas fa-euro-sign'></i> " .(!empty($lists->expected_salary_name) ? $lists->expected_salary_name : 'Not Disclosed')  . "</li>
+													<li><i class='fas fa-rupee-sign'></i> " .(!empty($lists->expected_salary_name) ? $lists->expected_salary_name : 'Not Disclosed')  . "</li>
 													 <li><i class='far fa-clock'></i> Active " .  $duration . " ago</li> 
 												</ul>
 											</div>
@@ -404,8 +529,9 @@ class employerProfile extends Controller
         }
 
         if ($req->ajax()) {
-            return $data;
-            //return response()->json($data); 
+            //return $data;
+           return response()->json($data); 
+   //return response()->json($data); 
 
         } else {
             // dd('No ajax');

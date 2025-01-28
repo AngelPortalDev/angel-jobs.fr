@@ -243,7 +243,9 @@ class commonController extends Controller
         $curr_date = $this->date;
         $data = [];
         
-        
+        $page = $req->input('page', 1);
+       
+        $perPage = 5;
         if (
             isset($req->left_jtype_fil) ||
             isset($req->left_edu_fil) || isset($req->left_indus_fil) || isset($req->left_exp_fil) || isset($req->left_sal_fil)
@@ -259,57 +261,257 @@ class commonController extends Controller
             $filter['desig_fil'] = isset($req->left_desig_fil) ? $req->input('left_desig_fil') : 0;
             $filter['date_sort'] = isset($req->date_sort) ? Carbon::now()->subDays($req->date_sort)->format('Y-m-d') : $filter['start_date'];
             
-            $filter['loc_fil'] = !empty(session('selectedLocations')) 
-                ? session('selectedLocations') 
+            $filter['loc_fil'] = !empty(session('selectedLocations'))
+                ? session('selectedLocations')
                 : (isset($req->left_loc_fil) ? $req->input('left_loc_fil') : 0);
 
-            $filter['edu_fil'] = !empty(session('selectedEducations')) 
-                ? session('selectedEducations') 
+            $filter['edu_fil'] = !empty(session('selectedEducations'))
+                ? session('selectedEducations')
                 : (isset($req->left_edu_fil) ? $req->input('left_edu_fil') : 0);
 
-            $filter['indus_fil'] = !empty(session('selectedIndustries')) 
-                ? session('selectedIndustries') 
+            $filter['indus_fil'] = !empty(session('selectedIndustries'))
+                ? session('selectedIndustries')
                 : (isset($req->left_indus_fil) ? $req->input('left_indus_fil') : 0);
 
-            $filter['desig_fil'] = !empty(session('selectedDesignations')) 
-                ? session('selectedDesignations') 
+            $filter['desig_fil'] = !empty(session('selectedDesignations'))
+                ? session('selectedDesignations')
                 : (isset($req->left_desig_fil) ? $req->input('left_desig_fil') : 0);
 
 
-            $query = $this->JobView->topSearchJobs($curr_date, '', $filter);
+            $filter['loc_fil'] = !empty(session('selectedLocations'))
+                ? session('selectedLocations')
+                : (isset($req->left_loc_fil) ? $req->input('left_loc_fil') : 0);
+
+            $filter['edu_fil'] = !empty(session('selectedEducations'))
+                ? session('selectedEducations')
+                : (isset($req->left_edu_fil) ? $req->input('left_edu_fil') : 0);
+
+            $filter['indus_fil'] = !empty(session('selectedIndustries'))
+                ? session('selectedIndustries')
+                : (isset($req->left_indus_fil) ? $req->input('left_indus_fil') : 0);
+
+            $filter['desig_fil'] = !empty(session('selectedDesignations'))
+                ? session('selectedDesignations')
+                : (isset($req->left_desig_fil) ? $req->input('left_desig_fil') : 0);
+
+            $query = $this->JobView->topSearchJobs($curr_date, '', $filter, $page, $perPage);
         } else {
             //cotrol + hover on topsearchjobs get view code and table code select query you can print that page 
-            $query = $this->JobView->topSearchJobs($curr_date, $req, '');
+            $query = $this->JobView->topSearchJobs($curr_date, $req, '', $page, $perPage);
         }
-        $perPage = 5;
-        $data['total_count'] = $query->count();
-    $data['paginate'] = $query->paginate($perPage);
-    $data['list'] = $data['paginate']->items();
-    $data['page'] = $data['paginate']->currentPage();
-    $data['last_page'] = $data['paginate']->lastPage();
+    //     $perPage = 5;
+    //     $data['total_count'] = $query->count();
+    // $data['paginate'] = $query->paginate($perPage);
+    // $data['list'] = $data['paginate']->items();
+    // $data['page'] = $data['paginate']->currentPage();
+    // $data['last_page'] = $data['paginate']->lastPage();
 
+    $data['total_count'] = $query['total'];
+    $data['list'] = $query['query'];
+    $data['page'] = $page;
+    $data['perPage'] = $perPage;
     $data['count'] = $data['total_count'] ?? 0;
     $data['html'] = '';
        
         $saved = '';
        
-        if (count($data['list']) > 0) {
+        // if (count($data['list']) > 0) {
 
+        //     $select = ['id', 'email_verified'];
+        //     $where = ['id' => session('js_user_id')];
+        //     $table = 'jobseekers';
+        //     $emailVerfiy = getData($table, $select, $where);
+
+        //     foreach ($data['list'] as $lists) {
+        //         $where = ['job_id' => $lists->id, 'js_id' => session('js_user_id'), 'is_saved' => 'Yes'];
+        //         $id = base64_encode($lists->id);
+        //         $posted_by = base64_encode($lists->posted_by);
+        //         if (session()->has('js_username')) {
+            
+
+        //             if (is_exist('jobseeker_viewed_jobs', $where) != 0) {
+
+                        
+        //                 $saved =  "<label class='like-btn action' data-is_toggle='No' data-posted_by='$posted_by' data-job_action='Saved' data-job_id='$id' title='Unsave this job' data-bs-toggle='Unsave this job' data-placement='right'>
+        //                                 <i class='fa fa-bookmark' style='color: #11a1f5;'></i>
+        //                             </label>";
+        //             } else {
+        //                 $saved = "<label class='like-btn action' data-is_toggle='Yes' data-posted_by='$posted_by' data-job_action='Unsaved' data-job_id='$id' title='Save this job' data-bs-toggle='Save this job' data-placement='right'>
+        //                                 <i class='far fa-bookmark' style='color: #11a1f5;'></i>
+        //                             </label>";
+        //             }
+
+               
+        //         } else {
+        //             $saved = "<label class='like-btn jslogincheck'><input type='checkbox'>
+        //                             <i class='far fa-bookmark' aria-hidden='true'></i>
+        //                         </label>";
+        //         }
+
+        //         $img = "<img alt='' src='" . Storage::url('employer/profile_image/employer.png') . "'>";
+        //         if (!empty($lists->profile_img)) {
+        //             $img = "<img alt='' src='" . Storage::url("employer/profile_image/$lists->profile_img") . "'>";
+        //         }
+
+        //         $sal = '';
+        //         if ($lists->salary_hide === 'No' && isset($lists->job_salary_to_name)) {
+        //             $sal =  "<li><i class='fas fa-euro-sign'></i>".$lists->job_salary_to_name."</li>";
+        //         }
+
+        //         $duration = duration($lists->posted_on);
+        //         $emp_id = base64_encode($lists->posted_by);
+        //         $workmode=explode(',',$lists->work_mode);
+        //         $workModeText = '';
+        //         foreach ($workmode as $index => $mode) {
+        //             switch ($mode) {
+        //                 case '1':
+        //                     $workModeText .= 'Remote';  
+        //                     break;
+        //                 case '2':
+        //                     $workModeText .= 'WFO';    
+        //                     break;
+        //                 case '3':
+        //                     $workModeText .= 'Hybrid'; 
+        //                     break;
+        //                 default:
+        //                     $workModeText .= ''; 
+        //             }
+        //             if ($index < count($workmode) - 1) {
+        //                 $workModeText .= ', ';
+        //             }
+        //         } 
+               
+        //         $workModetext = trim($workModeText);
+        //        if(!empty($workModetext)){
+        //         $workModetext= '('.$workModetext.')';
+        //        }else{
+        //         $workModetext='';
+        //        }
+        //         $data['html'] .= "<li>
+        //             <div class='post-bx'>
+        //                 <div class='d-flex m-b30'>
+        //                     <div class='job-post-company'><a ><span>{$img}</span></a></div>
+        //                     <div class='job-post-info'>
+        //                         <h4><a href='" . url('job-details-view', $id) . "' target='_blank'>" . htmlspecialchars_decode($lists->job_title) . "</a> ". $workModetext ."</h4>
+        //                         <div class='company-name-url'>
+
+        //                             <a href='" . url('emp-details-view', $emp_id) . "' target='_blank'>" . htmlspecialchars_decode($lists->company_name) . "</a>
+        //                         </div>
+        //                         <ul>
+        //                             <li><i class='fa-solid fa-briefcase'></i>" . $lists->experiance . " </li>
+        //                             {$sal}
+        //                            <li>
+        //                                 <i class='fas fa-map-marker-alt mt-2'></i> 
+        //                                 " . (empty($lists->location_hiring_name) ? 'Not Disclosed' : htmlspecialchars($lists->location_hiring_name)) . "
+        //                             </li>
+        //                              <li>
+        //                                 <i class='fas fa-tasks'></i><span>" . $lists->job_type_name . "</span>
+        //                             </li>
+        //                             <br/>
+        //                             <li><i class='far fa-clock mt-2'></i> Published " . $duration . " ago</li>
+        //                         </ul>
+        //                     </div>
+        //                 </div>
+        //                 <div class='d-flex justify-content-between'>
+        //                     <div class='job-time'>
+        //                     <a style='d-none'></a>  ";
+
+        //         // Skills
+        //         $skill = explode(',', $lists->skill_keyword);
+        //         $skills = multiSelectDropdown('key_skills', ['id', 'key_skill_name'], $skill);
+        //         $totalSkills = count($skills);
+        //         $maxSkillsToShow = 3;
+        //         $emppf=is_exist('jobseeker_view', ['js_id' => session('js_user_id')]);
+        //         // foreach ($skills as $key_skill) {
+        //         //     if (isset($key_skill[0]->key_skill_name)) {
+        //         //         $data['html'] .= "<span style='margin-right: 7px;'>{$key_skill[0]->key_skill_name}</span>";
+        //         //     }
+        //         // }
+
+        //         $data['html'] .= "<div class='skills-list'>";
+        //         foreach ($skills as $index => $key_skill) {
+        //             if (isset($key_skill[0]->key_skill_name)) {
+        //                 if ($index < $maxSkillsToShow) {
+        //                     // If the index is less than maxSkillsToShow, show the skill normally
+        //                     $data['html'] .= "<span style='margin-right:7px;'>" . e($key_skill[0]->key_skill_name) . "</span>";
+        //                 } else {
+        //                     // Otherwise, hide the skill with the 'more-skill' class
+        //                     $data['html'] .= "<span class='more-skill' style='display: none;'>" . e($key_skill[0]->key_skill_name) . "</span>";
+        //                 }
+        //             }
+        //         }
+
+        //         // Add "See More" button if total skills exceed maxSkillsToShow
+        //         if ($totalSkills > $maxSkillsToShow) {
+        //             $data['html'] .= "<span class='show-more-btn'>
+        //                                 <a href='" . url('job-details-view', $id) . "'>See More...</a>
+        //                             </span>";
+        //         }
+
+        //         $data['html'] .= "</div>";
+        //         $data['html'] .= "</div>";
+        //         if (session()->has('js_username')) {
+        //             $where = ['job_id' => $lists->id, 'js_id' => session('js_user_id')];
+        //             if (is_exist('job_application_history', $where) > 0) {
+        //                 $data['html'] .= "<a class='btn btn-primary' style='height:fit-content'>
+        //              Applied
+        //         </a>
+        //         </div>";
+        //             } elseif ($emailVerfiy[0]->email_verified === 'No') {
+        //                 $data['html'] .= "<a  class='btn btn-primary not_verify' style='height: fit-content;'>
+        //             Apply Now
+        //        </a>
+        //        </div>";
+        //             } elseif($emppf == 0) {
+        //                 $data['html'] .= "<a  class='btn btn-primary not_updateprofile' style='height: fit-content;'>
+        //             Apply Now
+        //        </a>
+        //        </div>";
+        //             }else{
+        //                $data['html'].="<button type='button' data-job_action='apply'
+        //                data-job_id='". base64_encode($lists->id) ."' class='site-button action'
+        //                style='white-space:nowrap'>Apply Now</button>"; 
+        //             }
+        //         } else {
+        //             $data['html'] .= "<a href='" . url('login-jobseeker') . "' target='_blank' class='btn btn-primary'style='height: fit-content;'>
+        //         Apply Now
+        //    </a>
+        //    </div>";
+        //         }
+        //         $data['html'] .= "{$saved}
+        //             </div>
+        //         </li>";
+        //     }
+        // } else {
+
+        //     $data['html'] .= "<li>
+		// 	<div class='post-bx'>
+		// 		<div class='d-flex m-b30'>
+		// 			<div class='job-post-info'>
+		// 				<ul>
+		// 					<li><h4>No Jobs Found</h4></li>
+		// 				</ul>
+		// 			</div>
+		// 		</div>
+		// 	</div>
+		// </li>";
+        // }
+        if ($data['count'] > 0) {
+            if (session()->has('js_username')) { 
             $select = ['id', 'email_verified'];
             $where = ['id' => session('js_user_id')];
             $table = 'jobseekers';
             $emailVerfiy = getData($table, $select, $where);
-
-            foreach ($data['list'] as $lists) {
-                $where = ['job_id' => $lists->id, 'js_id' => session('js_user_id'), 'is_saved' => 'Yes'];
+            $emppf = is_exist('jobseeker_view', ['js_id' => session('js_user_id')]);
+            }         
+           
+        foreach($data['list'] as $lists){
+            $where = ['job_id' => $lists->id, 'js_id' => session('js_user_id'), 'is_saved' => 'Yes'];
                 $id = base64_encode($lists->id);
                 $posted_by = base64_encode($lists->posted_by);
-                if (session()->has('js_username')) {
-            
-
-                    if (is_exist('jobseeker_viewed_jobs', $where) != 0) {
-
-                        
+             
+                if (session()->has('js_username')) {                  
+                    if (is_exist('jobseeker_viewed_jobs', $where) != 0) {                         
                         $saved =  "<label class='like-btn action' data-is_toggle='No' data-posted_by='$posted_by' data-job_action='Saved' data-job_id='$id' title='Unsave this job' data-bs-toggle='Unsave this job' data-placement='right'>
                                         <i class='fa fa-bookmark' style='color: #11a1f5;'></i>
                                     </label>";
@@ -318,62 +520,56 @@ class commonController extends Controller
                                         <i class='far fa-bookmark' style='color: #11a1f5;'></i>
                                     </label>";
                     }
-
-               
                 } else {
                     $saved = "<label class='like-btn jslogincheck'><input type='checkbox'>
                                     <i class='far fa-bookmark' aria-hidden='true'></i>
                                 </label>";
-                }
-
-                $img = "<img alt='' src='" . Storage::url('employer/profile_image/employer.png') . "'>";
-                if (!empty($lists->profile_img)) {
-                    $img = "<img alt='' src='" . Storage::url("employer/profile_image/$lists->profile_img") . "'>";
-                }
-
-                $sal = '';
-                if ($lists->salary_hide === 'No' && isset($lists->job_salary_to_name)) {
-                    $sal =  "<li><i class='fas fa-euro-sign'></i>".$lists->job_salary_to_name."</li>";
-                }
-
-                $duration = duration($lists->posted_on);
-                $emp_id = base64_encode($lists->posted_by);
-                $workmode=explode(',',$lists->work_mode);
-                $workModeText = '';
-                foreach ($workmode as $index => $mode) {
-                    switch ($mode) {
-                        case '1':
-                            $workModeText .= 'Remote';  
-                            break;
-                        case '2':
-                            $workModeText .= 'WFO';    
-                            break;
-                        case '3':
-                            $workModeText .= 'Hybrid'; 
-                            break;
-                        default:
-                            $workModeText .= ''; 
-                    }
-                    if ($index < count($workmode) - 1) {
-                        $workModeText .= ', ';
-                    }
                 } 
-               
-                $workModetext = trim($workModeText);
-               if(!empty($workModetext)){
-                $workModetext= '('.$workModetext.')';
-               }else{
-                $workModetext='';
-               }
-                $data['html'] .= "<li>
+                $img = "<img alt='' src='" . Storage::url('employer/profile_image/employer.png') . "'>";
+                        if (!empty($lists->profile_img)) {
+                            $img = "<img alt='' src='" . Storage::url("employer/profile_image/$lists->profile_img") . "'>";
+                        }
+                        $sal = '';
+                        if ($lists->salary_hide === 'No' && isset($lists->job_salary_to_name)) {
+                            $sal =  "<li><i class='fas fa-rupee-sign'></i>" . $lists->job_salary_to_name . "</li>";
+                        }
+                        $duration = duration($lists->posted_on);
+                      
+                        $workmode = explode(',', $lists->work_mode);
+                        $workModeText = '';
+                        foreach ($workmode as $index => $mode) {
+                            switch ($mode) {
+                                case '1':
+                                    $workModeText .= 'Remote ';
+                                    break;
+                                case '2':
+                                    $workModeText .= 'WFO ';
+                                    break;
+                                case '3':
+                                    $workModeText .= 'Hybrid ';
+                                    break;
+                                default:
+                                    $workModeText .= '';
+                            }
+                            if ($index < count($workmode) - 1) {
+                                $workModeText .= ', ';
+                            }
+                        }
+                        $workModetext = trim($workModeText);
+                        if (!empty($workModetext)) {
+                            $workModetext = '(' . $workModetext . ')';
+                        } else {
+                            $workModetext = '';
+                        }   
+                      $data['html'] .= "<li>
                     <div class='post-bx'>
                         <div class='d-flex m-b30'>
                             <div class='job-post-company'><a ><span>{$img}</span></a></div>
                             <div class='job-post-info'>
-                                <h4><a href='" . url('job-details-view', $id) . "' target='_blank'>" . htmlspecialchars_decode($lists->job_title) . "</a> ". $workModetext ."</h4>
+                                <h4><a href='" . url('job-details-view',  $id ) . "' target='_blank'>" . htmlspecialchars_decode($lists->job_title) . "</a> " . $workModetext . "</h4>
                                 <div class='company-name-url'>
 
-                                    <a href='" . url('emp-details-view', $emp_id) . "' target='_blank'>" . htmlspecialchars_decode($lists->company_name) . "</a>
+                                    <a href='" . url('emp-details-view', $posted_by) . "' target='_blank'>" . htmlspecialchars_decode($lists->company_name) . "</a>
                                 </div>
                                 <ul>
                                     <li><i class='fa-solid fa-briefcase'></i>" . $lists->experiance . " </li>
@@ -393,73 +589,59 @@ class commonController extends Controller
                         <div class='d-flex justify-content-between'>
                             <div class='job-time'>
                             <a style='d-none'></a>  ";
+                            $skill = explode(',', $lists->skill_keyword);
+                            $skills = multiSelectDropdown('key_skills', ['id', 'key_skill_name'], $skill);
+                            $data['html'] .= "<div class='skills-list'>";
+                            $skillCount = count($skills);
+                            $limitedSkills = array_slice($skills, 0, 3);
+                            
+                            foreach ($limitedSkills as $index => $key_skill) {
+                                if (isset($key_skill[0]->key_skill_name)) {                                   
+                                    $data['html'] .= "<span style='margin-right:7px;'>" . e($key_skill[0]->key_skill_name) . "</span>";                                    
+                                }
+                            }
+                            if ($skillCount > 3) {
+                                $data['html'] .= "<span style='margin-right:7px;'><a href='" . url('job-details-view', $id) . "'>See More...</a></span>";
+                            }
 
-                // Skills
-                $skill = explode(',', $lists->skill_keyword);
-                $skills = multiSelectDropdown('key_skills', ['id', 'key_skill_name'], $skill);
-                $totalSkills = count($skills);
-                $maxSkillsToShow = 3;
-                $emppf=is_exist('jobseeker_view', ['js_id' => session('js_user_id')]);
-                // foreach ($skills as $key_skill) {
-                //     if (isset($key_skill[0]->key_skill_name)) {
-                //         $data['html'] .= "<span style='margin-right: 7px;'>{$key_skill[0]->key_skill_name}</span>";
-                //     }
-                // }
+                            $data['html'] .= "</div>";
+                            $data['html'] .= "</div>";
 
-                $data['html'] .= "<div class='skills-list'>";
-                foreach ($skills as $index => $key_skill) {
-                    if (isset($key_skill[0]->key_skill_name)) {
-                        if ($index < $maxSkillsToShow) {
-                            // If the index is less than maxSkillsToShow, show the skill normally
-                            $data['html'] .= "<span style='margin-right:7px;'>" . e($key_skill[0]->key_skill_name) . "</span>";
-                        } else {
-                            // Otherwise, hide the skill with the 'more-skill' class
-                            $data['html'] .= "<span class='more-skill' style='display: none;'>" . e($key_skill[0]->key_skill_name) . "</span>";
-                        }
-                    }
-                }
+                            if (session()->has('js_username')) {
+                                            $where = ['job_id' => $lists->id, 'js_id' => session('js_user_id')];
+                                            if (is_exist('job_application_history', $where) > 0) {
+                                                $data['html'] .= "<a class='btn btn-primary' style='height:fit-content'>
+                                             Applied
+                                        </a>
+                                        </div>";
+                                            } elseif ($emailVerfiy[0]->email_verified === 'No') {
+                                                $data['html'] .= "<a  class='btn btn-primary not_verify' style='height: fit-content;'>
+                                            Apply Now
+                                       </a>
+                                       </div>";
+                                            } elseif ($emppf == 0) {
+                                                $data['html'] .= "<a  class='btn btn-primary not_updateprofile' style='height: fit-content;'>
+                                            Apply Now
+                                       </a>
+                                       </div>";
+                                            } else {
+                                                $data['html'] .= "<button type='button' data-job_action='apply'
+                                               data-job_id='" . base64_encode($lists->id) . "' class='site-button action'
+                                               style='white-space:nowrap'>Apply Now</button>";
+                                            }
+                                        } else {
+                                            $data['html'] .= "<a href='" . url('login-jobseeker') . "' target='_blank' class='btn btn-primary'style='height: fit-content;'>
+                                        Apply Now
+                                   </a>
+                                   </div>";
+                                        }
+                                        $data['html'] .= "{$saved}
+                                            </div>
+                                        </li>";
+            
 
-                // Add "See More" button if total skills exceed maxSkillsToShow
-                if ($totalSkills > $maxSkillsToShow) {
-                    $data['html'] .= "<span class='show-more-btn'>
-                                        <a href='" . url('job-details-view', $id) . "'>See More...</a>
-                                    </span>";
-                }
 
-                $data['html'] .= "</div>";
-                $data['html'] .= "</div>";
-                if (session()->has('js_username')) {
-                    $where = ['job_id' => $lists->id, 'js_id' => session('js_user_id')];
-                    if (is_exist('job_application_history', $where) > 0) {
-                        $data['html'] .= "<a class='btn btn-primary' style='height:fit-content'>
-                     Applied
-                </a>
-                </div>";
-                    } elseif ($emailVerfiy[0]->email_verified === 'No') {
-                        $data['html'] .= "<a  class='btn btn-primary not_verify' style='height: fit-content;'>
-                    Apply Now
-               </a>
-               </div>";
-                    } elseif($emppf == 0) {
-                        $data['html'] .= "<a  class='btn btn-primary not_updateprofile' style='height: fit-content;'>
-                    Apply Now
-               </a>
-               </div>";
-                    }else{
-                       $data['html'].="<button type='button' data-job_action='apply'
-                       data-job_id='". base64_encode($lists->id) ."' class='site-button action'
-                       style='white-space:nowrap'>Apply Now</button>"; 
-                    }
-                } else {
-                    $data['html'] .= "<a href='" . url('login-jobseeker') . "' target='_blank' class='btn btn-primary'style='height: fit-content;'>
-                Apply Now
-           </a>
-           </div>";
-                }
-                $data['html'] .= "{$saved}
-                    </div>
-                </li>";
-            }
+        }
         } else {
 
             $data['html'] .= "<li>
@@ -474,10 +656,9 @@ class commonController extends Controller
 			</div>
 		</li>";
         }
-
         if ($req->ajax()) {
-
-            return $data;
+            return response()->json($data);
+            //return $data;
         } else {
 
             return view('browse-all-jobs', $data);
