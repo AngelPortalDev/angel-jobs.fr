@@ -34,7 +34,7 @@ $(document).ready(function () {
             }
     
             if (currentPage < totalPages - 2) 
-                paginationHtml += `<li class="page-item disabled"><a href="#" class="page-linkem">...</a></li><li class="page-item"><a href="#" class="page-link" data-page="${totalPages}">${totalPages}</a></li>`;
+                paginationHtml += `<li class="page-item disabled"><a href="#" class="page-linkem">...</a></li><li class="page-item"><a href="#" class="page-linkem" data-page="${totalPages}">${totalPages}</a></li>`;
     
             paginationHtml += currentPage < totalPages 
                 ? `<li class="page-item"><a href="#" class="page-linkem" data-page="${currentPage + 1}">Next »</a></li>` 
