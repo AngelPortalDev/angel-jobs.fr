@@ -245,7 +245,7 @@ class commonController extends Controller
         
         $page = $req->input('page', 1);
        
-        $perPage = 5;
+        $perPage = 10;
         if (
             isset($req->left_jtype_fil) ||
             isset($req->left_edu_fil) || isset($req->left_indus_fil) || isset($req->left_exp_fil) || isset($req->left_sal_fil)
@@ -278,21 +278,7 @@ class commonController extends Controller
                 : (isset($req->left_desig_fil) ? $req->input('left_desig_fil') : 0);
 
 
-            $filter['loc_fil'] = !empty(session('selectedLocations'))
-                ? session('selectedLocations')
-                : (isset($req->left_loc_fil) ? $req->input('left_loc_fil') : 0);
-
-            $filter['edu_fil'] = !empty(session('selectedEducations'))
-                ? session('selectedEducations')
-                : (isset($req->left_edu_fil) ? $req->input('left_edu_fil') : 0);
-
-            $filter['indus_fil'] = !empty(session('selectedIndustries'))
-                ? session('selectedIndustries')
-                : (isset($req->left_indus_fil) ? $req->input('left_indus_fil') : 0);
-
-            $filter['desig_fil'] = !empty(session('selectedDesignations'))
-                ? session('selectedDesignations')
-                : (isset($req->left_desig_fil) ? $req->input('left_desig_fil') : 0);
+            
 
             $query = $this->JobView->topSearchJobs($curr_date, '', $filter, $page, $perPage);
         } else {
@@ -525,9 +511,10 @@ class commonController extends Controller
                                     <i class='far fa-bookmark' aria-hidden='true'></i>
                                 </label>";
                 } 
-                $img = "<img alt='' src='" . Storage::url('employer/profile_image/employer.png') . "'>";
-                        if (!empty($lists->profile_img)) {
+                        if (isset($lists->profile_img) && !empty($lists->profile_img)) {
                             $img = "<img alt='' src='" . Storage::url("employer/profile_image/$lists->profile_img") . "'>";
+                        }else{
+                            $img = "<img alt='' src='" . Storage::url('employer/profile_image/employer.png') . "'>";
                         }
                         $sal = '';
                         if ($lists->salary_hide === 'No' && isset($lists->job_salary_to_name)) {

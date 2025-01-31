@@ -254,7 +254,7 @@
                                                             placeholder="No of Vacancies">
                                                         <span id="vacancy_count_error" style="color:red;display:none;">
                                                             <small>
-                                                                <i>Enter No. of Openings Not less then 1 </i>
+                                                                <i>Enter No. of Vacancy </i>
                                                             </small></span>
                                                     </div>
                                                 </div>
@@ -271,7 +271,7 @@
                                                         </select>
                                                         <span id="select_work_mode_error" style="color:red;display:none;">
                                                             <small>
-                                                                <i>Select Work Mode Not less then 1 </i>
+                                                                <i>Select Work Mode</i>
                                                             </small></span>
                                                     </div>
                                                 </div>
@@ -442,7 +442,7 @@
                                         </form>
                                         @else
                                         <div class="container">
-                                            First Update Linence Number <a href="{{ route('company-profile') }}"
+                                            First Update Company Linence Number <a href="{{ route('company-profile') }}"
                                                 target="blank"> Click Here </a>
                                         </div>
                                         @endif

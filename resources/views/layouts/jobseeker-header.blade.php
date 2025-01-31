@@ -81,6 +81,9 @@
         <a href="javascript:void(0);">Jobs <i class="fa fa-chevron-down"></i></a>
         <ul class="sub-menu mm-show jobs-top-btn">
             <li>
+                <a href="https://www.ustudious.com/" target="_blank">Study Abroad</a>
+            </li>
+            <li>
                 <form class="dezPlaceAni" action="{{ url('top-search-bar') }}" method="GET">
                     @csrf
                     <input name="search_job_type[]" value='{{base64_encode(16)}}' hidden>

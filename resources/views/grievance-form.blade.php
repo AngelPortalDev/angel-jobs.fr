@@ -55,7 +55,7 @@
                                                     
                                         <label>Contact Number:</label>
                                         <div class="row">
-                                            <div class="col-4 col-md-3" style="padding-right: 0;">
+                                            <div class="col-4 col-md-4" style="padding-right: 0;">
                                                 <div class="form-group">
                                                     <div class="dropdown bootstrap-select mob-code">
                                                         <div class="dropdown bootstrap-select">
@@ -75,7 +75,7 @@
                                             </div>
 
 
-                                            <div class="col-8 col-md-9">
+                                            <div class="col-8 col-md-8">
                                                 <div class="form-group">
                                                     <input type="text" name='contact_no' class="form-control" placeholder="Contact Number" required>
                                                 </div>

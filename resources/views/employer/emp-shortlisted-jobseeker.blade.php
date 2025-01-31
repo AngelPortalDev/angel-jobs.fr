@@ -30,7 +30,8 @@
                                             $js_id = base64_encode($shortlist->js_id);
                                             $job_id = base64_encode($shortlist->job_id);
                                             $action = base64_encode('No');
-                                            $imagePath = storage_path("jobseeker/profile_image/{$shortlist->profile_img}",);
+                                            // $imagePath = storage_path("jobseeker/profile_image/{$shortlist->profile_img}",);
+                                            $imagePath = 'storage/jobseeker/profile_image/' . $shortlist->profile_img;
                                             $duration = duration($shortlist->updated_at);
                                         @endphp
                                         <li class="col-lg-12 col-md-12" id='candidate_{{ $i }}'>
@@ -39,24 +40,34 @@
                                                     <div class="jobseeker-photo-for-applied">
                                                         <span>
 
-                                                            @if (file_exists($imagePath))
-                                                                @if (isset($shortlist->profile_img) && !empty($shortlist->profile_img))
-                                                                    <img alt=""
-                                                                        src="{{ Storage::url('jobseeker/profile_image/' . $shortlist->profile_img) }}">
-                                                                @else
-                                                                    <img alt=""
-                                                                        src="{{ asset('images/user_profile.png') }}">
-                                                                @endif
+                                                            @if (Storage::exists($imagePath))
+                                                            @if (isset($shortlist->profile_img) && !empty($shortlist->profile_img))
+                                                                <img alt=""
+                                                                    src="{{ Storage::url('jobseeker/profile_image/' . $shortlist->profile_img) }}">
                                                             @else
                                                                 <img alt=""
                                                                     src="{{ asset('images/user_profile.png') }}">
                                                             @endif
+                                                        @else
+                                                            <img alt=""
+                                                                src="{{ asset('images/user_profile.png') }}">
+                                                        @endif
 
                                                         </span>
                                                     </div>
                                                     <div class="job-post-info">
                                                         <h5 class="m-b0"><a
                                                                 href="{{ route('emp-js-view', $js_id) }}">{{ $shortlist->fullname }}</a>
+                                                                @if (!empty($shortlist->status) && $shortlist->status == 3)
+                                                                @php
+                                                                    $expiredat = getData('jobseeker_profiles',['js_id', 'plan_expired_on'],['js_id' => base64_decode($js_id)]);
+                                                                @endphp
+                                                                @if ($expiredat[0]->plan_expired_on >= date('Y-m-d'))
+                                                                    <img src= "{{ asset('images/premium_badge_new.svg') }}"
+                                                                        alt='Premium Member' class='premium-badge'
+                                                                        style='width:25px; height:25px; margin-left: 5px;'>
+                                                                @endif
+                                                            @endif
                                                         </h5>
 
                                                         <ul>

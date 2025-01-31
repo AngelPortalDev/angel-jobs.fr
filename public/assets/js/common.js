@@ -18,6 +18,7 @@ $(document).ready(function () {
     function generatePagination(total_count, perPage, currentPage) {
         let totalPages = Math.ceil(total_count / perPage);
         let paginationHtml = '';
+        let dropdownpagination = '';  
         currentPage = Number(currentPage);
     
         if (totalPages > 1) {
@@ -45,6 +46,11 @@ $(document).ready(function () {
         }
     
         $("#paginationLinks").html(paginationHtml);
+        dropdownpagination +='<select id="pageDropdown">';     
+        for (i = 1; i <= totalPages; i++){
+        dropdownpagination += `<option value="${i}" ${i === currentPage ? 'selected' : ''}>Page ${i}</option>`
+        }
+    dropdownpagination +='</select>'
     }  
     
 
@@ -943,7 +949,7 @@ $(document).ready(function () {
                     console.log("Pagination AJAX Success:", res);
                    
                         loadJobs(res.html, res.page, res.count, res.total_count, res.perPage);
-                  
+                        $('#pageDropdown').selectpicker();
                 },
                 error: function (xhr, status, error) {
                     // Handle errors
@@ -990,6 +996,7 @@ $(document).ready(function () {
                     
                     $(".pagination .page-item").removeClass("active");
                     $(".pagination .page-link[data-page='" + page + "']").parent().addClass("active");
+                    $('#pageDropdown').selectpicker();
                 },
                 error: function () {
                     $("#loader").fadeOut();
@@ -998,7 +1005,37 @@ $(document).ready(function () {
             });
         });
         
-    
+        $(document).on("change", "#pageDropdown", function (e) {
+            const selectedPage = $(this).val(); 
+            if (selectedPage === "disabled" || !selectedPage) {
+                console.log("Pagination Click Ignored: Disabled or Missing Page");
+                return;
+            }   
+            $("#loader").fadeIn();        
+            
+            const form = $(".left_filters").serialize() + `&page=${selectedPage}`;    
+            $.ajax({
+                url: "top-search-bar",
+                type: "GET",
+                dataType: "json",
+                data: form,
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+                success: function (res) {
+                    $("#loader").fadeOut();
+                   
+                    loadJobs(res.html, res.page, res.count, res.total_count, res.perPage);
+        
+                    $('#pageDropdown').selectpicker();
+                   // $("#pageDropdown").val(selectedPage); 
+                },
+                error: function () {
+                    $("#loader").fadeOut();
+                    $("#jobResults").html("<li>No Jobs Found</li>");
+                },
+            });
+        });
 
     // Newsletter Mail Subcrib
     $(".newsletterSend").on("click", function (e) {

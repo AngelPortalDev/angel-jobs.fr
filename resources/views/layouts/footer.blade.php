@@ -500,7 +500,7 @@
 
 
 </script>
-
+<script>
     // $(document).ready(function() {
     //     var csrfToken = $('meta[name="csrf-token"]').attr("content");
     //     var baseUrl = window.location.origin;

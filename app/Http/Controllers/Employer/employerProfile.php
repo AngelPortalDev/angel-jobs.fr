@@ -135,10 +135,27 @@ class employerProfile extends Controller
         
         if (session()->has('emp_username')) {
             $username = Session::get('emp_username');
+            // $query = DB::table('job_application_history')
+            // ->select('job_application_history.js_id', 'job_application_history.job_id', 'job_application_history.applied_on', 'job_posting_view.job_title',  'jobseeker_view.profile_img', 'jobseeker_view.fullname', 'jobseeker_view.notice_name', 'job_application_history.is_shortlisted')
+            // ->leftJoin('job_posting_view', 'job_application_history.job_id', '=', 'job_posting_view.id')
+            // ->leftJoin('jobseeker_view', 'jobseeker_view.js_id', '=', 'job_application_history.js_id')
             $query = DB::table('job_application_history')
-            ->select('job_application_history.js_id', 'job_application_history.job_id', 'job_application_history.applied_on', 'job_posting_view.job_title',  'jobseeker_view.profile_img', 'jobseeker_view.fullname', 'jobseeker_view.notice_name', 'job_application_history.is_shortlisted')
-            ->leftJoin('job_posting_view', 'job_application_history.job_id', '=', 'job_posting_view.id')
-            ->leftJoin('jobseeker_view', 'jobseeker_view.js_id', '=', 'job_application_history.js_id')
+                ->select('job_application_history.js_id', 'job_application_history.job_id', 'job_application_history.applied_on', 'job_posting_view.job_title',  'jobseeker_view.profile_img', 'jobseeker_view.fullname', 'jobseeker_view.notice_name', 'job_application_history.is_shortlisted','jobseeker_payments.id as payment_id','jobseeker_payments.payment_amount',
+                    'jobseeker_payments.status','jobseeker_payments.created_at as payment_date')
+                ->leftJoin('job_posting_view', 'job_application_history.job_id', '=', 'job_posting_view.id')
+                ->leftJoin('jobseeker_view', 'jobseeker_view.js_id', '=', 'job_application_history.js_id')
+                ->leftJoin('jobseeker_payments', function ($join) {
+                    $join->on('jobseeker_view.js_id', '=', 'jobseeker_payments.js_id')
+                        ->where('jobseeker_payments.status', '=', 3) 
+                        ->where('jobseeker_payments.id', '=', function ($subQuery) {
+                            $subQuery->from('jobseeker_payments')
+                                ->select('id')
+                                ->whereColumn('jobseeker_view.js_id', 'jobseeker_payments.js_id')
+                                ->where('jobseeker_payments.status', '=', 3) 
+                                ->orderBy('jobseeker_payments.created_at', 'DESC')
+                                ->limit(1);
+                        });
+                })
             ->where('job_posting_view.email', $username)
             ->whereNotNull('job_application_history.applied_on')
             ->orderBy('job_application_history.applied_on', 'DESC');
@@ -162,13 +179,32 @@ class employerProfile extends Controller
             $emp_user_id = Session::get('emp_user_id');
             $username = Session::get('emp_username');
 
+            // $query = DB::table('job_application_history')
+            // ->select('job_application_history.id', 'job_application_history.js_id', 'job_application_history.job_id','job_application_history.update_at', 'jobseeker_view.fullname', 'jobseeker_view.profile_img','jobseeker_view.updated_at', 'jobseeker_view.prefered_location_name','jobseeker_view.experiance_name','jobseeker_view.expected_salary_name','job_application_history.is_shortlisted')
+            // ->leftJoin('job_posting_view', 'job_application_history.employer_id', '=', 'job_posting_view.id')
+            // ->join('jobseeker_view', 'jobseeker_view.js_id', '=', 'job_application_history.js_id')
+            // ->where('job_application_history.employer_id', $emp_user_id)
+            // ->where('job_application_history.is_shortlisted', 'Yes')
+            // ->orderBy('job_application_history.update_at', 'DESC');
             $query = DB::table('job_application_history')
-            ->select('job_application_history.id', 'job_application_history.js_id', 'job_application_history.job_id','job_application_history.update_at', 'jobseeker_view.fullname', 'jobseeker_view.profile_img','jobseeker_view.updated_at', 'jobseeker_view.prefered_location_name','jobseeker_view.experiance_name','jobseeker_view.expected_salary_name','job_application_history.is_shortlisted')
-            ->leftJoin('job_posting_view', 'job_application_history.employer_id', '=', 'job_posting_view.id')
-            ->join('jobseeker_view', 'jobseeker_view.js_id', '=', 'job_application_history.js_id')
-            ->where('job_application_history.employer_id', $emp_user_id)
-            ->where('job_application_history.is_shortlisted', 'Yes')
-            ->orderBy('job_application_history.update_at', 'DESC');
+                ->select('job_application_history.id','job_application_history.js_id','job_application_history.job_id','job_application_history.update_at','jobseeker_view.fullname','jobseeker_view.profile_img','jobseeker_view.updated_at','jobseeker_view.prefered_location_name','jobseeker_view.experiance_name','jobseeker_view.expected_salary_name','job_application_history.is_shortlisted','jobseeker_payments.id as payment_id','jobseeker_payments.payment_amount',
+                    'jobseeker_payments.status','jobseeker_payments.created_at as payment_date')
+                ->leftJoin('jobseeker_view', 'jobseeker_view.js_id', '=', 'job_application_history.js_id')
+                ->leftJoin('jobseeker_payments', function ($join) {
+                    $join->on('jobseeker_view.js_id', '=', 'jobseeker_payments.js_id')
+                        ->where('jobseeker_payments.status', '=', 3) 
+                        ->where('jobseeker_payments.id', '=', function ($subQuery) {
+                            $subQuery->from('jobseeker_payments')
+                                ->select('id')
+                                ->whereColumn('jobseeker_view.js_id', 'jobseeker_payments.js_id')
+                                ->where('jobseeker_payments.status', '=', 3) 
+                                ->orderBy('jobseeker_payments.created_at', 'DESC')
+                                ->limit(1);
+                        });
+                })
+                ->where('job_application_history.employer_id', $emp_user_id)
+                ->where('job_application_history.is_shortlisted', 'Yes')
+                ->orderBy('job_application_history.update_at', 'DESC');
             $shortlisted = $query->get();
             
           

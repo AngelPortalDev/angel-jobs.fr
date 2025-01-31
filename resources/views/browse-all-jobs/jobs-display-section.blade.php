@@ -2,6 +2,26 @@
 	<div class="job-bx-title clearfix">
 		<h5 class="font-weight-700 float-start text-uppercase" id="jobCount">{{ $count ?? 0 }} Jobs Found</h5>
 		<div class="float-end">
+		@php
+                $totalPages = ceil($total_count / $perPage);
+                $currentPage = $page;
+                $range = 3;
+
+            @endphp
+
+            <div id="pageDropdownlist">
+                
+                @if (isset($totalPages) && $totalPages != 0)
+                    <select id="pageDropdown">                        
+                            @for ($i = 1; $i <= $totalPages; $i++)
+                                <option value="{{ $i }}" {{ $i == $currentPage ? 'selected' : '' }}>
+                                    Page {{ $i }}
+                                </option>
+                            @endfor                      
+                    </select>
+                @endif
+            </div>
+		
 			{{-- <form class="left_filters">
 			<span class="select-title">Sort by</span>
 			<select name='date_sort'>
@@ -41,13 +61,6 @@
 			<div id="paginationLinks" class="pagination-bx">
 				
 
-				  @php
-                $totalPages = ceil($total_count / $perPage);
-                $currentPage = $page;
-                $range = 3; 
-                
-            @endphp
-            
             <ul class="pagination">
                 <!-- Previous Button -->
                 <li class="page-item {{ $currentPage == 1 ? 'disabled' : '' }}">

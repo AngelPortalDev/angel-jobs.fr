@@ -32,53 +32,15 @@
 			</div>
 
 		</div>
-
 		<div class="panel">
 			<div class="acod-head">
 				<h6 class="acod-title">
-					<a data-bs-toggle="collapse" href="#education" class="collapsed">
-						Education
-					</a>
-				</h6>
-			</div>
-			<div id="education" class="acod-body collapse ">
-				<div class="acod-content">
-					<div class="search-bx style-1 search-field-js">
-						<div class="input-group">
-							<input class="form-control" value="" data-classfil="main_edu_list" placeholder="Search Education" data-list="1" type="text">
-							<button type="button" class="btn btn-primary btn-sm" id="clear-search-education">Clear</button>
-						</div>
-					</div>
-					<div id="main_edu_list">
-						@foreach (getDropDownlist('qualifications', ['id', 'educational_qualification']) as $index => $data)
-							<div class="form-check edu-item" style="{{ $index >= 5 ? 'display: none;' : '' }}">
-								<input class="form-check-input edu_fil" name="left_edu_fil[]" id="education{{$data->id}}" type="checkbox" value="{{$data->id}}">
-								<label class="form-check-label" for="education{{$data->id}}">{{$data->educational_qualification}}</label>
-							</div>
-						@endforeach
-					</div>
-					@if (count(getDropDownlist('qualifications', ['id', 'educational_qualification'])) > 5)
-						<button id="show-more-education" class="btn btn-primary btn-sm mt-2">Show More</button>
-					@endif
-				</div>
-
-				
-				{{-- Serach bar --}}
-				
-
-			</div>
-			
-		</div>
-
-		<div class="panel">
-			<div class="acod-head">
-				<h6 class="acod-title">
-					<a data-bs-toggle="collapse" href="#industry" class="collapsed">
+					<a data-bs-toggle="collapse" href="#industry">
 						Industry
 					</a>
 				</h6>
 			</div>
-			<div id="industry" class="acod-body collapse ">
+			<div id="industry" class="acod-body collapse show">
 				<div class="acod-content" id="industry_list">
 				{{-- <div class="search-bx style-1 search-field-js">
 						<div class="input-group">
@@ -126,17 +88,16 @@
 
 			</div>
 		</div>
-
 		<div class="panel">
 			<div class="acod-head">
 				<h6 class="acod-title">
-					<a data-bs-toggle="collapse" href="#location" class="collapsed">
+					<a data-bs-toggle="collapse" href="#location">
 						Location
 					</a>
 				</h6>
 			</div>
 		
-			<div id="location" class="acod-body collapse ">
+			<div id="location" class="acod-body collapse show">
 
 				<div class="acod-content" id="location_list">
 					{{-- <div class="search-bx style-1 search-field-js">
@@ -172,6 +133,46 @@
 
 			</div>
 		</div>
+		<div class="panel">
+			<div class="acod-head">
+				<h6 class="acod-title">
+					<a data-bs-toggle="collapse" href="#education" class="collapsed">
+						Education
+					</a>
+				</h6>
+			</div>
+			<div id="education" class="acod-body collapse ">
+				<div class="acod-content">
+					<div class="search-bx style-1 search-field-js">
+						<div class="input-group">
+							<input class="form-control" value="" data-classfil="main_edu_list" placeholder="Search Education" data-list="1" type="text">
+							<button type="button" class="btn btn-primary btn-sm" id="clear-search-education">Clear</button>
+						</div>
+					</div>
+					<div id="main_edu_list">
+						@foreach (getDropDownlist('qualifications', ['id', 'educational_qualification']) as $index => $data)
+							<div class="form-check edu-item" style="{{ $index >= 5 ? 'display: none;' : '' }}">
+								<input class="form-check-input edu_fil" name="left_edu_fil[]" id="education{{$data->id}}" type="checkbox" value="{{$data->id}}">
+								<label class="form-check-label" for="education{{$data->id}}">{{$data->educational_qualification}}</label>
+							</div>
+						@endforeach
+					</div>
+					@if (count(getDropDownlist('qualifications', ['id', 'educational_qualification'])) > 5)
+						<button id="show-more-education" class="btn btn-primary btn-sm mt-2">Show More</button>
+					@endif
+				</div>
+
+				
+				{{-- Serach bar --}}
+				
+
+			</div>
+			
+		</div>
+
+		
+
+		
 
 		<div class="panel">
 			<div class="acod-head">
