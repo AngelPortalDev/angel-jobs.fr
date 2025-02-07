@@ -85,6 +85,12 @@
                                 </a>
 
                             </div>
+                            @php
+                                $table = 'employer_viewed_js_contact';
+                                $where = ['employer_id' => Session::get('emp_user_id'), 'jobseeker_id' => $data[0]->id];
+                                $exists = is_exist($table, $where);
+                            
+                            @endphp
                             {{-- resume_link --}}
                         {{-- @if ($plan_details[0]->plan_id != 1 && $plan_details[0]->plan_expired_on >= date('Y-m-d'))
                                     @foreach ($data as $header)
@@ -503,7 +509,7 @@
                                           
                                            @endphp
                                            <div class="clearfix m-b20">
-                                            <label class="m-b0">Preferred Location</label>
+                                            <label class="m-b0">Preferred Work Mode</label>
                                             <span
                                                 class="clearfix font-13">{{ $workModeText }}</span>
                                             </div>

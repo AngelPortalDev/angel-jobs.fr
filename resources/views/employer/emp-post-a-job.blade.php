@@ -31,12 +31,22 @@
                                                 $tooltip = 'Free Credit : 0, Plan Credit : 0';
                                                 $totalposting = '0';
                                             }
+                                            $plan=getData('employer_plan',['id','cv_access_limit'],['id'=>$plan_detail->plan_id]);
+                                           
+                                           if($plan_detail->plan_id == 1){$total = 500;
+                                           }else{$total = 500 + $plan[0]->cv_access_limit ;}
+                                           $tooltipresume = "Remaining : $plan_detail->cv_access_limit, Total: " .  $total;
+                                           $viewcv=$total-$plan_detail->cv_access_limit;
                                         @endphp
                                         <h5 class="font-weight-700 float-start text-uppercase">Post A Job</h5>
-                                        <p class="site-button button-sm float-end btn-success" data-bs-toggle="tooltip"
+                                        {{-- <p class="site-button button-sm float-end btn-success" data-bs-toggle="tooltip"
                                             data-bs-placement="top" title="{{ $tooltip }}" style="white-space: normal">
                                             {{ $totalposting }} Job
-                                            Posting Left</p>
+                                            Posting Left</p> --}}
+                                            
+                                        <p class="site-button button-sm float-end btn-success" style="white-space: normal"> Unlimited Job Postings</p>
+                                        <p class="site-button button-sm float-end btn-success m-lr5" data-bs-toggle="tooltip"  data-bs-placement="top" title="{{ $tooltipresume }}" style="white-space: normal"> Resume Views {{$viewcv}} / {{ $total}} </p>
+
                                     @endforeach
                                 </div>
                                 @if (is_exist('employers', ['id' => Session::get('emp_user_id'), 'email_verified' => 'Yes']) != 0)

@@ -254,11 +254,15 @@
                                                             class="font-weight-700 text-black">Experience</strong>{{ $job->experiance }}
                                                     </li>
 
-                                                    @if ($job->job_salary_to_name != '' && $job->salary_hide === 'No')
-                                                        <li><i class="fas fa-euro-sign"></i><strong
-                                                                class="font-weight-700 text-black">Salary</strong>
-                                                            {{ $job->job_salary_to_name }} MONTHLY </li>
-                                                    @endif
+                                                    <li><i class="fas fa fa-euro"></i><strong
+                                                        class="font-weight-700 text-black">Salary</strong>
+                                                        @if ($job->job_salary_to_name != '' && $job->salary_hide === 'No')
+                                                        {{ $job->job_salary_to_name }} MONTHLY 
+                                                        @else
+                                                           
+                                                            Not Disclosed
+                                                            @endif
+                                                </li>
                                                     <li><i class="fa-solid fa-location-dot"></i><strong
                                                             class="font-weight-700 text-black">Location for
                                                             Hiring</strong><span class="text-black-light">

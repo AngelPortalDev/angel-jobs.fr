@@ -337,7 +337,7 @@ class JobPostingController extends Controller
         if (session()->has('emp_username')) {
 
 
-            $select = ['free_assign_job_posting', 'left_credit_job_posting_plan', 'plan_id', 'plan_start_from', 'plan_expired_on','license_no','pan_no'];
+            $select = ['free_assign_job_posting', 'left_credit_job_posting_plan', 'plan_id', 'plan_start_from', 'plan_expired_on','license_no','pan_no','cv_access_limit'];
             $plan_details = getData('employers', $select, ['email' => session()->get('emp_username')]);
             // 1 Free Welcom Plan
          
@@ -651,6 +651,7 @@ class JobPostingController extends Controller
                     } else {
                         jobseekerAction($table, $data, $where);
                     }
+                    echo json_encode(array('code' => 200, 'message' =>  $msg, 'icon' => 'success', 'msg' => $action));
                 } catch (\Exception $e) {
                     
                     echo json_encode(['code' => 201, 'message' => 'Unble to ' . $msg, "icon" => "error"]);

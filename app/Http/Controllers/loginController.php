@@ -40,10 +40,10 @@ class loginController extends Controller
     }
     public function employerSignup(Request $req)
     {
-        
+
         if ($req->isMethod('POST') && $req->ajax()) {
 
-           
+
             $name = isset($req->fullname) ? htmlspecialchars($req->input('fullname')) : '';
             $com_name = isset($req->com_name) ? htmlspecialchars($req->input('com_name')) : '';
             $contact_no = isset($req->contact_no) ? htmlspecialchars($req->input('contact_no')) : '';
@@ -59,43 +59,44 @@ class loginController extends Controller
             $plan_id = 1; //Free Plan ID
             $plan_end_duration = 90;
             $plan_expired_on = $currentDate->addDays($plan_end_duration)->format('Y-m-d');
-            $plan_details = $this->EmpPlan->planDetails($plan_id, ['job_post_limit']); // 1 Free Welcom Plan
+            $plan_details = $this->EmpPlan->planDetails($plan_id, ['job_post_limit','cv_access_limit']); // 1 Free Welcom Plan
 
             if (Employer::where('email', $email)->count() === 0) {
                 if (Employer::where('mobile', $contact_no)->where('mob_code', $mob_code)->count() === 0) {
-            $validate_rules = [
-                'fullname' => 'required|string|max:225',
-                'com_name' => 'required|string|max:225',
-                'contact_no' => 'required|string|max:225',
-                'email' => 'required|email|max:225',
-                'c_password' => 'required|string|max:225',
-                'tnc' => 'required|string|max:225',
-                'mob_code' => 'string|max:225',
-            ];
+                    $validate_rules = [
+                        'fullname' => 'required|string|max:225',
+                        'com_name' => 'required|string|max:225',
+                        'contact_no' => 'required|string|max:225',
+                        'email' => 'required|email|max:225',
+                        'c_password' => 'required|string|max:225',
+                        'tnc' => 'required|string|max:225',
+                        'mob_code' => 'string|max:225',
+                    ];
 
-         
-            $validate = Validator::make($req->all(), $validate_rules);
+
+                    $validate = Validator::make($req->all(), $validate_rules);
 
 
                     if (!$validate->fails()) {
                         // return $req->all();
-                try {
+                        try {
 
-                    $user_id = Employer::create([
-                        'fullname' => $name,
-                        'mobile' => $contact_no,
-                        'email' => $email,
+                            $user_id = Employer::create([
+                                'fullname' => $name,
+                                'mobile' => $contact_no,
+                                'email' => $email,
                                 'mob_code' => $mob_code,
                                 'plan_id' => $plan_id,
                                 'plan_start_from' => $booking_date,
                                 'plan_expired_on' => $plan_expired_on,
                                 'free_assign_job_posting' => $plan_details[0]->job_post_limit,
+                                'cv_access_limit' => $plan_details[0]->cv_access_limit,
                                 'company_name' => $com_name,
-                        'password' => Hash::make($password),
-                        'is_deleted' => 'No',
-                        'register_date' => $time,
-                    ]);
-   
+                                'password' => Hash::make($password),
+                                'is_deleted' => 'No',
+                                'register_date' => $time,
+                            ]);
+
                             $emp_id = $user_id->id;
                             Session::put('user_id', $emp_id);
                             $dyc_id = Crypt::encrypt($emp_id);
@@ -104,11 +105,11 @@ class loginController extends Controller
                             echo json_encode(array('code' => 200, 'message' => 'Successfully Signup', 'icon' => 'success'));
                         } catch (\Exception $e) {
                             echo json_encode(['code' => 201, 'message' => 'Credentials Invalid Or Already Exist', "icon" => "error"]);
-                }
-            } else {
+                        }
+                    } else {
                         echo json_encode(['code' => 201, 'message' => 'Mandatory Feilds are Missing', "icon" => "error"]);
-            }
-        } else {
+                    }
+                } else {
                     echo json_encode(['code' => 201, 'message' => 'Phone No. is Already Exists', "icon" => "error"]);
                 }
             } else {
@@ -192,7 +193,7 @@ class loginController extends Controller
     {
 
         if ($req->isMethod('POST') && $req->ajax()) {
-           
+
 
             $name = isset($req->name) ? htmlspecialchars($req->input('name')) : '';
             $contact_no = isset($req->contact_no) ? htmlspecialchars($req->input('contact_no')) : '';
@@ -217,20 +218,20 @@ class loginController extends Controller
 
             if (Jobseeker::where('email', $email)->count() === 0) {
                 if (Jobseeker::where('mobile', $contact_no)->where('mob_code', $mob_code)->count() === 0) {
-                   
-            if (!$validate->fails()) {
 
-                try {
-                    $user_id = Jobseeker::create([
-                        'fullname' => $name,
-                        'mob_code' => $mob_code,
-                        'mobile' => $contact_no,
-                        'email' => $email,
-                        'email_verified' => 'No',
-                        'password' => Hash::make($password),
-                        'is_deleted' => 'No',
-                        'register_date' => $time,
-                    ]);
+                    if (!$validate->fails()) {
+
+                        try {
+                            $user_id = Jobseeker::create([
+                                'fullname' => $name,
+                                'mob_code' => $mob_code,
+                                'mobile' => $contact_no,
+                                'email' => $email,
+                                'email_verified' => 'No',
+                                'password' => Hash::make($password),
+                                'is_deleted' => 'No',
+                                'register_date' => $time,
+                            ]);
                             $js_id = $user_id->id;
                             Session::put('user_id', $js_id);
                             $dyc_id = Crypt::encrypt($js_id);
@@ -239,11 +240,11 @@ class loginController extends Controller
                             mail_send(1, ['#Name#', '#Email#', '#Link#'], [ucfirst($name), strtolower($email), $dyc_id], $email);
                             echo json_encode(array('code' => 200, 'message' => 'Successfully Signup', 'icon' => 'success'));
                         } catch (\Exception $e) {
-                    echo json_encode(['code' => 201, 'message' => 'Credentials Invalid Or Already Exist 1', "icon" => "error"]);
-                }
-            } else {
-                echo json_encode(['code' => 201, 'message' => 'Credentials Invalid Or Already Exist 2', "icon" => "error"]);
-            }
+                            echo json_encode(['code' => 201, 'message' => 'Credentials Invalid Or Already Exist 1', "icon" => "error"]);
+                        }
+                    } else {
+                        echo json_encode(['code' => 201, 'message' => 'Credentials Invalid Or Already Exist 2', "icon" => "error"]);
+                    }
                 } else {
                     echo json_encode(['code' => 201, 'message' => 'Phone No. is Already Exists', "icon" => "error"]);
                 }
@@ -270,12 +271,12 @@ class loginController extends Controller
             $validate = validator::make($req->all(), $rules);
 
 
-            
+
             if (!$validate->fails()) {
 
                 try {
 
-                    $auth = Jobseeker::where('email', $username)->where('is_delete','No')->count();
+                    $auth = Jobseeker::where('email', $username)->where('is_delete', 'No')->count();
 
                     if ($auth ===  1) {
                         $auth = Jobseeker::where('email', $username)->get();
@@ -326,12 +327,12 @@ class loginController extends Controller
             // dd($dd.'won');
             if (session()->has('js_username')) {
                 $username = session()->get('js_username');
-                $cate='login-jobseeker';
+                $cate = 'login-jobseeker';
                 $table = 'jobseekers';
                 $cat = "Jobseeker";
             } elseif (session()->has('emp_username')) {
                 $username = session()->get('emp_username');
-                $cate='login-employer';
+                $cate = 'login-employer';
                 $table = 'employers';
                 $cat = "Employer";
                 // dd($username.'won');
@@ -339,7 +340,7 @@ class loginController extends Controller
                 echo json_encode(['code' => 404, 'message' => 'Somting Went Wrong ']);
                 return;
             }
-           
+
             $old_pass = isset($req->old_pass) ? htmlspecialchars($req->input('old_pass')) : '';
             $confirm_pass = isset($req->confirm_pass) ? htmlspecialchars($req->input('confirm_pass')) : '';
             $rules = [
@@ -360,9 +361,9 @@ class loginController extends Controller
                             $name = $auth[0]->fullname;
 
                             if (Hash::check($old_pass, $dbpassword)) {
-                               $check  = DB::table($table)->where('email', $username)->update(['password' => Hash::make($confirm_pass)]);
-                               $link= env('APP_URL') . "/".$cate;
-                                mail_send(17, ['#Name#', '#Cat#','#Link#'], [ucfirst($name), $cat,$link], $username);
+                                $check  = DB::table($table)->where('email', $username)->update(['password' => Hash::make($confirm_pass)]);
+                                $link = env('APP_URL') . "/" . $cate;
+                                mail_send(17, ['#Name#', '#Cat#', '#Link#'], [ucfirst($name), $cat, $link], $username);
                                 echo json_encode(['code' => 200, 'message' => 'Password has been changed']);
                             } else {
                                 echo json_encode(['code' => 404, 'message' => 'Incorrect Old Password']);
@@ -387,17 +388,17 @@ class loginController extends Controller
     }
     public function verifyMail($cat, $id)
     {
-       
+
         if (!empty($cat) && !empty($id)) {
-           
+
             $id =  Crypt::decrypt($id);
-           
+
             if ($cat === 'js') {
                 $is_exist =   is_exist('jobseekers', ['id' => $id, 'email_verified' => 'Yes']);
                 if ($is_exist === 0) {
                     $verifid =   Jobseeker::where(['id' => $id])->update(['email_verified' => 'Yes']);
 
-                    
+
                     if ($verifid === 1) {
                         return redirect('verified-mail')->with('msg', 'You are Successfully Verified')->with('status', 'true');
                     } else {
@@ -412,7 +413,7 @@ class loginController extends Controller
                 if ($is_exist === 0) {
                     $verifid =   Employer::where(['id' => $id])->update(['email_verified' => 'Yes']);
 
-                    
+
                     if ($verifid === 1) {
                         return redirect('verified-mail')->with('msg', 'You are Successfully Verified')->with('status', 'true');
                     } else {
@@ -430,7 +431,7 @@ class loginController extends Controller
     {
 
         // dump(session()->get('js_name'));
-       
+
         if ($req->isMethod('POST') && session()->has('emp_username') || session()->has('js_username')) {
             if (session()->has('js_username')) {
                 $email = session()->get('js_username');
@@ -438,7 +439,6 @@ class loginController extends Controller
                 $id = Session::get('js_user_id');
                 $cat = "js";
                 $tempt_id = 1;
-               
             } elseif (session()->has('emp_username')) {
                 $email = session()->get('emp_username');
                 $name = Session::get('emp_name');
@@ -451,20 +451,18 @@ class loginController extends Controller
             }
 
             $dyc_id = Crypt::encrypt($id);
-            
+
             // dump($email.'<=email'.$name.'<=name'.$id.'<=id'.$cat.'<=cat');
             $link =  env('APP_URL') . "/verfiy-mail/$cat/" . $dyc_id;
-           
-            try {                                   
-              $mail_send =   mail_send($tempt_id, ['#Name#', '#Email#', '#Link#'], [ucfirst($name), strtolower($email), $link], $email);
-                
+
+            try {
+                $mail_send =   mail_send($tempt_id, ['#Name#', '#Email#', '#Link#'], [ucfirst($name), strtolower($email), $link], $email);
+
                 echo json_encode(['code' => 200, 'message' => 'Verification Link Send']);
-            }
-             catch (Exception $e) {
+            } catch (Exception $e) {
                 // dump($mail_send);
                 echo json_encode(['code' => 404, 'message' => 'Something Went Wrong']);
             }
-
         } else {
             echo json_encode(['code' => 404, 'message' => 'Something Went Wrong']);
             // dump('check-2');
@@ -523,7 +521,7 @@ class loginController extends Controller
                         $email_enc = base64_encode($email);
                         $cat_enc = base64_encode($cat);
                         $link =  env('APP_URL') . "/reset-password-form/$cat_enc/$email_enc/" . $token;
-                        mail_send($tempt_id, ['#Link#','#Cat#'], [$link,$cate], $email);
+                        mail_send($tempt_id, ['#Link#', '#Cat#'], [$link, $cate], $email);
                         DB::commit();
                         echo json_encode(['code' => 200, 'message' => 'Reset Link Sent Successfully']);
                     } catch (Exception $e) {
@@ -626,14 +624,14 @@ class loginController extends Controller
                 $is_exist =   is_exist($table, $where);
 
                 if ($is_exist === 1) {
-                    
+
                     DB::beginTransaction();
                     try {
-                        $currentPassword = DB::table($table)->where($where)->value('password');        
-                        
+                        $currentPassword = DB::table($table)->where($where)->value('password');
+
                         if (Hash::check($newpasscon, $currentPassword)) {
-                            echo json_encode(['code' => 400,'message' => 'Password Not Reset.','text' => 'Please use a different password']);
-                            return; 
+                            echo json_encode(['code' => 400, 'message' => 'Password Not Reset.', 'text' => 'Please use a different password']);
+                            return;
                         }
                         $updatedData = DB::table($table)->select('fullname')->where($where)->first();
                         DB::table($table)->where($where)->update(['password' => Hash::make($newpasscon), 'reset_token' => $datetime]);
@@ -658,7 +656,7 @@ class loginController extends Controller
     public function logout()
     {
         session()->flush();
-         return redirect('/')->with('successlogout', 'Successfully Logged Out');
+        return redirect('/')->with('successlogout', 'Successfully Logged Out');
         //return redirect('/');
     }
 

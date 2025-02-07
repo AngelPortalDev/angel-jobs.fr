@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\{job_posting_view as Jobs,employer_plan as EmpPlan,jobseeker_plan as JsPlan, employer as Employer, employer_payment as EmpPayments, jobseeker_profile as JobseekerProf, jobseeker_payment as JsPayement};
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Session, Http, DB, Validator, Storage, Log};
+use Illuminate\Support\Facades\{Session, Http, DB, Validator, Storage, Log, Mail};
 use Carbon\Carbon;
 use Razorpay\Api\Api;
 
@@ -1219,15 +1219,23 @@ class commonController extends Controller
                     $logo_uploaded = file_upload($req->file('grfile'), 'storage/grivance_doc', $grfile_name, '');
                 }
                 // if ($logo_uploaded === TRUE) {
-                try {
-                    DB::table('grievance')->insert(['name' => $name, 'country_code' => $country_code, 'contact_no' => $contact_no, 'email' => $email, 'address' => $address, 'report_url' => $report_url, 'date_oc' => $date_oc, 'confirm' => $confirm, 'message' => $message, 'tnc' => $tnc]);
-
-
-                    // mail_send(9, ['#Name#', '#Cat#'], ['', $cat], session()->get('emp_username'));
-                    return  redirect()->back()->with(['code' => 200, 'message' => 'Successfully Submitted']);
-                } catch (\Exception $e) {
-                    return  redirect()->back()->with(['code' => 201, 'message' => 'Unable to Upload', 'text' => "Try Again", "icon" => "error"]);
-                }
+                    try {
+                        DB::table('grievance')->insert(['name' => $name, 'country_code' => $country_code, 'contact_no' => $contact_no, 'email' => $email, 'address' => $address, 'report_url' => $report_url, 'date_oc' => $date_oc, 'confirm' => $confirm, 'message' => $message, 'tnc' => $tnc,'grfile'=>$grfile_name]);
+                        $datameg= $message;
+                        $data=['name' => $name, 'country_code' => $country_code, 'contact_no' => '+91', 'email' => $email, 'address' => $address, 'report_url' => $report_url, 'date_oc' => $date_oc, 'confirm' => $confirm, 'datameg' => $datameg, 'tnc' => $tnc,'grfile_name'=>$grfile_name];
+                        $user['to'] = 'info@angel-jobs.com';
+                        $send = Mail::send('grievancemail', $data, function ($mes) use ($user, $email, $name,) {
+                            $mes->from(env('MAIL_FROM_ADDRESS'));
+                            $mes->to($user['to']);
+                            $mes->subject('Enquiry Givance Form from Angel-jobs.fr');
+                            $mes->replyTo($email, $name);
+                        });
+    
+                        // mail_send(9, ['#Name#', '#Cat#'], ['', $cat], session()->get('emp_username'));
+                        return  redirect()->back()->with(['code' => 200, 'message' => 'Successfully Submitted']);
+                    } catch (\Exception $e) {
+                        return  redirect()->back()->with(['code' => 201, 'message' => 'Unable to Upload', 'text' => "Try Again", "icon" => "error"]);
+                    }
             } else {
                 return redirect()->back()->with(['code' => 203, 'message' => 'Invalid File', 'text' => "File Should be JPG, PNG & Less then 3MB", "icon" => "error"]);
             }

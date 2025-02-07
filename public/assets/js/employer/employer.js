@@ -465,6 +465,7 @@ $(document).ready(function () {
                 },
                 context: $(".shortlist"),
                 success: function (response) {
+                      
                     $("#loader").fadeOut();
                     if (response.code == 200) {
                         if (atob(short_action) === "No") {
