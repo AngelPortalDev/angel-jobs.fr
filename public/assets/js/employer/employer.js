@@ -856,6 +856,70 @@ $(document).ready(function () {
             },
         });
     });
+
+
+    $("#add_template").click(function (event) {
+        event.preventDefault();    
+        
+    $("#template_name_error").hide();
+    $("#email_subject_error").hide(); 
+    $("#email_content_error").hide();
+    var template_name = $("#template_name").val();
+    var email_subject = $("#email_subject").val();
+    var email_content = $("#email_content").val();
+    if (template_name === "") {
+        $("#template_name_error").show();
+        $("#template_name")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    } 
+    if (email_subject === "") {
+        $("#email_subject_error").show();
+        $("#email_subject")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    } 
+    if (email_content === "") {
+        $("#email_content_error").show();
+        $("#email_content")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    }
+    var form = $("#addtemplate").serialize();
+    $("#loader").fadeIn();
+    $.ajax({
+        url: baseUrl + "/employer/emp-email-template",
+        type: "POST",
+        data: form,
+        dataType: "json",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+        },
+        success: function (response) {
+            $("#loader").fadeOut();
+
+            if (response.code == 200) {
+                $("#addtemplate")[0].reset();
+                swal({
+                    title: response.message,
+                    text: "",
+                    icon: "success",
+                }).then(function () {
+                    window.location.href = baseUrl + "/employer/email-view";
+                });
+            } else {
+                swal({
+                    title: response.message,
+                    text: "Please Try Again",
+                    icon: "error",
+                });
+            }
+        },
+        // error: function (xhr) {
+        //     // Handle the error response
+        //     console.log(xhr.responseText);
+        //     alert("An error occurred while inserting data.");
+        // },
+    });
+    });
+    
     $("#postemail").click(function (event) {
         event.preventDefault();    
     
@@ -1061,6 +1125,59 @@ $(document).ready(function () {
             // },
         });
     });
+    $(".viewaction").click(function (event) {
+        event.preventDefault();
+        var emp_id = $(this).data("emp_id");
+        var js_id = $(this).data("js_id");
+        if (emp_id != "" && (js_id !== null)) {
+            $.ajax({
+                url: baseUrl + "/employer/js-details-view",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    emp_id: emp_id,
+                    js_id: js_id,
+                },
+                headers: {
+                    "X-CSRF-TOKEN": csrfToken,
+                },
+                context: $(".action"),
+                success: function (res) {
+                    $("#loader").fadeOut();
+                    //console.log(action_txt);
+                    if (res.code === 200) {
+                        
+                        swal({
+                            title: res.message,
+                            text: "",
+                            icon: "success",
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        swal({
+                            title: res.message,
+                            text: "Please Try Again",
+                            icon: "error",
+                        });
+                    }
+                }.bind(this),
+                error: function (xhr, status, error) {
+                    // Handle errors
+                    console.error(error);
+                    $("#result").html("An error occurred.");
+                },
+            });
+        } else {
+            swal({
+                title: "Something Went Wrong",
+                text: "Please Try Again",
+                icon: "error",
+            });
+        }
+
+    });
+
 
 });
 

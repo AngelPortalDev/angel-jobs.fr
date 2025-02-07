@@ -28,6 +28,7 @@ class jobseeker extends Model
 
         $username =  Session::has('js_username') ? Session::get('js_username') : $job_id;
         $select = [
+            'id',
             'fullname',
             'email',
             'mob_code',

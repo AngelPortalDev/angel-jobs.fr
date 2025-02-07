@@ -45,27 +45,17 @@
 								<div class="form">
                                    
                                     <div class="container">
-                                        <form action="{{ route('emp-add-template') }}" method="POST">
-                                            @csrf
+                                        <form id="addtemplate">
+                                          
                                         <div class="row g-2">
+                                            <input type="text" value="2" hidden name="type" id="type">
                                             <div class="  col-md-6">
-                                                <label for="inputAddress" class="form-label">Select Type</label>
-                                                <select class="form-control" name="type">
-                                                    <option value="1">Employer</option>
-                                                    <option value="2">Jobseeker</option>
-                                                    <option value="0">Common</option>
-                                                </select>
-                                                @error('type')
-                                                    <span style="color:red;text-transform:capitalize">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                            <div class="  col-md-6">
-                                                <label for="inputAddress" class="form-label">Template Name</label>
-                                                <input type="text" class="form-control" id="inputAddress" placeholder=""
-                                                    name="template_name" value="{{ old('template_name') }}">
-                                                @error('template_name')
-                                                    <span style="color:red;text-transform:capitalize">{{ $message }}</span>
-                                                @enderror
+                                                <label for="inputAddress" class="form-label">Template Name<span class="imp-field-star">*</span></label>
+                                                <input type="text" class="form-control" placeholder="Please enter template name"
+                                                    name="template_name" id="template_name" value="{{ old('template_name') }}">
+                                              
+                                                    <span id="template_name_error" style="color:red;display:none">Please enter template name</span>
+                                             
                                             </div>
                                             {{-- <div class="col-md-6">
                                                 <label for="inputAddress" class="form-label">Select Jobseekers <span class="imp-field-star"> *</span></label>
@@ -77,12 +67,12 @@
                                               </select>
                                             </div> --}}
                                             <div class="col-md-12">
-                                                <label for="inputAddress" class="form-label">Email Subject</label>
-                                                <input type="text" class="form-control" id="inputAddress" placeholder=""
-                                                    name="email_subject" value="{{ old('email_subject') }}">
-                                                @error('email_subject')
-                                                    <span style="color:red;text-transform:capitalize">{{ $message }}</span>
-                                                @enderror
+                                                <label for="inputAddress" class="form-label">Email Subject<span class="imp-field-star">*</span></label>
+                                                <input type="text" class="form-control" placeholder="Please enter subject"
+                                                    name="email_subject"  id="email_subject" value="{{ old('email_subject') }}">
+                                               
+                                                    <span id ="email_subject_error" style="color:red;display:none">Please enter subject</span>
+                                              
                                             </div>
                                             <div class="col-md-12">
                                                 <label for="inputAddress" class="form-label">Email Content</label>
@@ -94,9 +84,11 @@
 													
 													<input type="hidden" name="email_content" id="email_content" value=''>
                                             </div>
+                                            
+                                            <span id ="email_content_error" style="color:red;display:none">Please enter content</span>
                                                 <div class="">
-                                                    <button type="submit" class="btn btn-primary mb-4 me-2">Add</button>
-                                                    <a href="{{ route('email-view') }}">
+                                                    <button  id="add_template" class="btn btn-primary mb-4 me-2">Add</button>
+                                                    <a href="{{ route('emp-manage-mails') }}">
                                                         <button type="button" class="btn btn-secondary mb-4">Back</button>
                                                     </a>
                                                 </div>

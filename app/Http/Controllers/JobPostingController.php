@@ -166,7 +166,31 @@ class JobPostingController extends Controller
                                     if (session()->has('emp_user_id')) {
                                         $approval_status="Updated sucessfull";
                                     }
-                                    JobPosting::where('id', $job_id)->update($select);
+                                    $jobexpire = is_exist('job_postings', ['id' => $job_id, 'posted_by' => $emp_id, 'is_deleted' => 'No', ['job_expired_on', '>', $this->date]]);
+                                    if (isset($jobexpire) && $jobexpire === 0) {
+                                        $select_arr = ['free_assign_job_posting', 'left_credit_job_posting_plan', 'plan_id', 'plan_start_from', 'plan_expired_on'];
+                                        $plan_detail = getData('employers', $select_arr, $where);
+                                        $free_limit = $plan_detail[0]->free_assign_job_posting;
+                                        $plan_limit =  $plan_detail[0]->left_credit_job_posting_plan;
+                                        $select = array_merge($select, ['start_date' => $time, 'job_expired_on' => $job_end, 'posted_on' => $time]);
+                                        $postingID = JobPosting::where('id', $job_id)->update($select);
+                                        if (is_numeric($postingID) && $postingID != 0) {
+                                            $query = DB::table('employers')->where('id', $emp_id);
+
+                                            if ($free_limit != 0) {
+                                                $updated_limit = $free_limit - 1;
+                                                $query->update(['free_assign_job_posting' => $updated_limit]);
+                                            } else {
+                                                $updated_limit = $plan_limit - 1;
+                                                $query->update(['left_credit_job_posting_plan' => $updated_limit]);
+                                            }
+                                        }
+                                    } else {
+                                        JobPosting::where('id', $job_id)->update($select);
+                                    }
+
+
+                                    // JobPosting::where('id', $job_id)->update($select);
                                     $jobtitle = JobPosting::select('id','job_title')->where('id', $job_id)->first();
                                     
                                     $dyc_id = base64_encode($job_id);
@@ -553,9 +577,18 @@ class JobPostingController extends Controller
             if ($exists === 1) {
                 try {
                     // return $table.''.$data.''.$where;
-                    jobseekerAction($table,$data, $where);
+                   // jobseekerAction($table,$data, $where);
                     //return "fshg";
-              
+                    if ($action === 'apply') {
+                        $username = Session::get('js_name');
+                        $jobdata = getData('job_posting_view', ['id', 'job_title', 'is_deleted', 'status', 'approval_status', 'contact_email', 'contact_person', 'company_name'], ['id' => $job_id, 'is_deleted' => 'No', 'status' => 'Live', 'approval_status' => 'APPROVED']);
+                        $result = jobseekerAction($table, $data, $where);
+                        if (isset($result) && $result === true) {
+                            mail_send(40, ['#Name#', '#Job_title#', '#contact_person#', '#company_name#'], [$username, $jobdata[0]->job_title, $jobdata[0]->contact_person, $jobdata[0]->company_name], $jobdata[0]->contact_email);
+                        }
+                    } else {
+                        jobseekerAction($table, $data, $where);
+                    }
                     echo json_encode(array('code' => 200, 'message' => 'Successfully ' . $remark, 'icon' => 'success', 'lable' => $remark, 'newAction' => $remark));
                 } catch (\Exception $e) {
                    
@@ -602,8 +635,22 @@ class JobPostingController extends Controller
             if ($exists != 0) {
                 $table = 'job_application_history';
                 try {
-                    jobseekerAction($table, $data, $where);
-                    echo json_encode(array('code' => 200, 'message' =>  $msg, 'icon' => 'success', 'msg' => $action));
+                    
+                    // jobseekerAction($table, $data, $where);
+                    // echo json_encode(array('code' => 200, 'message' =>  $msg, 'icon' => 'success', 'msg' => $action));
+                    if ($job_id != 0 && $action === 'Yes') {
+                       
+                        $jsdta = getData('jobseekers',['id', 'fullname', 'email','is_delete' ] ,['is_delete' => 'No', 'id' => $js_id]);
+                        $jobdata = getData('job_posting_view', ['id', 'job_title', 'is_deleted', 'status', 'approval_status', 'company_name'], ['id' => $job_id, 'is_deleted' => 'No', 'status' => 'Live', 'approval_status' => 'APPROVED']);
+                       
+                        $result = jobseekerAction($table, $data, $where);
+                        if (isset($result) && $result != 0) {
+                            mail_send(41, ['#Name#', '#Job_title#', '#company_name#'], [$jsdta[0]->fullname, $jobdata[0]->job_title, $jobdata[0]->company_name], $jsdta[0]->email);
+                        }
+                       
+                    } else {
+                        jobseekerAction($table, $data, $where);
+                    }
                 } catch (\Exception $e) {
                     
                     echo json_encode(['code' => 201, 'message' => 'Unble to ' . $msg, "icon" => "error"]);

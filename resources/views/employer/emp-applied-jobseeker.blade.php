@@ -32,7 +32,7 @@
 										$js_id =base64_encode($appliedDatas->js_id);
 										$job_id =base64_encode($appliedDatas->job_id);
 										$action =base64_encode('Yes');
-										$imagePath = 'storage/jobseeker/profile_image/' . $shortlist->profile_img;
+										$imagePath = 'storage/jobseeker/profile_image/' . $appliedDatas->profile_img;
 									@endphp
 									<li class="col-lg-12 col-md-12">
 										<div class="post-bx">
@@ -40,9 +40,9 @@
 												<div class="jobseeker-photo-for-applied">
 														<span>
 															@if (Storage::exists($imagePath))
-                                                            @if (isset($shortlist->profile_img) && !empty($shortlist->profile_img))
+                                                            @if (isset($appliedDatas->profile_img) && !empty($appliedDatas->profile_img))
                                                                 <img alt=""
-                                                                    src="{{ Storage::url('jobseeker/profile_image/' . $shortlist->profile_img) }}">
+                                                                    src="{{ Storage::url('jobseeker/profile_image/' . $appliedDatas->profile_img) }}">
                                                             @else
                                                                 <img alt=""
                                                                     src="{{ asset('images/user_profile.png') }}">

@@ -142,7 +142,7 @@
                                             </div>
                                                 <div class="">
                                                     <button type="button" id="send-mails" class="btn btn-primary mb-4 me-2">Send</button>
-                                                    <a href="{{ route('email-view') }}">
+                                                    <a href="{{ route('emp-manage-mails') }}">
                                                         <button type="button" class="btn btn-secondary mb-4">Back</button>
                                                     </a>
                                                 </div>

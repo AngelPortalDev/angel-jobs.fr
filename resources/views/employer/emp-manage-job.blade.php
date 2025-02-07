@@ -124,7 +124,7 @@
                                                     </td>
                                                 @endif
                                                 <td>
-                                                    <div class="form-check form-switch">
+                                                    {{-- <div class="form-check form-switch">
                                                         <input class="form-check-input job_inactive"
                                                             data-row="{{ $i }}" type="checkbox"
                                                             data-enc_id_inc="{{ $enc_id }}" role="switch"
@@ -134,7 +134,26 @@
 																value="" @endif
                                                             {{ $checked }}
                                                             @if(strtotime($jobDatas->job_expired_on) < strtotime(now())) disabled @endif>
+                                                    </div> --}}
+                                                    @if(strtotime($jobDatas->job_expired_on) > strtotime(now()))
+                                                    <div class="form-check form-switch">
+                                                    <input class="form-check-input job_inactive"
+                                                        data-row="{{ $i }}" type="checkbox"
+                                                        data-enc_id_inc="{{ $enc_id }}" role="switch"
+                                                        id="flexSwitchCheckDefault_{{ $i }}"
+                                                        @if ($status === 'Inactive') value="Live"
+                                                        @else
+                                                            value="" @endif
+                                                        {{ $checked }}>
                                                     </div>
+                                                    @else
+                                                    <div>
+                                                    <a href="{{ route('job-update', ['enc_id' => $enc_id]) }}" class="bg-warning mb-0 badge"  style="padding:8px 15px; font-size:14px;color:black">
+                                                        Repost
+                                                    </a>
+                                                      
+                                                </div>
+                                                @endif
                                                 </td>
                                                 <td class="job-links">
                                                     <a href="javascript:void(0);" data-enc_id="{{ $enc_id }}" data-del_row="{{ $i }}" class="job_delete">

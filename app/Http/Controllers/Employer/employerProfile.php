@@ -604,7 +604,8 @@ class employerProfile extends Controller
             $emails_subject = isset($req->email_subject) ? htmlspecialchars($req->input('email_subject')) : '';
             $email_content = isset($req->email_content) ? htmlspecialchars_decode($req->input('email_content')) : '';
             $ids = explode(',', $selected_emails);
-           
+            $emailFrom = session::get('emp_name');
+            $emailFromAddress = session::get('emp_username');
             $employer_data = getEmails('jobseeker_view', ['js_id', 'fullname', 'email'], ['js_id', 'IN', $ids]);
            
             if (isset($employer_data) && !empty($employer_data)) {
@@ -612,7 +613,7 @@ class employerProfile extends Controller
                    
                     $personalized_content = str_replace('#Name#', $employer->fullname, $email_content);
         
-                    SendEmailJob::dispatch($emails_subject, $personalized_content, $employer->fullname, $employer->email);
+                    SendEmailJob::dispatch($emails_subject, $personalized_content, $employer->fullname, $employer->email,$emailFrom, $emailFromAddress);
                 }
         
                 return response()->json(['code' => 200, 'message' => 'Emails are being sent.']);
@@ -628,5 +629,81 @@ class employerProfile extends Controller
 
     }
 
+    public function detailsview(Request $req)
+    {
 
+        if ($req->isMethod('POST') && $req->ajax() && session()->has('emp_username')) {
+
+            $emp_id = isset($req->emp_id) ? base64_decode($req->input('emp_id')) : '';
+            $js_id = isset($req->js_id) ? base64_decode($req->input('js_id')) : '';
+            $table = 'jobseeker_view';
+            $where = ['id' => $js_id];
+            $exists = is_exist($table, $where);
+
+            if ($exists === 1) {
+                try {
+                    $data = ['employer_id'    => $emp_id, 'jobseeker_id'   => $js_id, 'last_viewed_on' => $this->time];
+                    $where = ['employer_id'  => $emp_id, 'jobseeker_id' => $js_id];
+                    $select_arr = ['free_assign_job_posting', 'left_credit_job_posting_plan', 'plan_id', 'plan_start_from', 'plan_expired_on', 'cv_access_limit'];
+                    $plan_detail = getData('employers', $select_arr, ['id' => $emp_id]);
+                    if (!empty($plan_detail) && isset($plan_detail[0]->plan_expired_on, $plan_detail[0]->cv_access_limit)) {
+                        if ($plan_detail[0]->plan_expired_on >= $this->date && $plan_detail[0]->cv_access_limit > 0) {
+                            $upload = jobseekerAction('employer_viewed_js_contact', $data, $where);            
+                            if (isset($upload) && $upload == true) {
+                                $updated = employer::where('id', $emp_id)
+                                    ->update(['cv_access_limit' => $plan_detail[0]->cv_access_limit - 1]);            
+                                if ($updated) {
+                                    echo json_encode(['code' => 200, 'message' => 'Now you can view jobseeker details', 'icon' => 'success']);
+                                } else {
+                                    echo json_encode(['code' => 201, 'message' => 'Error updating CV access limit', 'icon' => 'error']);
+                                }
+                            } else {
+                                echo json_encode(['code' => 201, 'message' => 'Unable to View jobseeker details' ,'icon' => 'error']);
+                            }
+                        } else {
+                            echo json_encode(['code' => 201, 'message' => 'Detail Access limit reached', 'icon' => 'error']);
+                        }
+                    } else {
+                        echo json_encode(['code' => 201, 'message' => 'Invalid employer plan details', 'icon' => 'error']);
+                    }
+            
+                } catch (\Exception $e) {                    
+                    echo json_encode(['code'    => 201, 'message' =>'Something went worng', 'icon'    => 'error']);
+                }
+            } else {
+                echo json_encode(['code'    => 201, 'message' => 'Jobseeker Not Exist', 'icon'    => 'error']);
+            }
+        }
+    }
+
+    public function indexemployer()
+    {
+        $sortedJsData =DB::table('jobseeker_view as jv')
+        ->leftJoin(
+            DB::raw('(SELECT js_id, status, created_at FROM jobseeker_payments WHERE status = 3 AND created_at IN (SELECT MAX(created_at) FROM jobseeker_payments WHERE status = 3 GROUP BY js_id)) as jp'), 
+            'jv.js_id', '=', 'jp.js_id'
+        ) // Left join with the latest payment (status = 3) for each jobseeker
+        ->select(
+            'jv.js_id', 'jv.is_delete', 'jv.experiance_name', 'jv.skill', 'jv.email_verified',
+            'jv.fullname', 'jv.role_name', 'jv.company_name', 'jv.prefered_location_name',
+            'jv.expected_salary_name', 'jv.pref_job_type_name', 'jv.notice_name', 'jv.plan_expired_on', 'jv.updated_at',
+            'jp.status' // Add status from the jobseeker_payments table
+        )
+        ->where([['jv.email_verified', '=', 'Yes'], ['jv.is_delete', '=', 'No']])
+        ->whereNotNull('jv.skill')
+        ->whereNotNull('jv.prefered_job_type')
+        ->whereNotNull('jv.qul_id')
+        ->whereNotNull('jv.notice_period')
+        ->whereNotNull('jv.prefered_location')
+        ->whereNotNull('jv.total_exp_year')
+        ->orderByRaw("CASE WHEN jv.plan_expired_on >= CURDATE() THEN 0 ELSE 1 END")
+        ->orderBy('jv.updated_at', 'desc')
+        ->orderBy('jv.js_id', 'asc') 
+        ->distinct('jv.js_id')
+        ->limit(6)
+        ->get();
+    
+                   
+         return view('index-employer', compact('sortedJsData'));
+    }
 }
