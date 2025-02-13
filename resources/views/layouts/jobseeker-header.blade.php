@@ -139,4 +139,7 @@
             <li><a class="dez-page" href="{{ route('jobseeker-plans') }}">Jobseeker </a></li>
         </ul>
     </li>
+    <li>
+        <a href="https://www.ustudious.com/" class="site-button plans-btn" target="_blank">Study Abroad</a>
+    </li>
 </ul>

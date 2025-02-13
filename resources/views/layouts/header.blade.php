@@ -222,9 +222,7 @@ li.site-button{
 					@else
 					{{-- Guest Header --}}
 						<ul class="nav navbar-nav mob-resp-btn">
-							<li>
-								<a href="https://www.ustudious.com/" target="_blank">Study Abroad</a>
-							</li>
+							
 							<li>
 								<a href="javascript:void(0);">Jobs <i class="fa fa-chevron-down"></i></a>
 								<ul class="sub-menu mm-show jobs-top-btn">
@@ -271,7 +269,9 @@ li.site-button{
 		
 								</ul>
 							</li>
-							
+							<li>
+								<a href="https://www.ustudious.com/" class="site-button plans-btn" target="_blank">Study Abroad</a>
+							</li>
 
 						</ul>	
 
