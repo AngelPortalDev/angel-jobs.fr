@@ -1,6 +1,6 @@
 					<search>
 					{{-- <form class="dezPlaceAni" id="searchFilter" > --}}
-					<form class="dezPlaceAni" action="{{url('top-search-bar')}}" method="GET"> 
+					<form class="dezPlaceAni" action="{{url('top-search-bar')}}" method="GET" style="max-width: 900px"> 
 						 @csrf
 						<div class="row top-search-close-btn" style="align-items: end;">
 							<div class="col-lg-4 col-md-6">

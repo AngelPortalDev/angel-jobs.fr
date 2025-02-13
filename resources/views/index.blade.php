@@ -4,7 +4,7 @@
     <div class="page-content">
         <!-- Section Banner -->
         <div class="dez-bnr-inr dez-bnr-inr-md main-slider"
-            style="background-image:url({{ asset('images/france-city-bg.jpg') }});">
+            style="background-image:url({{ asset('images/banner/banner.jpg') }});">
             <div class="container">
                 <div class="dez-bnr-inr-entry align-m">
                     <div class="find-job-bx">
@@ -394,7 +394,8 @@
                                 $where = ['id' => session('js_user_id')];
                                 $table = 'jobseekers';
                                 $emailVerfiy = getData($table, $select, $where);
-
+                            // print_r($emailVerfiy);
+                            // exit();
                             @endphp
                             @php
                                 $table = 'job_posting_view';
@@ -570,7 +571,7 @@
                             @php $where = ['job_id' => $lists->id, 'js_id' => session('js_user_id')]; @endphp
                             @if (is_exist('job_application_history', $where) > 0)
                                 <a class="site-button style-1" style="white-space:nowrap">Applied</a>
-                            @elseif($emailVerfiy[0]->email_verified === 'No')
+                            @elseif(isset($emailVerfiy) && $emailVerfiy[0]->email_verified === 'No')
                                 <a href="#" class="site-button not_verify" style="white-space:nowrap">Apply Now</a>
                             @elseif( is_exist('jobseeker_view', ['js_id' => session('js_user_id')]) == 0)
                             <a href="#" class="site-button not_updateprofile" style="white-space:nowrap">Apply Now</a>

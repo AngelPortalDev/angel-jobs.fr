@@ -3,39 +3,56 @@ $(document).ready(function () {
     var baseUrl = window.location.origin;
     var reader = new FileReader();
     var img = new Image();
-    function loadJobseeker(records, page, count,lastPage) {
-        $("#jobseekerCount").html(count + " Jobseekers Found");
-        $("#jobseekerResults").html(records);
-        let paginationHtml = "<ul class='pagination'>";   
-       
-        if (page > 1) {
-            paginationHtml += `<li class="page-item">
-                <a href="#" class="btn btn-primary page-linkem prev-page" data-page="${page - 1}">Previous</a>
-            </li>`;
-        } else {
-            paginationHtml += `<li class="page-item disabled">
-                <a class="btn btn-primary disabled">Previous</a>
-            </li>`;
-        }       
-        for (let i = 1; i <= lastPage; i++) {
-            paginationHtml += `<li class="page-item ${i === page ? 'active' : ''}">
-                <a href="#" class="btn btn-primary page-linkem" data-page="${i}">${i}</a>
-            </li>`;
-        } 
-        if (page < lastPage) {
-            paginationHtml += `<li class="page-item">
-                <a href="#" class="btn btn-primary page-linkem next-page" data-page="${page + 1}">Next</a>
-            </li>`;
-        } else {
-            paginationHtml += `<li class="page-item disabled">
-                <a class="btn btn-primary disabled">Next</a>
-            </li>`;
-        }    
-        paginationHtml += "</ul>";    
-        $("#paginationLinks").html(paginationHtml);
-
-
-    }
+        function loadJobseeker(records, page, count, total_count, perPage) {
+            $("#jobseekerCount").html(`${count} Jobs Found`);
+            // $("#jobResults").html('');      
+            if (records.length > 0) {
+                $("#jobseekerResults").html(records);
+            } else {
+                $("#jobseekerResults").html("<li>No Jobs Found</li>");
+            }
+            generatePagination(total_count, perPage, page);
+        }
+        
+        function generatePagination(total_count, perPage, currentPage) {
+            let totalPages = Math.ceil(total_count / perPage);
+            let paginationHtml = '';
+            let dropdownpagination = '';  
+            currentPage = Number(currentPage);
+        
+            if (totalPages > 1) {
+                paginationHtml += '<ul class="pagination">';
+                paginationHtml += currentPage > 1 
+                    ? `<li class="page-item"><a href="#" class="page-linkem" data-page="${currentPage - 1}">« Prev</a></li>` 
+                    : `<li class="page-item disabled"><a class="page-linkem">« Prev</a></li>`;
+        
+                if (currentPage > 3) 
+                    paginationHtml += `<li class="page-item"><a href="#" class="page-linkem" data-page="1">1</a></li><li class="page-item disabled"><a href="#" class="page-linkem">...</a></li>`;
+        
+                
+                for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
+                    paginationHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}"><a href="#" class="page-linkem" data-page="${i}">${i}</a></li>`;
+                }
+        
+                if (currentPage < totalPages - 2) 
+                    paginationHtml += `<li class="page-item disabled"><a href="#" class="page-linkem">...</a></li><li class="page-item"><a href="#" class="page-linkem" data-page="${totalPages}">${totalPages}</a></li>`;
+        
+                paginationHtml += currentPage < totalPages 
+                    ? `<li class="page-item"><a href="#" class="page-linkem" data-page="${currentPage + 1}">Next »</a></li>` 
+                    : `<li class="page-item disabled"><a class="page-linkem">Next »</a></li>`;
+        
+                paginationHtml += '</ul>';
+                paginationHtml += '</ul>';
+                dropdownpagination +='<select id="pageDropdownem">';     
+                for (i = 1; i <= totalPages; i++){
+                dropdownpagination += `<option value="${i}" ${i === currentPage ? 'selected' : ''}>Page ${i}</option>`
+                }
+            dropdownpagination +='</select>'
+            }
+        
+            $("#paginationLinks").html(paginationHtml);
+            $("#pageDropdownlistem").html(dropdownpagination);
+        }  
     function manageJobs() {
         $.ajax({
             url: baseUrl + "/emp-manage-job",
@@ -448,6 +465,7 @@ $(document).ready(function () {
                 },
                 context: $(".shortlist"),
                 success: function (response) {
+                      
                     $("#loader").fadeOut();
                     if (response.code == 200) {
                         if (atob(short_action) === "No") {
@@ -747,38 +765,44 @@ $(document).ready(function () {
     // Jobseeker Found on Employer Section Left filter
     $(".jsfound_left_filters").on("change","input[type='checkbox'], input[type='radio']",function (e) {
             
-            e.preventDefault();
-            $("#loader").fadeIn();
-            var form = $(".jsfound_left_filters").serialize();
-          $("#jobseekerResults li").slideUp();
-            $.ajax({
-                url: baseUrl + "/employer/emp-browse-jobseeker",
-                type: "GET",
-                dataType: "json",
-                data: form,
-                headers: {
-                    "X-CSRF-TOKEN": csrfToken,
-                },
-                success: function (res) {
-                    $("#loader").fadeOut();
-                    var records = res.html;
-                    var page = res.page;                    
-                    var count = res.count;           
-                    var lastpage = res.last_page;         // console.warn(page+'<= this is page'+count+'this is count');            
-                    loadJobseeker(records, page, count,lastpage);
-                },
-                error: function (xhr, status, error) {
-                    // Handle errors
-                    console.error(error);
-                    $("#result").html("An error occurred.");
-                },
-            });
-        }
+        e.preventDefault();
+        $("#loader").fadeIn();
+        var form = $(".jsfound_left_filters").serialize();
+      $("#jobseekerResults li").slideUp();
+        $.ajax({
+            url: baseUrl + "/employer/emp-browse-jobseeker",
+            type: "GET",
+            dataType: "json",
+            data: form,
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+            },
+            success: function (res) {
+                $("#loader").fadeOut();
+                var records = res.html;
+                var page = res.page;                    
+                var count = res.count;           
+                var lastpage = res.last_page;         // console.warn(page+'<= this is page'+count+'this is count');            
+                loadJobseeker(res.html, res.page, res.count, res.total_count, res.perPage);
+                $('#pageDropdownem').selectpicker();
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                console.error(error);
+                $("#result").html("An error occurred.");
+            },
+        });
+    }
     );
 
     $(document).on("click", ".page-linkem", function (e) {
         e.preventDefault();
-       
+    
+        if ($(this).parent().hasClass("disabled") || !$(this).data("page")) {
+            console.log("Pagination Click Ignored: Disabled or Missing Data-Page");
+            return;
+        }
+
         $("#loader").fadeIn();
         
         const page = $(this).data("page");
@@ -793,13 +817,108 @@ $(document).ready(function () {
             },
             success: function (res) {
                 $("#loader").fadeOut();
-                loadJobseeker(res.html, res.page, res.count, res.last_page);
+                loadJobseeker(res.html, res.page, res.count, res.total_count, res.perPage);
+                $('#pageDropdownem').selectpicker();
             },
             error: function () {
                 $("#loader").fadeOut();
                 $("#jobseekerResults").html("<li>No Jobs Found</li>");
             },
         });
+    });
+    $(document).on("change", "#pageDropdownem", function (e) {
+        const selectedPage = $(this).val(); 
+        if (selectedPage === "disabled" || !selectedPage) {
+            console.log("Pagination Click Ignored: Disabled or Missing Page");
+            return;
+        }   
+        $("#loader").fadeIn();        
+        
+        const form = $(".jsfound_left_filters").serialize() + `&page=${selectedPage}`;    
+        $.ajax({
+            url: "/employer/emp-browse-jobseeker",
+            type: "GET",
+            dataType: "json",
+            data: form,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function (res) {
+                $("#loader").fadeOut();
+                
+                loadJobseeker(res.html, res.page, res.count, res.total_count, res.perPage);
+    
+                $('#pageDropdownem').selectpicker();
+               // $("#pageDropdown").val(selectedPage); 
+            },
+            error: function () {
+                $("#loader").fadeOut();
+                $("#jobResults").html("<li>No Jobs Found</li>");
+            },
+        });
+    });
+
+
+    $("#add_template").click(function (event) {
+        event.preventDefault();    
+        
+    $("#template_name_error").hide();
+    $("#email_subject_error").hide(); 
+    $("#email_content_error").hide();
+    var template_name = $("#template_name").val();
+    var email_subject = $("#email_subject").val();
+    var email_content = $("#email_content").val();
+    if (template_name === "") {
+        $("#template_name_error").show();
+        $("#template_name")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    } 
+    if (email_subject === "") {
+        $("#email_subject_error").show();
+        $("#email_subject")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    } 
+    if (email_content === "") {
+        $("#email_content_error").show();
+        $("#email_content")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    }
+    var form = $("#addtemplate").serialize();
+    $("#loader").fadeIn();
+    $.ajax({
+        url: baseUrl + "/employer/emp-email-template",
+        type: "POST",
+        data: form,
+        dataType: "json",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+        },
+        success: function (response) {
+            $("#loader").fadeOut();
+
+            if (response.code == 200) {
+                $("#addtemplate")[0].reset();
+                swal({
+                    title: response.message,
+                    text: "",
+                    icon: "success",
+                }).then(function () {
+                    window.location.href = baseUrl + "/employer/email-view";
+                });
+            } else {
+                swal({
+                    title: response.message,
+                    text: "Please Try Again",
+                    icon: "error",
+                });
+            }
+        },
+        // error: function (xhr) {
+        //     // Handle the error response
+        //     console.log(xhr.responseText);
+        //     alert("An error occurred while inserting data.");
+        // },
+    });
     });
     
     $("#postemail").click(function (event) {
@@ -1007,6 +1126,59 @@ $(document).ready(function () {
             // },
         });
     });
+    $(".viewaction").click(function (event) {
+        event.preventDefault();
+        var emp_id = $(this).data("emp_id");
+        var js_id = $(this).data("js_id");
+        if (emp_id != "" && (js_id !== null)) {
+            $.ajax({
+                url: baseUrl + "/employer/js-details-view",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    emp_id: emp_id,
+                    js_id: js_id,
+                },
+                headers: {
+                    "X-CSRF-TOKEN": csrfToken,
+                },
+                context: $(".action"),
+                success: function (res) {
+                    $("#loader").fadeOut();
+                    //console.log(action_txt);
+                    if (res.code === 200) {
+                        
+                        swal({
+                            title: res.message,
+                            text: "",
+                            icon: "success",
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        swal({
+                            title: res.message,
+                            text: "Please Try Again",
+                            icon: "error",
+                        });
+                    }
+                }.bind(this),
+                error: function (xhr, status, error) {
+                    // Handle errors
+                    console.error(error);
+                    $("#result").html("An error occurred.");
+                },
+            });
+        } else {
+            swal({
+                title: "Something Went Wrong",
+                text: "Please Try Again",
+                icon: "error",
+            });
+        }
+
+    });
+
 
 });
 

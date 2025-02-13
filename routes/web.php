@@ -41,7 +41,8 @@ Route::view('grievance-form', 'grievance-form')->name('grievance-form');
 Route::view('security-center', 'security-center')->name('security-center');
 Route::view('employer-plans', 'employer-plans')->name('employer-plans');
 Route::view('jobseeker-plans', 'jobseeker-plans')->name('jobseeker-plans');
-Route::view('employer-home', 'index-employer')->name('employer-home');
+// Route::view('employer-home', 'index-employer')->name('employer-home');
+Route::get('employer-home', [employerProfile::class, 'indexemployer'])->name('employer-home');
 Route::view('reset-password-1', 'reset-password-1')->name('reset-password-1');
 Route::view('reset-password-2', 'reset-password-2')->name('reset-password-2');
 Route::view('verified-mail', 'verified-mail')->name('verified-mail');
@@ -127,13 +128,13 @@ Route::group(['prefix' => 'employer', 'middleware' => 'EmpAuth'], function () {
     
     Route::view('add-email-template', 'employer/add-email-template')->name('add-email-template');
     Route::post('emp-email-template',[AdminCommon::class, 'addEmailTemplate'])->name('emp-add-template');
-    Route::get('email-view', [AdminCommon::class, 'getEmailTemplate'])->name('manage-mails');
+    Route::get('email-view', [AdminCommon::class, 'getEmailTemplate'])->name('emp-manage-mails');
     Route::get('email-edit-view/{temp_id}', [AdminCommon::class, 'editTemplate'])->name('empedit-template');
     Route::post('update-email-template', [AdminCommon::class, 'updateEmailTemplate'])->name('update-template');  
     Route::get('send-bulk-mail', [employerProfile::class, 'sendmail'])->name('sendmail');
     Route::post('emptemplate-content',[AdminCommon::class, 'templateContent']);
     Route::post('sending-mails',[employerProfile::class, 'bulkmail'])->name('bulkmail');
-
+    Route::post('js-details-view',[employerProfile::class, 'detailsview'])->name('detailsview');
  
 });
 Route::post('payment', [commonController::class,'payment'])->name('payment');

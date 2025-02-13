@@ -48,7 +48,7 @@
 
 				{{-- Jobs Card Display section --}}
 				{{-- @include('browse-all-jobs.jobs-display-section', ['pages'=>$page]) --}}
-				@include('browse-all-jobs.jobs-display-section',[$paginate])
+				@include('browse-all-jobs.jobs-display-section')
 				{{-- Jobs Card Display section end --}}
 			</div>
 		</div>

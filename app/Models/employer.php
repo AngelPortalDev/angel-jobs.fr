@@ -30,6 +30,7 @@ class employer extends Model
         'last_payment_recieved_id',
         'last_payment_recieved',
         'last_payment_recieved_on',
+        'cv_access_limit',
         'industry',
         'address',
         'country',

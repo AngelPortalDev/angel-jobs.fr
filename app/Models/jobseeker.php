@@ -28,6 +28,7 @@ class jobseeker extends Model
 
         $username =  Session::has('js_username') ? Session::get('js_username') : $job_id;
         $select = [
+            'id',
             'fullname',
             'email',
             'mob_code',
@@ -118,7 +119,7 @@ class jobseeker extends Model
         
         return $jobseekerData;
     }
-    public function searchJobseeker($curr_date, $req, $filters = '')
+    public function searchJobseeker($curr_date, $req, $filters = '',$page, $perPage)
     {
 
         $select = [
@@ -292,9 +293,14 @@ class jobseeker extends Model
         if (isset($filters['sal_fil']) && $filters['sal_fil'] != 0) {
             $query->whereIn('expected_salary', $filters['sal_fil']);
         }
+        $total=$query->count();
+        $offset = ($page - 1) * $perPage;
 
+        return [
+            'query' => $query->offset($offset)->limit($perPage)->get(),
+            'total'=> $total ];
     
-        return  $query;
+        // return  $query;
     }
 
     function getJobSkills($js_username) {

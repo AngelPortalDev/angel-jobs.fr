@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\{employer as Employer, job_posting as JobPosting, jobseeker as Jobseeker, employer_payment as EmpPayments};
 use Illuminate\Support\Facades\{Session, DB, Validator, View, Storage, Crypt};
 use Carbon\Carbon;
-
+use App\Jobs\SendEmailJob;
 
 
 class employerProfile extends Controller
@@ -135,10 +135,27 @@ class employerProfile extends Controller
         
         if (session()->has('emp_username')) {
             $username = Session::get('emp_username');
+            // $query = DB::table('job_application_history')
+            // ->select('job_application_history.js_id', 'job_application_history.job_id', 'job_application_history.applied_on', 'job_posting_view.job_title',  'jobseeker_view.profile_img', 'jobseeker_view.fullname', 'jobseeker_view.notice_name', 'job_application_history.is_shortlisted')
+            // ->leftJoin('job_posting_view', 'job_application_history.job_id', '=', 'job_posting_view.id')
+            // ->leftJoin('jobseeker_view', 'jobseeker_view.js_id', '=', 'job_application_history.js_id')
             $query = DB::table('job_application_history')
-            ->select('job_application_history.js_id', 'job_application_history.job_id', 'job_application_history.applied_on', 'job_posting_view.job_title',  'jobseeker_view.profile_img', 'jobseeker_view.fullname', 'jobseeker_view.notice_name', 'job_application_history.is_shortlisted')
-            ->leftJoin('job_posting_view', 'job_application_history.job_id', '=', 'job_posting_view.id')
-            ->leftJoin('jobseeker_view', 'jobseeker_view.js_id', '=', 'job_application_history.js_id')
+                ->select('job_application_history.js_id', 'job_application_history.job_id', 'job_application_history.applied_on', 'job_posting_view.job_title',  'jobseeker_view.profile_img', 'jobseeker_view.fullname', 'jobseeker_view.notice_name', 'job_application_history.is_shortlisted','jobseeker_payments.id as payment_id','jobseeker_payments.payment_amount',
+                    'jobseeker_payments.status','jobseeker_payments.created_at as payment_date')
+                ->leftJoin('job_posting_view', 'job_application_history.job_id', '=', 'job_posting_view.id')
+                ->leftJoin('jobseeker_view', 'jobseeker_view.js_id', '=', 'job_application_history.js_id')
+                ->leftJoin('jobseeker_payments', function ($join) {
+                    $join->on('jobseeker_view.js_id', '=', 'jobseeker_payments.js_id')
+                        ->where('jobseeker_payments.status', '=', 3) 
+                        ->where('jobseeker_payments.id', '=', function ($subQuery) {
+                            $subQuery->from('jobseeker_payments')
+                                ->select('id')
+                                ->whereColumn('jobseeker_view.js_id', 'jobseeker_payments.js_id')
+                                ->where('jobseeker_payments.status', '=', 3) 
+                                ->orderBy('jobseeker_payments.created_at', 'DESC')
+                                ->limit(1);
+                        });
+                })
             ->where('job_posting_view.email', $username)
             ->whereNotNull('job_application_history.applied_on')
             ->orderBy('job_application_history.applied_on', 'DESC');
@@ -162,14 +179,47 @@ class employerProfile extends Controller
             $emp_user_id = Session::get('emp_user_id');
             $username = Session::get('emp_username');
 
+            // $query = DB::table('job_application_history')
+            // ->select('job_application_history.id', 'job_application_history.js_id', 'job_application_history.job_id','job_application_history.update_at', 'jobseeker_view.fullname', 'jobseeker_view.profile_img','jobseeker_view.updated_at', 'jobseeker_view.prefered_location_name','jobseeker_view.experiance_name','jobseeker_view.expected_salary_name','job_application_history.is_shortlisted')
+            // ->leftJoin('job_posting_view', 'job_application_history.employer_id', '=', 'job_posting_view.id')
+            // ->join('jobseeker_view', 'jobseeker_view.js_id', '=', 'job_application_history.js_id')
+            // ->where('job_application_history.employer_id', $emp_user_id)
+            // ->where('job_application_history.is_shortlisted', 'Yes')
+            // ->orderBy('job_application_history.update_at', 'DESC');
             $query = DB::table('job_application_history')
-                ->select('job_application_history.id', 'job_application_history.js_id', 'job_application_history.job_id', 'jobseeker_view.fullname', 'jobseeker_view.profile_img','jobseeker_view.updated_at', 'jobseeker_view.prefered_location_name','jobseeker_view.experiance_name','jobseeker_view.expected_salary_name','job_application_history.is_shortlisted')
-                ->leftJoin('job_posting_view', 'job_application_history.employer_id', '=', 'job_posting_view.id')
-                ->join('jobseeker_view', 'jobseeker_view.js_id', '=', 'job_application_history.js_id')
-                ->where('job_application_history.employer_id', $emp_user_id)
-                ->where('job_application_history.is_shortlisted', 'Yes')
-                ->orderBy('id', 'ASC');
-            
+            ->select(
+                'job_application_history.id',
+                'job_application_history.js_id',
+                'job_application_history.job_id',
+                'job_application_history.update_at',
+                'jobseeker_view.fullname',
+                'jobseeker_view.profile_img',
+                'jobseeker_view.updated_at',
+                'jobseeker_view.prefered_location_name',
+                'jobseeker_view.experiance_name',
+                'jobseeker_view.expected_salary_name',
+                'job_application_history.is_shortlisted',
+                'jobseeker_payments.id as payment_id',
+                'jobseeker_payments.payment_amount',
+                'jobseeker_payments.status',
+                'jobseeker_payments.created_at as payment_date'
+            )
+            ->leftJoin('jobseeker_view', 'jobseeker_view.js_id', '=', 'job_application_history.js_id')
+            ->leftJoin('jobseeker_payments', function ($join) {
+                $join->on('jobseeker_view.js_id', '=', 'jobseeker_payments.js_id')
+                    ->where('jobseeker_payments.status', '=', 3)
+                    ->where('jobseeker_payments.id', '=', function ($subQuery) {
+                        $subQuery->from('jobseeker_payments')
+                            ->select('id')
+                            ->whereColumn('jobseeker_view.js_id', 'jobseeker_payments.js_id')
+                            ->where('jobseeker_payments.status', '=', 3)
+                            ->orderBy('jobseeker_payments.created_at', 'DESC')
+                            ->limit(1);
+                    });
+            })
+            ->where('job_application_history.employer_id', $emp_user_id)
+            ->where('job_application_history.is_shortlisted', 'Yes')
+            ->orderBy('job_application_history.update_at', 'DESC');
             
             $shortlisted = $query->get();
             
@@ -238,7 +288,9 @@ class employerProfile extends Controller
         // dd(session('selectedLocations'));
         $curr_date = $this->date;
         $data = [];
-
+        $page = $req->input('page', 1);
+       
+        $perPage = 5;
         if (
             isset($req->left_jtype_fil) ||
             isset($req->left_edu_fil) || isset($req->notice_type_fil) || isset($req->left_exp_fil) || isset($req->left_sal_fil)
@@ -253,9 +305,9 @@ class employerProfile extends Controller
             $filter['sal_fil'] = isset($req->left_sal_fil) ? $req->input('left_sal_fil') : 0;
             $filter['date_sort'] = isset($req->date_sort) ? Carbon::now()->subDays($req->date_sort)->format('Y-m-d') : $filter['start_date'];
 
-            $query = $this->Jobseeker->searchJobseeker($curr_date, '', $filter);
+            $query = $this->Jobseeker->searchJobseeker($curr_date, '', $filter, $page, $perPage);
         } else {
-            $query = $this->Jobseeker->searchJobseeker($curr_date, $req, '');
+            $query = $this->Jobseeker->searchJobseeker($curr_date, $req, '', $page, $perPage);
         }
 
         // $data['perPage'] = 2; // Number of items per page
@@ -269,13 +321,16 @@ class employerProfile extends Controller
         // // } else {
         // //     $data['paginate'] = $query->paginate(1000);
         // // }
-        $perPage = 5;
-        $data['total_count'] = $query->count();
-        $data['paginate'] = $query->paginate($perPage);
-        $data['list'] = $data['paginate']->items();
-        $data['page'] = $data['paginate']->currentPage();
-        $data['last_page'] = $data['paginate']->lastPage();
-
+        // $perPage = 5;
+        // $data['total_count'] = $query->count();
+        // $data['paginate'] = $query->paginate($perPage);
+        // $data['list'] = $data['paginate']->items();
+        // $data['page'] = $data['paginate']->currentPage();
+        // $data['last_page'] = $data['paginate']->lastPage();
+        $data['total_count'] = $query['total'];
+        $data['list'] = $query['query'];
+        $data['page'] = $page;
+        $data['perPage'] = $perPage;
         // return $data['list'];
 
         $data['count'] = $data['total_count'] ?? 0;
@@ -283,6 +338,126 @@ class employerProfile extends Controller
         $data['html'] = '';
         $saved = '';
 
+        // if (count($data['list']) > 0) {
+        //     $select = ['id', 'email_verified'];
+        //     $where = ['id' => session('emp_user_id')];
+        //     $table = 'employers';
+        //     $emailVerfiy = getData($table, $select, $where);
+        //     foreach ($data['list'] as $lists) {
+
+        //         $where = ['js_id' => $lists->js_id, 'employer_id' => session('emp_user_id'), 'is_shortlisted' => 'Yes'];
+        //         $id = base64_encode($lists->js_id);
+
+
+        //         // if (session()->has('js_username')) {
+        //         $saved = '';
+        //         $action = '';
+        //         if($emailVerfiy[0]->email_verified === 'Yes'){
+        //         if (is_exist('job_application_history', $where) != 0) {
+        //             $action = base64_encode('No');
+        //             $saved =  "<label class='like-btn shortlist' data-is_toggle='No' data-short_action=" . $action . "
+        //                                 data-js_id='$id' data-job_id='' title='Not Shortlist' data-bs-toggle='tooltip' data-placement='right'>
+        //                                 <i class='fa fa-bookmark' style='color: #11a1f5;'></i>
+        //                             </label>";
+        //         } else {
+        //             $action = base64_encode('Yes');
+        //             $saved = "<label class='like-btn shortlist' data-is_toggle='Yes'
+        //                                 data-short_action=" . $action . " data-js_id='$id' data-job_id='' title='Shortlist' data-bs-toggle='tooltip' data-placement='right'>
+        //                                 <i class='far fa-bookmark' style='color: #11a1f5;'></i>
+        //                                 </label> 
+        //                                 ";
+        //         }
+        //     }else{
+        //         $saved = "<label class='like-btn not_verify' data-username=". session('emp_user_id') ."><input type='checkbox'>
+        //         <i class='far fa-bookmark' aria-hidden='true'></i>
+        //     </label>";
+        //         }
+        //         // } else {
+
+        //         //     $saved = "<label class='like-btn jslogincheck'><input type='checkbox'>
+        //         //                   <i class='far fa-bookmark' aria-hidden='true'></i>
+        //         //                 </label>";
+        //         // }
+
+
+        //         // $img = "<img alt='' src='" . Storage::url('images/user_profile.png') . "'>";
+        //         if (!empty($lists->profile_img) && $lists->profile_img !== '') {
+                    
+        //             $imagePath = Storage::path("storage/jobseeker/profile_image/{$lists->profile_img}");
+                  
+        //             if (file_exists($imagePath)) {
+        //                 // If the image exists, display it
+        //                 $img = "<img alt='' src='" . Storage::url("jobseeker/profile_image/{$lists->profile_img}") . "'>";
+        //             } else {
+        //                 // If the image doesn't exist, show default image
+        //                 $img = "<img alt='' src='" . asset('images/user_profile.png') . "'>";
+        //             }
+        //         } else {
+        //             // If no image is available or it is 'Null', show default image
+        //             $img = "<img alt='' src='" . asset('images/user_profile.png') . "'>";
+        //         }
+                
+                
+        //         // $sal = '';
+        //         // if (!empty($lists->salary_hide === 'No')) {
+        //         //     $sal = "<div class='salary-bx'><span>" . $lists->job_salary_to_name . "</span></div>";
+        //         // }
+
+        //         $duration = duration($lists->updated_at);
+
+        //         $data['html'] .= "<li>
+		// 							<div class='post-bx'>
+		// 								<div class='d-flex mb-4'>
+		// 									<div class='job-post-company'>
+		// 										<a href='javascript:void(0);'><span>
+		// 											" . $img . "
+		// 										</span></a>
+		// 									</div>
+		// 									<div class='job-post-info'>
+		// 										<h4>
+        //             <a href='" . route('emp-js-view', $id) . "' class='js-name'>" . $lists->fullname . "</a>";
+
+        //                             if (!empty($lists->status) && $lists->status == 3) {
+        //                                 $data['html'] .= "<img src='" . asset('images/premium_badge_new.svg') . "' alt='Premium Member' class='premium-badge' style='width:25px; height:25px; margin-left: 5px;'>";
+        //                             }
+        //                             $data['html'] .= "</h4>
+		// 										<p class='m-b5 font-13'>
+		// 											<a href='javascript:void(0);' class='text-primary text-decoration-none' style='cursor: auto;'>" . $lists->role_name . " </a>
+													
+		// 										</p>
+		// 										<ul>
+		// 											<li><i class='fas fa-map-marker-alt'></i> " . (!empty($lists->prefered_location_name) ? $lists->prefered_location_name : 'Not Disclosed') . "</li>
+		// 											<li><i class='fa-solid fa-business-time'></i> " . (!empty($lists->experiance_name) ? $lists->experiance_name : 'Not Disclosed')  . "</li>
+		// 											<li><i class='fas fa-euro-sign'></i> " .(!empty($lists->expected_salary_name) ? $lists->expected_salary_name : 'Not Disclosed')  . "</li>
+		// 											 <li><i class='far fa-clock'></i> Active " .  $duration . " ago</li> 
+		// 										</ul>
+		// 									</div>
+		// 								</div>
+		// 								<div class='d-flex'>
+		// 									<div class='job-time me-auto'>
+		// 										<a href='javascript:void(0);'><span>" . $lists->pref_job_type_name . "</span></a>
+		// 										<a href='javascript:void(0);'><span>" . $lists->notice_name . "</span></a>
+		// 									</div>
+
+		// 								</div>
+		// 								" . $saved . "
+		// 							</div>
+		// 						</li>";
+        //     }
+        // } else {
+        //     $data['html'] .= "<li>
+		// 	<div class='post-bx'>
+		// 		<div class='d-flex m-b30'>
+		// 			<div class='job-post-info'>
+		// 				<ul>
+		// 					<li><h4>No Jobseeker Found</h4></li>
+		// 				</ul>
+		// 			</div>
+		// 		</div>
+		// 	</div>
+		// </li>";
+        // }
+      
         if (count($data['list']) > 0) {
             $select = ['id', 'email_verified'];
             $where = ['id' => session('emp_user_id')];
@@ -301,13 +476,13 @@ class employerProfile extends Controller
                 if (is_exist('job_application_history', $where) != 0) {
                     $action = base64_encode('No');
                     $saved =  "<label class='like-btn shortlist' data-is_toggle='No' data-short_action=" . $action . "
-                                        data-js_id='$id' data-job_id='' title='Not Shortlist' data-bs-toggle='tooltip' data-placement='right'>
+                                        data-js_id='$id' data-job_id='' title='Reject candidate' data-bs-toggle='tooltip' data-placement='right'>
                                         <i class='fa fa-bookmark' style='color: #11a1f5;'></i>
                                     </label>";
                 } else {
                     $action = base64_encode('Yes');
                     $saved = "<label class='like-btn shortlist' data-is_toggle='Yes'
-                                        data-short_action=" . $action . " data-js_id='$id' data-job_id='' title='Shortlist' data-bs-toggle='tooltip' data-placement='right'>
+                                        data-short_action=" . $action . " data-js_id='$id' data-job_id='' title='Shortlist candidate' data-bs-toggle='tooltip' data-placement='right'>
                                         <i class='far fa-bookmark' style='color: #11a1f5;'></i>
                                         </label> 
                                         ";
@@ -404,8 +579,9 @@ class employerProfile extends Controller
         }
 
         if ($req->ajax()) {
-            return $data;
-            //return response()->json($data); 
+            //return $data;
+           return response()->json($data); 
+   //return response()->json($data); 
 
         } else {
             // dd('No ajax');
@@ -444,7 +620,8 @@ class employerProfile extends Controller
             $emails_subject = isset($req->email_subject) ? htmlspecialchars($req->input('email_subject')) : '';
             $email_content = isset($req->email_content) ? htmlspecialchars_decode($req->input('email_content')) : '';
             $ids = explode(',', $selected_emails);
-           
+            $emailFrom = session::get('emp_name');
+            $emailFromAddress = session::get('emp_username');
             $employer_data = getEmails('jobseeker_view', ['js_id', 'fullname', 'email'], ['js_id', 'IN', $ids]);
            
             if (isset($employer_data) && !empty($employer_data)) {
@@ -452,7 +629,7 @@ class employerProfile extends Controller
                    
                     $personalized_content = str_replace('#Name#', $employer->fullname, $email_content);
         
-                    SendEmailJob::dispatch($emails_subject, $personalized_content, $employer->fullname, $employer->email);
+                    SendEmailJob::dispatch($emails_subject, $personalized_content, $employer->fullname, $employer->email,$emailFrom, $emailFromAddress);
                 }
         
                 return response()->json(['code' => 200, 'message' => 'Emails are being sent.']);
@@ -468,5 +645,81 @@ class employerProfile extends Controller
 
     }
 
+    public function detailsview(Request $req)
+    {
 
+        if ($req->isMethod('POST') && $req->ajax() && session()->has('emp_username')) {
+
+            $emp_id = isset($req->emp_id) ? base64_decode($req->input('emp_id')) : '';
+            $js_id = isset($req->js_id) ? base64_decode($req->input('js_id')) : '';
+            $table = 'jobseeker_view';
+            $where = ['id' => $js_id];
+            $exists = is_exist($table, $where);
+
+            if ($exists === 1) {
+                try {
+                    $data = ['employer_id'    => $emp_id, 'jobseeker_id'   => $js_id, 'last_viewed_on' => $this->time];
+                    $where = ['employer_id'  => $emp_id, 'jobseeker_id' => $js_id];
+                    $select_arr = ['free_assign_job_posting', 'left_credit_job_posting_plan', 'plan_id', 'plan_start_from', 'plan_expired_on', 'cv_access_limit'];
+                    $plan_detail = getData('employers', $select_arr, ['id' => $emp_id]);
+                    if (!empty($plan_detail) && isset($plan_detail[0]->plan_expired_on, $plan_detail[0]->cv_access_limit)) {
+                        if ($plan_detail[0]->plan_expired_on >= $this->date && $plan_detail[0]->cv_access_limit > 0) {
+                            $upload = jobseekerAction('employer_viewed_js_contact', $data, $where);            
+                            if (isset($upload) && $upload == true) {
+                                $updated = employer::where('id', $emp_id)
+                                    ->update(['cv_access_limit' => $plan_detail[0]->cv_access_limit - 1]);            
+                                if ($updated) {
+                                    echo json_encode(['code' => 200, 'message' => 'Now you can view jobseeker details', 'icon' => 'success']);
+                                } else {
+                                    echo json_encode(['code' => 201, 'message' => 'Error updating CV access limit', 'icon' => 'error']);
+                                }
+                            } else {
+                                echo json_encode(['code' => 201, 'message' => 'Unable to View jobseeker details' ,'icon' => 'error']);
+                            }
+                        } else {
+                            echo json_encode(['code' => 201, 'message' => 'Detail Access limit reached', 'icon' => 'error']);
+                        }
+                    } else {
+                        echo json_encode(['code' => 201, 'message' => 'Invalid employer plan details', 'icon' => 'error']);
+                    }
+            
+                } catch (\Exception $e) {                    
+                    echo json_encode(['code'    => 201, 'message' =>'Something went worng', 'icon'    => 'error']);
+                }
+            } else {
+                echo json_encode(['code'    => 201, 'message' => 'Jobseeker Not Exist', 'icon'    => 'error']);
+            }
+        }
+    }
+
+    public function indexemployer()
+    {
+        $sortedJsData =DB::table('jobseeker_view as jv')
+        ->leftJoin(
+            DB::raw('(SELECT js_id, status, created_at FROM jobseeker_payments WHERE status = 3 AND created_at IN (SELECT MAX(created_at) FROM jobseeker_payments WHERE status = 3 GROUP BY js_id)) as jp'), 
+            'jv.js_id', '=', 'jp.js_id'
+        ) // Left join with the latest payment (status = 3) for each jobseeker
+        ->select(
+            'jv.js_id', 'jv.is_delete', 'jv.experiance_name', 'jv.skill', 'jv.email_verified',
+            'jv.fullname', 'jv.role_name', 'jv.company_name', 'jv.prefered_location_name',
+            'jv.expected_salary_name', 'jv.pref_job_type_name', 'jv.notice_name', 'jv.plan_expired_on', 'jv.updated_at',
+            'jp.status' // Add status from the jobseeker_payments table
+        )
+        ->where([['jv.email_verified', '=', 'Yes'], ['jv.is_delete', '=', 'No']])
+        ->whereNotNull('jv.skill')
+        ->whereNotNull('jv.prefered_job_type')
+        ->whereNotNull('jv.qul_id')
+        ->whereNotNull('jv.notice_period')
+        ->whereNotNull('jv.prefered_location')
+        ->whereNotNull('jv.total_exp_year')
+        ->orderByRaw("CASE WHEN jv.plan_expired_on >= CURDATE() THEN 0 ELSE 1 END")
+        ->orderBy('jv.updated_at', 'desc')
+        ->orderBy('jv.js_id', 'asc') 
+        ->distinct('jv.js_id')
+        ->limit(6)
+        ->get();
+    
+                   
+         return view('index-employer', compact('sortedJsData'));
+    }
 }

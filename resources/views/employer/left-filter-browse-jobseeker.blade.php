@@ -75,7 +75,7 @@
 												</div>
 											</div>
 											<div id="main_edu_list">
-												@foreach (getDropDownlist('qualifications', ['id', 'educational_qualification'], 5) as $index => $data)
+												@foreach (getDropDownlist('qualifications', ['id', 'educational_qualification']) as $index => $data)
 													<div class="form-check edu-item" style="{{ $index >= 5 ? 'display: none;' : '' }}">
 														<input class="form-check-input edu_fil" name="left_edu_fil[]" id="education{{$data->id}}" type="checkbox" value="{{$data->id}}">
 														<label class="form-check-label" for="education{{$data->id}}">{{$data->educational_qualification}}</label>

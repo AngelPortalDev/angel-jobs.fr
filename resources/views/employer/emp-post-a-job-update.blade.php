@@ -257,7 +257,7 @@
 										<div class="form-group">
 											<label>Salary Range (Monthly)</label>
 											<select class="slec" id="job_sal"  name="job_sal">
-												@if (isset($jobDatas->job_salary_to_name))
+												{{-- @if (isset($jobDatas->job_salary_to_name))
 														<option value="{{ $jobDatas->job_salary_to}}" selected>{{ $jobDatas->job_salary_to_name}}</option>
 													@else
 														<option value="" disabled selected>Select Salary Range</option>
@@ -265,7 +265,13 @@
 												 @foreach (getDropDownlist('salary_ranges', ['id', 'salary_range']) as $salary_range)
 												<option value="{{ $salary_range->id}}">{{ $salary_range->salary_range}}
 												</option>
-												@endforeach 
+												@endforeach  --}}
+												@foreach (getDropDownlist('salary_ranges', ['salary_range', 'id']) as $salary_range)
+													<option value="{{ $salary_range->id }}" 
+														{{ $jobDatas->job_salary_to == $salary_range->id ? 'selected' : '' }}>
+														{{ $salary_range->salary_range }}
+													</option>
+												@endforeach
 											</select>
 											<div class="show-hide-check-emp sal_disply">
 												@php

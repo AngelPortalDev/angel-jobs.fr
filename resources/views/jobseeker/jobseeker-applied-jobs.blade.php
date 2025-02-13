@@ -52,7 +52,11 @@
 								<li>
 									<div class="post-bx">
 										<div class="job-post-info m-a0">
-											<h4><a href='{{ url('job-details-view', $id)}}' target="_blank">{!! htmlspecialchars_decode($data->job_title) !!}</a></h4>
+											@if($data->is_deleted == 'Yes')
+												<h4>{!! htmlspecialchars_decode($data->job_title) !!}  <span style="color: red; font-size: 14px; margin-left: 10px;">(Job No Longer Available)</span></h4>
+											@else
+												<h4><a href='{{ url('job-details-view', $id)}}' target="_blank">{!! htmlspecialchars_decode($data->job_title) !!}</a></h4>
+											@endif
 											<ul>
 												<li>{{htmlspecialchars_decode($data->company_name)}}</li>
 												<li><i class="fas fa-map-marker-alt"></i> {{htmlspecialchars_decode($data->location_hiring_name)}}</li>

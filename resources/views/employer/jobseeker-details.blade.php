@@ -85,9 +85,93 @@
                                 </a>
 
                             </div>
+                            @php
+                                $table = 'employer_viewed_js_contact';
+                                $where = ['employer_id' => Session::get('emp_user_id'), 'jobseeker_id' => $data[0]->id];
+                                $exists = is_exist($table, $where);
+                            
+                            @endphp
                             {{-- resume_link --}}
-                            @if ($plan_details[0]->plan_id != 1 && $plan_details[0]->plan_expired_on >= date('Y-m-d'))
-                                @foreach ($data as $header)
+                        {{-- @if ($plan_details[0]->plan_id != 1 && $plan_details[0]->plan_expired_on >= date('Y-m-d'))
+                                    @foreach ($data as $header)
+                                        <div class="text-white browse-job text-left">
+                                            <h4 class="m-b0">{{ isset($header->fullname) ? $header->fullname : '' }}
+                                            </h4>
+                                            <p class="m-b15">{{ isset($header->role_name) ? $header->role_name : '' }}</p>
+                                            <ul class="clearfix">
+                                                <li><i class="ti-location-pin"></i>
+                                                    {{ isset($header->city) ? $header->city : '' }},
+                                                    {{ isset($header->country_name) ? $header->country_name : '' }}</li>
+                                                <a href="tel:{{ $header->mob_code . $header->mobile }}"
+                                                    style="text-decoration: none;color:white;">
+                                                    <li><i class="ti-mobile"></i>
+                                                        {{ isset($header->mob_code) ? $header->mob_code : '' }}
+                                                        {{ isset($header->mobile) ? $header->mobile : '' }}</li>
+                                                </a>
+                                                <li><i class="ti-briefcase"></i>
+                                                    {{ isset($header->experiance_name) ? $header->experiance_name : '' }}</li>
+                                                <a href="mailto:{{ $header->email }}"
+                                                    style="text-decoration: none;color:white;">
+                                                    <li><i class="ti-email"></i>
+                                                        {{ isset($header->email) ? $header->email : '' }}</li>
+                                                </a>
+
+                                            </ul>
+                                            <div class="m-t20">
+                                                <ul class="dez-social-icon dez-social-icon-lg"
+                                                    style="list-style: none; padding: 0; margin: 0;">
+
+
+                                                    @if (isset($header->resume_link) && !empty($header->resume_link))
+                                                        <a href="{{ Storage::url('jobseeker/resume/' . $header->resume_link) }}"
+                                                            download="{{ $header->fullname }}_Resume"><button type="button"
+                                                                class="btn btn-primary btn-sm rounded-pill"
+                                                                style="padding: 7px 15px;">Download Resume</button></a>
+                                                    @endif
+                                                    @if (isset($header->facebook_link) && !empty($header->facebook_link))
+                                                        <div style="display: inline-block; margin-right: 10px;">
+                                                            <a target="_blank" href="{{ $header->facebook_link }}"
+                                                                style="text-decoration: none;color:white;"
+                                                                class="student_profile_icons_fb"><i
+                                                                    class="fab fa-facebook-f "></i></a>
+                                                        </div>
+                                                    @endif
+
+
+                                                    @if (isset($header->insta_link) && !empty($header->insta_link))
+                                                        <div style="display: inline-block; margin-right: 10px;">
+                                                            <a target="_blank" href="{{ $header->insta_link }}"
+                                                                style="text-decoration: none;color:white;"
+                                                                class=".student_profile_icons_insta"><i
+                                                                    class="fab fa-instagram"></i></a>
+                                                        </div>
+                                                    @endif
+
+                                                    @if (isset($header->linkedin) && !empty($header->linkedin))
+                                                        <div style="display: inline-block; margin-right: 10px;">
+                                                            <a target="_blank" href="{{ $header->linkedin }}"
+                                                                style="text-decoration: none;color:white;"
+                                                                class="student_profile_icons_linkdin"><i
+                                                                    class="fab fa-linkedin-in "></i></a>
+                                                        </div>
+                                                    @endif
+
+                                                    @if (isset($header->twitter_link) && !empty($header->twitter_link))
+                                                        <div style="display: inline-block; margin-right: 10px;">
+                                                            <a target="_blank" href="{{ $header->twitter_link }}"
+                                                                style="text-decoration: none;color:white;"
+                                                                class="student_profile_icons_twitter"><i
+                                                                    class="fab fa-twitter"></i></a>
+                                                        </div>
+                                                    @endif
+                                                
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                             @else
+
+                                    @foreach ($data as $header)
                                     <div class="text-white browse-job text-left">
                                         <h4 class="m-b0">{{ isset($header->fullname) ? $header->fullname : '' }}
                                         </h4>
@@ -96,18 +180,16 @@
                                             <li><i class="ti-location-pin"></i>
                                                 {{ isset($header->city) ? $header->city : '' }},
                                                 {{ isset($header->country_name) ? $header->country_name : '' }}</li>
-                                            <a href="tel:{{ $header->mob_code . $header->mobile }}"
-                                                style="text-decoration: none;color:white;">
+                                            <a style="text-decoration: none;color:white;">
                                                 <li><i class="ti-mobile"></i>
                                                     {{ isset($header->mob_code) ? $header->mob_code : '' }}
-                                                    {{ isset($header->mobile) ? $header->mobile : '' }}</li>
+                                                    XXXXXX</li>
                                             </a>
                                             <li><i class="ti-briefcase"></i>
                                                 {{ isset($header->experiance_name) ? $header->experiance_name : '' }}</li>
-                                            <a href="mailto:{{ $header->email }}"
-                                                style="text-decoration: none;color:white;">
+                                            <a style="text-decoration: none;color:white;">
                                                 <li><i class="ti-email"></i>
-                                                    {{ isset($header->email) ? $header->email : '' }}</li>
+                                                    XXXXXXX.com</li>
                                             </a>
 
                                         </ul>
@@ -116,16 +198,10 @@
                                                 style="list-style: none; padding: 0; margin: 0;">
 
 
-                                                @if (isset($header->resume_link) && !empty($header->resume_link))
-                                                    <a href="{{ Storage::url('jobseeker/resume/' . $header->resume_link) }}"
-                                                        download="{{ $header->fullname }}_Resume"><button type="button"
-                                                            class="btn btn-primary btn-sm rounded-pill"
-                                                            style="padding: 7px 15px;">Download Resume</button></a>
-                                                @endif
+                                                
                                                 @if (isset($header->facebook_link) && !empty($header->facebook_link))
                                                     <div style="display: inline-block; margin-right: 10px;">
-                                                        <a target="_blank" href="{{ $header->facebook_link }}"
-                                                            style="text-decoration: none;color:white;"
+                                                        <a style="text-decoration: none;color:white;"
                                                             class="student_profile_icons_fb"><i
                                                                 class="fab fa-facebook-f "></i></a>
                                                     </div>
@@ -134,8 +210,7 @@
 
                                                 @if (isset($header->insta_link) && !empty($header->insta_link))
                                                     <div style="display: inline-block; margin-right: 10px;">
-                                                        <a target="_blank" href="{{ $header->insta_link }}"
-                                                            style="text-decoration: none;color:white;"
+                                                        <a style="text-decoration: none;color:white;"
                                                             class=".student_profile_icons_insta"><i
                                                                 class="fab fa-instagram"></i></a>
                                                     </div>
@@ -143,8 +218,7 @@
 
                                                 @if (isset($header->linkedin) && !empty($header->linkedin))
                                                     <div style="display: inline-block; margin-right: 10px;">
-                                                        <a target="_blank" href="{{ $header->linkedin }}"
-                                                            style="text-decoration: none;color:white;"
+                                                        <a style="text-decoration: none;color:white;"
                                                             class="student_profile_icons_linkdin"><i
                                                                 class="fab fa-linkedin-in "></i></a>
                                                     </div>
@@ -152,102 +226,188 @@
 
                                                 @if (isset($header->twitter_link) && !empty($header->twitter_link))
                                                     <div style="display: inline-block; margin-right: 10px;">
-                                                        <a target="_blank" href="{{ $header->twitter_link }}"
-                                                            style="text-decoration: none;color:white;"
+                                                        <a style="text-decoration: none;color:white;"
                                                             class="student_profile_icons_twitter"><i
                                                                 class="fab fa-twitter"></i></a>
                                                     </div>
                                                 @endif
-                                                {{-- <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
-											
-											<a class="a2a_button_whatsapp"></a> --}}
-                                                {{-- <a class="a2a_button_telegram"></a> --}}
-                                                {{-- <script async src="https://static.addtoany.com/menu/page.js"></script>
-											</div> --}}
+                                                
                                             </ul>
                                         </div>
-									</div>
-                                @endforeach
-                            @else
+                                    </div>
+                                    @endforeach
+                            @endif --}}
 
-							@foreach ($data as $header)
-							<div class="text-white browse-job text-left">
-								<h4 class="m-b0">{{ isset($header->fullname) ? $header->fullname : '' }}
-								</h4>
-								<p class="m-b15">{{ isset($header->role_name) ? $header->role_name : '' }}</p>
-								<ul class="clearfix">
-									<li><i class="ti-location-pin"></i>
-										{{ isset($header->city) ? $header->city : '' }},
-										{{ isset($header->country_name) ? $header->country_name : '' }}</li>
-									<a style="text-decoration: none;color:white;">
-										<li><i class="ti-mobile"></i>
-											{{ isset($header->mob_code) ? $header->mob_code : '' }}
-											XXXXXX</li>
-									</a>
-									<li><i class="ti-briefcase"></i>
-										{{ isset($header->experiance_name) ? $header->experiance_name : '' }}</li>
-									<a style="text-decoration: none;color:white;">
-										<li><i class="ti-email"></i>
-											XXXXXXX.com</li>
-									</a>
+                            @if(isset($exists) && $exists === 1)
+                            @foreach ($data as $header)
+                                <div class="text-white browse-job text-left">
+                                    <h4 class="m-b0">{{ isset($header->fullname) ? $header->fullname : '' }}
+                                    </h4>
+                                    <p class="m-b15">{{ isset($header->role_name) ? $header->role_name : '' }}</p>
+                                    <ul class="clearfix">
+                                        <li><i class="ti-location-pin"></i>
+                                            {{ isset($header->city) ? $header->city : '' }},
+                                            {{ isset($header->country_name) ? $header->country_name : '' }}</li>
+                                        <a href="tel:{{ $header->mob_code . $header->mobile }}"
+                                            style="text-decoration: none;color:white;">
+                                            <li><i class="ti-mobile"></i>
+                                                {{ isset($header->mob_code) ? $header->mob_code : '' }}
+                                                {{ isset($header->mobile) ? $header->mobile : '' }}</li>
+                                        </a>
+                                        <li><i class="ti-briefcase"></i>
+                                            {{ isset($header->experiance_name) ? $header->experiance_name : '' }}</li>
+                                        <a href="mailto:{{ $header->email }}"
+                                            style="text-decoration: none;color:white;">
+                                            <li><i class="ti-email"></i>
+                                                {{ isset($header->email) ? $header->email : '' }}</li>
+                                        </a>
 
-								</ul>
-								<div class="m-t20">
-									<ul class="dez-social-icon dez-social-icon-lg"
-										style="list-style: none; padding: 0; margin: 0;">
-
-
-										{{-- @if (isset($header->resume_link) && !empty($header->resume_link))
-											<a href="{{ Storage::url('jobseeker/resume/' . $header->resume_link) }}"
-												download="{{ $header->fullname }}_Resume"><button type="button"
-													class="btn btn-primary btn-sm rounded-pill"
-													style="padding: 7px 15px;">Download Resume</button></a>
-										@endif --}}
-										@if (isset($header->facebook_link) && !empty($header->facebook_link))
-											<div style="display: inline-block; margin-right: 10px;">
-												<a style="text-decoration: none;color:white;"
-													class="student_profile_icons_fb"><i
-														class="fab fa-facebook-f "></i></a>
-											</div>
-										@endif
+                                    </ul>
+                                    <div class="m-t20">
+                                        <ul class="dez-social-icon dez-social-icon-lg"
+                                            style="list-style: none; padding: 0; margin: 0;">
 
 
-										@if (isset($header->insta_link) && !empty($header->insta_link))
-											<div style="display: inline-block; margin-right: 10px;">
-												<a style="text-decoration: none;color:white;"
-													class=".student_profile_icons_insta"><i
-														class="fab fa-instagram"></i></a>
-											</div>
-										@endif
+                                            @if (isset($header->resume_link) && !empty($header->resume_link))
+                                                <a href="{{ Storage::url('jobseeker/resume/' . $header->resume_link) }}"
+                                                    download="{{ $header->fullname }}_Resume"><button type="button"
+                                                        class="btn btn-primary btn-sm rounded-pill"
+                                                        style="padding: 7px 15px;">Download Resume</button></a>
+                                            @endif
+                                            @if (isset($header->facebook_link) && !empty($header->facebook_link))
+                                                <div style="display: inline-block; margin-right: 10px;">
+                                                    <a target="_blank" href="{{ $header->facebook_link }}"
+                                                        style="text-decoration: none;color:white;"
+                                                        class="student_profile_icons_fb"><i
+                                                            class="fab fa-facebook-f "></i></a>
+                                                </div>
+                                            @endif
 
-										@if (isset($header->linkedin) && !empty($header->linkedin))
-											<div style="display: inline-block; margin-right: 10px;">
-												<a style="text-decoration: none;color:white;"
-													class="student_profile_icons_linkdin"><i
-														class="fab fa-linkedin-in "></i></a>
-											</div>
-										@endif
 
-										@if (isset($header->twitter_link) && !empty($header->twitter_link))
-											<div style="display: inline-block; margin-right: 10px;">
-												<a style="text-decoration: none;color:white;"
-													class="student_profile_icons_twitter"><i
-														class="fab fa-twitter"></i></a>
-											</div>
-										@endif
-										{{-- <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
-									
-									<a class="a2a_button_whatsapp"></a> --}}
-										{{-- <a class="a2a_button_telegram"></a> --}}
-										{{-- <script async src="https://static.addtoany.com/menu/page.js"></script>
-									</div> --}}
-									</ul>
-								</div>
-							</div>
-						@endforeach
-                            @endif
+                                            @if (isset($header->insta_link) && !empty($header->insta_link))
+                                                <div style="display: inline-block; margin-right: 10px;">
+                                                    <a target="_blank" href="{{ $header->insta_link }}"
+                                                        style="text-decoration: none;color:white;"
+                                                        class=".student_profile_icons_insta"><i
+                                                            class="fab fa-instagram"></i></a>
+                                                </div>
+                                            @endif
 
-                        
+                                            @if (isset($header->linkedin) && !empty($header->linkedin))
+                                                <div style="display: inline-block; margin-right: 10px;">
+                                                    <a target="_blank" href="{{ $header->linkedin }}"
+                                                        style="text-decoration: none;color:white;"
+                                                        class="student_profile_icons_linkdin"><i
+                                                            class="fab fa-linkedin-in "></i></a>
+                                                </div>
+                                            @endif
+
+                                            @if (isset($header->twitter_link) && !empty($header->twitter_link))
+                                                <div style="display: inline-block; margin-right: 10px;">
+                                                    <a target="_blank" href="{{ $header->twitter_link }}"
+                                                        style="text-decoration: none;color:white;"
+                                                        class="student_profile_icons_twitter"><i
+                                                            class="fab fa-x-twitter"></i></a>
+                                                </div>
+                                            @endif
+                                            {{-- <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
+                                
+                                <a class="a2a_button_whatsapp"></a> --}}
+                                            {{-- <a class="a2a_button_telegram"></a> --}}
+                                            {{-- <script async src="https://static.addtoany.com/menu/page.js"></script>
+                                </div> --}}
+                                        </ul>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            @foreach ($data as $header)
+                                <div class="text-white browse-job text-left">
+                                    <h4 class="m-b0">{{ isset($header->fullname) ? $header->fullname : '' }}
+                                    </h4>
+                                    <p class="m-b15">{{ isset($header->role_name) ? $header->role_name : '' }}</p>
+                                    <ul class="clearfix">
+                                        <li><i class="ti-location-pin"></i>
+                                            {{ isset($header->city) ? $header->city : '' }},
+                                            {{ isset($header->country_name) ? $header->country_name : '' }}</li>
+                                        <a style="text-decoration: none;color:white;">
+                                            <li><i class="ti-mobile"></i>
+                                                {{ isset($header->mob_code) ? $header->mob_code : '' }}
+                                                XXXXXX</li>
+                                        </a>
+                                        <li><i class="ti-briefcase"></i>
+                                            {{ isset($header->experiance_name) ? $header->experiance_name : '' }}</li>
+                                        <a style="text-decoration: none;color:white;">
+                                            <li><i class="ti-email"></i>
+                                                XXXXXXX.com</li>
+                                        </a>
+
+                                    </ul>
+                                    <div class="m-t20">
+
+
+                                        <ul class="dez-social-icon dez-social-icon-lg"
+                                            style="list-style: none; padding: 0; margin: 0;">
+                                            @if (is_exist('employers', ['id' => Session::get('emp_user_id'), 'email_verified' => 'Yes']) != 0)
+                                            <button type="button" data-job_action="View"
+                                                data-emp_id="{{ base64_encode(Session::get('emp_user_id')) }}"
+                                                data-js_id="{{ base64_encode($header->id) }}"
+                                                class="site-button viewaction" style="white-space:nowrap">View
+                                                Details</button>
+                                            @else
+                                            <button type="button"
+                                                class="site-button not_verify" data-username="{{Session::get('emp_user_id')}}" style="white-space:nowrap">View
+                                                Details</button>
+                                            @endif
+                                            {{-- @if (isset($header->resume_link) && !empty($header->resume_link))
+                                        <a href="{{ Storage::url('jobseeker/resume/' . $header->resume_link) }}"
+                                            download="{{ $header->fullname }}_Resume"><button type="button"
+                                                class="btn btn-primary btn-sm rounded-pill"
+                                                style="padding: 7px 15px;">Download Resume</button></a>
+                                    @endif --}}
+                                            {{-- @if (isset($header->facebook_link) && !empty($header->facebook_link))
+                                        <div style="display: inline-block; margin-right: 10px;">
+                                            <a style="text-decoration: none;color:white;"
+                                                class="student_profile_icons_fb"><i
+                                                    class="fab fa-facebook-f "></i></a>
+                                        </div>
+                                    @endif
+
+
+                                    @if (isset($header->insta_link) && !empty($header->insta_link))
+                                        <div style="display: inline-block; margin-right: 10px;">
+                                            <a style="text-decoration: none;color:white;"
+                                                class=".student_profile_icons_insta"><i
+                                                    class="fab fa-instagram"></i></a>
+                                        </div>
+                                    @endif
+
+                                    @if (isset($header->linkedin) && !empty($header->linkedin))
+                                        <div style="display: inline-block; margin-right: 10px;">
+                                            <a style="text-decoration: none;color:white;"
+                                                class="student_profile_icons_linkdin"><i
+                                                    class="fab fa-linkedin-in "></i></a>
+                                        </div>
+                                    @endif
+
+                                    @if (isset($header->twitter_link) && !empty($header->twitter_link))
+                                        <div style="display: inline-block; margin-right: 10px;">
+                                            <a style="text-decoration: none;color:white;"
+                                                class="student_profile_icons_twitter"><i
+                                                    class="fab fa-twitter"></i></a>
+                                        </div>
+                                    @endif --}}
+                                            {{-- <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
+                                
+                                <a class="a2a_button_whatsapp"></a> --}}
+                                            {{-- <a class="a2a_button_telegram"></a> --}}
+                                            {{-- <script async src="https://static.addtoany.com/menu/page.js"></script>
+                                </div> --}}
+                                        </ul>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
                     </div>
                 </div>
             </div>
@@ -349,7 +509,7 @@
                                           
                                            @endphp
                                            <div class="clearfix m-b20">
-                                            <label class="m-b0">Preferred Location</label>
+                                            <label class="m-b0">Preferred Work Mode</label>
                                             <span
                                                 class="clearfix font-13">{{ $workModeText }}</span>
                                             </div>

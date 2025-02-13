@@ -16,12 +16,14 @@ class SendActionMails implements ShouldQueue
     protected $subject;
     protected $content;
     protected $recipient;
+    protected $sendcc;
 
-    public function __construct($subject, $content, $recipient)
+    public function __construct($subject, $content, $recipient,$sendcc=[])
     {
         $this->subject = $subject;
         $this->content = $content;
         $this->recipient = $recipient ?? 'test@gmail.com';
+        $this->sendcc = $sendcc;
     }
 
 
@@ -33,6 +35,9 @@ class SendActionMails implements ShouldQueue
             // $message->from('test@gmail.com');
             $message->to($this->recipient);
             $message->subject($this->subject);
+            if ($this->sendcc) {
+                $message->cc($this->sendcc);
+            }
         });
     }
 }
