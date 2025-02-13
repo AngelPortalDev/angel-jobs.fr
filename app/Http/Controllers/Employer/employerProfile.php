@@ -187,24 +187,40 @@ class employerProfile extends Controller
             // ->where('job_application_history.is_shortlisted', 'Yes')
             // ->orderBy('job_application_history.update_at', 'DESC');
             $query = DB::table('job_application_history')
-                ->select('job_application_history.id','job_application_history.js_id','job_application_history.job_id','job_application_history.update_at','jobseeker_view.fullname','jobseeker_view.profile_img','jobseeker_view.updated_at','jobseeker_view.prefered_location_name','jobseeker_view.experiance_name','jobseeker_view.expected_salary_name','job_application_history.is_shortlisted','jobseeker_payments.id as payment_id','jobseeker_payments.payment_amount',
-                    'jobseeker_payments.status','jobseeker_payments.created_at as payment_date')
-                ->leftJoin('jobseeker_view', 'jobseeker_view.js_id', '=', 'job_application_history.js_id')
-                ->leftJoin('jobseeker_payments', function ($join) {
-                    $join->on('jobseeker_view.js_id', '=', 'jobseeker_payments.js_id')
-                        ->where('jobseeker_payments.status', '=', 3) 
-                        ->where('jobseeker_payments.id', '=', function ($subQuery) {
-                            $subQuery->from('jobseeker_payments')
-                                ->select('id')
-                                ->whereColumn('jobseeker_view.js_id', 'jobseeker_payments.js_id')
-                                ->where('jobseeker_payments.status', '=', 3) 
-                                ->orderBy('jobseeker_payments.created_at', 'DESC')
-                                ->limit(1);
-                        });
-                })
-                ->where('job_application_history.employer_id', $emp_user_id)
-                ->where('job_application_history.is_shortlisted', 'Yes')
-                ->orderBy('job_application_history.update_at', 'DESC');
+            ->select(
+                'job_application_history.id',
+                'job_application_history.js_id',
+                'job_application_history.job_id',
+                'job_application_history.update_at',
+                'jobseeker_view.fullname',
+                'jobseeker_view.profile_img',
+                'jobseeker_view.updated_at',
+                'jobseeker_view.prefered_location_name',
+                'jobseeker_view.experiance_name',
+                'jobseeker_view.expected_salary_name',
+                'job_application_history.is_shortlisted',
+                'jobseeker_payments.id as payment_id',
+                'jobseeker_payments.payment_amount',
+                'jobseeker_payments.status',
+                'jobseeker_payments.created_at as payment_date'
+            )
+            ->leftJoin('jobseeker_view', 'jobseeker_view.js_id', '=', 'job_application_history.js_id')
+            ->leftJoin('jobseeker_payments', function ($join) {
+                $join->on('jobseeker_view.js_id', '=', 'jobseeker_payments.js_id')
+                    ->where('jobseeker_payments.status', '=', 3)
+                    ->where('jobseeker_payments.id', '=', function ($subQuery) {
+                        $subQuery->from('jobseeker_payments')
+                            ->select('id')
+                            ->whereColumn('jobseeker_view.js_id', 'jobseeker_payments.js_id')
+                            ->where('jobseeker_payments.status', '=', 3)
+                            ->orderBy('jobseeker_payments.created_at', 'DESC')
+                            ->limit(1);
+                    });
+            })
+            ->where('job_application_history.employer_id', $emp_user_id)
+            ->where('job_application_history.is_shortlisted', 'Yes')
+            ->orderBy('job_application_history.update_at', 'DESC');
+            
             $shortlisted = $query->get();
             
           
@@ -532,7 +548,7 @@ class employerProfile extends Controller
 												<ul>
 													<li><i class='fas fa-map-marker-alt'></i> " . (!empty($lists->prefered_location_name) ? $lists->prefered_location_name : 'Not Disclosed') . "</li>
 													<li><i class='fa-solid fa-business-time'></i> " . (!empty($lists->experiance_name) ? $lists->experiance_name : 'Not Disclosed')  . "</li>
-													<li><i class='fas fa-rupee-sign'></i> " .(!empty($lists->expected_salary_name) ? $lists->expected_salary_name : 'Not Disclosed')  . "</li>
+													<li><i class='fas fa-euro-sign'></i> " .(!empty($lists->expected_salary_name) ? $lists->expected_salary_name : 'Not Disclosed')  . "</li>
 													 <li><i class='far fa-clock'></i> Active " .  $duration . " ago</li> 
 												</ul>
 											</div>

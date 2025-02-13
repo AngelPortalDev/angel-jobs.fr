@@ -518,7 +518,7 @@ class commonController extends Controller
                         }
                         $sal = '';
                         if ($lists->salary_hide === 'No' && isset($lists->job_salary_to_name)) {
-                            $sal =  "<li><i class='fas fa-rupee-sign'></i>" . $lists->job_salary_to_name . "</li>";
+                            $sal =  "<li><i class='fas fa-euro-sign'></i>" . $lists->job_salary_to_name . "</li>";
                         }
                         $duration = duration($lists->posted_on);
                       
@@ -949,13 +949,15 @@ class commonController extends Controller
                                 $planDuration = isset($plan[0]->plan_duration) ? $plan[0]->plan_duration : 0;
                                 $addedDate = $carbonDate->copy()->addDays($planDuration);
                                 if($plantable == 'employer_plan'){
-                                    $plan = getData($plantable, ['job_post_limit', 'plan_duration'], ['id' => $payment[0]->plan_id]);
+                                    $plan = getData($plantable, ['job_post_limit', 'plan_duration','cv_access_limit'], ['id' => $payment[0]->plan_id]);
                                     if (isset($plan) && !empty($plan)) {
                                         $jobPostLimit  = isset($plan[0]->job_post_limit) ? $plan[0]->job_post_limit : 0;
-                                        $currentLeftCredit = getData($mainTable, ['left_credit_job_posting_plan'], ['id' => $payment[0]->$column]);
+                                        $CvaccessLimit  = isset($plan[0]->cv_access_limit) ? $plan[0]->cv_access_limit : 0;
+                                        $currentLeftCredit = getData($mainTable, ['left_credit_job_posting_plan','cv_access_limit'], ['id' => $payment[0]->$column]);
                                         // $currentLeftCredit = DB::table($mainTable)->where('id', $payment->$column)->value('left_credit_job_posting_plan');
                                         if (isset($currentLeftCredit) && !empty($currentLeftCredit)) {
                                             $newLeftCredit = $currentLeftCredit[0]->left_credit_job_posting_plan + $jobPostLimit;
+                                            $newcvLeftCredit= $currentLeftCredit[0]->cv_access_limit +  $CvaccessLimit;
                                             $mainTableSelect = [
                                                 'plan_id' => $payment[0]->plan_id, 
                                                 'plan_start_from' => now(), 

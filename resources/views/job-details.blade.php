@@ -514,7 +514,7 @@
                                                             @else
 
                                                                 <button type="button" data-job_action="apply"
-                                                                    data-job_id="{{ base64_encode($job->id) }}"
+                                                                    data-job_id="{{ base64_encode($lists->id) }}"
                                                                     class="site-button action" style="white-space: normal">Apply Now</button>
 
                                                             @endif

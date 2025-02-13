@@ -627,7 +627,7 @@ class JobPostingController extends Controller
             } else {
               
                 $exists = is_exist('jobseekers', ['is_delete' => 'No', 'id' => $js_id]);
-                $data = ['is_shortlisted' => $action, 'js_id' => $js_id, 'job_id' => 0, 'employer_id' => $emp_user_id];
+                $data = ['is_shortlisted' => $action, 'js_id' => $js_id, 'job_id' => 0, 'employer_id' => $emp_user_id,'update_at'=> $this->time];
                 $where = ['js_id' => $js_id,'job_id' => 0,];
                 $msg_alert = 'Jobseeker Not Exist';
             }
