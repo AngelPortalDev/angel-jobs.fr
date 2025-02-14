@@ -66,7 +66,7 @@
            <img class="logo-1" src="{{ asset('images/not-verified-icon.png')}}" alt="Angel Jobs France Logo" width="80px">
          <h2><span style="color: #d72f37;font-weight: 600;">{{session('msg')}}</span></h2>
             @endif
-        <img class="logo" src="{{ asset('images/angel-jobs-France.png')}}" alt="Angel Jobs France Logo">
+        <img class="logo" src="{{ asset('images/angel-Jobs-France.png')}}" alt="Angel Jobs France Logo">
         <h2 style="font-weight: 600;">Welcome to <br> <span style="font-size: 40px; color: #23a0d2;font-weight: 700;">Angel Jobs France</span></h2>
         
         <p class="message">Thank you for registering on our platform. <br> You are now part of the Angel Jobs France community.</p>

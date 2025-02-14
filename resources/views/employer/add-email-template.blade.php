@@ -87,7 +87,7 @@
                                             
                                             <span id ="email_content_error" style="color:red;display:none">Please enter content</span>
                                                 <div class="">
-                                                    <button  id="add_template" class="btn btn-primary mb-4 me-2">Add</button>
+                                                    <button type="button" id="add_template" class="btn btn-primary mb-4 me-2">Add</button>
                                                     <a href="{{ route('manage-mails') }}">
                                                         <button type="button" class="btn btn-secondary mb-4">Back</button>
                                                     </a>

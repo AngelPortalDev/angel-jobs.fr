@@ -181,7 +181,7 @@
 											
 												<div class="viewgst" id="viewgst">
 													@if(isset($empData->gst_license) && !empty($empData->gst_license))
-													<p>Current License: <a href="{{ Storage::url('employer/gst_license/' . $empData->gst_license) }}" target="_blank">View File</a></p>
+													<p>Current Licence: <a href="{{ Storage::url('employer/gst_license/' . $empData->gst_license) }}" target="_blank">View File</a></p>
 													@else
 													<p>Upload Licence number</p>
 													@endif
@@ -189,7 +189,7 @@
 										
 												<div class="edit_gst" id="edit_gst" style="display:none">
 													@if(isset($empData->gst_license) && !empty($empData->gst_license))
-													<p>Current  License: <a href="{{ Storage::url('employer/gst_license/' . $empData->gst_license) }}" target="_blank">View File</a></p>
+													<p>Current Licence: <a href="{{ Storage::url('employer/gst_license/' . $empData->gst_license) }}" target="_blank">View File</a></p>
 													@else
 													<p>Upload Licence number</p>
 													@endif

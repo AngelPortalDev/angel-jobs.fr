@@ -516,7 +516,7 @@ class commonController extends Controller
                         }else{
                             $img = "<img alt='' src='" . Storage::url('employer/profile_image/employer.png') . "'>";
                         }
-                        $sal = '';
+                        $sal = "<li><i class='fas fa-euro-sign'></i>Not Disclosed</li>";
                         if ($lists->salary_hide === 'No' && isset($lists->job_salary_to_name)) {
                             $sal =  "<li><i class='fas fa-euro-sign'></i>" . $lists->job_salary_to_name . "</li>";
                         }

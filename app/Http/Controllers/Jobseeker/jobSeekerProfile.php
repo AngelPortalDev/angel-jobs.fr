@@ -379,8 +379,9 @@ class jobSeekerProfile extends Controller
         if (session()->has('js_username')) {
             $username = Session::get('js_username');
             $appliedJobs = DB::table('job_application_history')
-            ->select('job_application_history.js_id', 'job_application_history.job_id', 'job_posting_view.job_title', 'jobseekers.fullname', 'job_application_history.is_shortlisted', 'job_posting_view.company_name', 'job_posting_view.location_hiring_name', 'job_posting_view.salary_hide', 'job_application_history.applied_on', 'job_posting_view.job_type_name')
+            ->select('job_application_history.js_id', 'job_application_history.job_id', 'job_posting_view.job_title', 'jobseekers.fullname', 'job_application_history.is_shortlisted', 'job_posting_view.company_name', 'job_posting_view.location_hiring_name', 'job_posting_view.salary_hide', 'job_application_history.applied_on', 'job_posting_view.job_salary_to_name', 'job_postings.is_deleted')
             ->leftJoin('job_posting_view', 'job_application_history.job_id', '=', 'job_posting_view.id')
+            ->leftJoin('job_postings', 'job_application_history.job_id', '=', 'job_postings.id')
             ->join('jobseekers', 'jobseekers.id', '=', 'job_application_history.js_id')
             ->where('jobseekers.email', $username)
             ->whereNotNull('job_application_history.applied_on')

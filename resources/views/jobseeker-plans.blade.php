@@ -15,7 +15,7 @@
             <div class="container">
                 <div class="section-head text-black text-center">
                     <h2 class="m-b0">Jobseeker Membership Plans</h2>
-                    <p>Registering on Angel-jobs.com gives you access to a wide variety of job opportunities from different
+                    <p>Registering on Angel-jobs.fr gives you access to a wide variety of job opportunities from different
                         industries and companies.</p>
                 </div>
                 <!-- Pricing table-1 Columns 3 with gap -->
