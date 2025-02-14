@@ -33,25 +33,30 @@
                                             }
                                             $plan=getData('employer_plan',['id','cv_access_limit'],['id'=>$plan_detail->plan_id]);
                                            
-                                           if($plan_detail->plan_id == 1){$total = 500;
-                                           }else{$total = 500 + $plan[0]->cv_access_limit ;}
-                                           $tooltipresume = "Remaining : $plan_detail->cv_access_limit, Total: " .  $total;
-                                           $viewcv=$total-$plan_detail->cv_access_limit;
+                                            if($plan_detail->plan_id == 1){$total = 500;
+                                            }else{$total = 500 + $plan[0]->cv_access_limit ;}
+                                            $tooltipresume = "Remaining : $plan_detail->cv_access_limit, Total: " .  $total;
+                                            $viewcv=$total-$plan_detail->cv_access_limit;
                                         @endphp
                                         <h5 class="font-weight-700 float-start text-uppercase">Post A Job</h5>
-                                        {{-- <p class="site-button button-sm float-end btn-success" data-bs-toggle="tooltip"
+                                     {{-- <p class="site-button button-sm float-end btn-success" data-bs-toggle="tooltip"
                                             data-bs-placement="top" title="{{ $tooltip }}" style="white-space: normal">
-                                            {{ $totalposting }} Job
-                                            Posting Left</p> --}}
-                                            
+                                            {{ $totalposting }} JobPosting Left
+                                        </p> --}}
+
+
                                         <p class="site-button button-sm float-end btn-success" style="white-space: normal"> Unlimited Job Postings</p>
                                         <p class="site-button button-sm float-end btn-success m-lr5" data-bs-toggle="tooltip"  data-bs-placement="top" title="{{ $tooltipresume }}" style="white-space: normal"> Resume Views {{$viewcv}} / {{ $total}} </p>
 
                                     @endforeach
+                                    
                                 </div>
                                 @if (is_exist('employers', ['id' => Session::get('emp_user_id'), 'email_verified' => 'Yes']) != 0)
+                                @if ($plan_detail->gst_license != '' && $plan_detail->owner_id != '')
+                                @if (isset($plan_detail->plan_id) && $plan_detail->plan_id != 1)
+                                @if (is_exist('employers', ['id' => Session::get('emp_user_id'), 'document_verification' => 'Yes']) != 0)
                                     @if ($totalposting > 0 && $plan_detail->plan_expired_on >= date('Y-m-d'))
-                                    @if ($plan_detail->pan_no != '')
+                                   
                                         <form id="addJobForm">
                                             <div class="row">
                                                 <div class="col-lg-6 col-md-6">
@@ -70,7 +75,7 @@
                                                         <label>Job Type <span class="imp-field-star">*</span></label>
                                                         <select class="slec" id="job_type" name="job_type">
                                                             <option value="" selected>Select Job Type</option>
-                                                            @foreach (getDropDownlist('job_types', ['job_type', 'id']) as $job_type)
+                                                            @foreach (getDropDownlist('job_types', ['job_type', 'id'])->sortby('id') as $job_type)
                                                                 <option value="{{ $job_type->id }}">
                                                                     {{ $job_type->job_type }}</option>
                                                             @endforeach
@@ -196,6 +201,7 @@
                                                     <div class="form-group">
                                                         <label>Hiring Location <span class="imp-field-star">*</span></label>
                                                         <select class="slec" id="job_location" name="job_location" data-live-search="true">
+                                                            <option value="" selected disabled>Select Location</option>
                                                             @foreach (getDropDownlist('cities', ['id', 'city_name']) as $city)
                                                                 <option value="{{ $city->id }}">{{ $city->city_name }}
                                                                 </option>
@@ -214,21 +220,21 @@
                                                     </div>
                                                 </div>
                                                 {{-- <div class="col-lg-6 col-md-6">
-										<div class="form-group">
-											<label>Shift Time <span class="imp-field-star">*</span></label>
-											<select id="job_shift" name="job_shift">
-												<option value="">Select Shift Time</option>
-												@foreach ($shift_types as $shift_type)
-												<option value="{{ $shift_type->id}}">{{ $shift_type->shift_type}}
-												</option>
-												@endforeach
-											</select>
-											<span id="job_shift_error" style="color:red;display:none;">
-												<small>
-													<i>Please Provide Shift Time </i>
-												</small></span>
-										</div>
-									</div> --}}
+                                                    <div class="form-group">
+                                                        <label>Shift Time <span class="imp-field-star">*</span></label>
+                                                        <select id="job_shift" name="job_shift">
+                                                            <option value="">Select Shift Time</option>
+                                                            @foreach ($shift_types as $shift_type)
+                                                            <option value="{{ $shift_type->id}}">{{ $shift_type->shift_type}}
+                                                            </option>
+                                                            @endforeach
+                                                        </select>
+                                                        <span id="job_shift_error" style="color:red;display:none;">
+                                                            <small>
+                                                                <i>Please Provide Shift Time </i>
+                                                            </small></span>
+                                                    </div>
+                                                </div> --}}
                                                 <div class="col-lg-6 col-md-6">
                                                     <div class="form-group">
                                                         <label>Gender</label>
@@ -243,18 +249,18 @@
                                                     </div>
                                                 </div>
                                                 {{-- <div class="col-lg-6 col-md-6">
-										<div class="form-group">
-											<label>Vacancy Open From </label>
-											<input type="date" id="job_start" name="job_start" class="form-control">
-										</div>
-									</div> --}}
+                                                        <div class="form-group">
+                                                            <label>Vacancy Open From </label>
+                                                            <input type="date" id="job_start" name="job_start" class="form-control">
+                                                        </div>
+                                                    </div> --}}
                                                 {{-- <div class="col-lg-6 col-md-6">
-										<div class="form-group">
-											<label>Vacancy Expired On </label>
-											<input type="date" id="job_end"  name="job_end" class="form-control">
-											
-										</div>
-									</div> --}}
+                                                        <div class="form-group">
+                                                            <label>Vacancy Expired On </label>
+                                                            <input type="date" id="job_end"  name="job_end" class="form-control">
+                                                            
+                                                        </div>
+                                                    </div> --}}
                                                 <div class="col-lg-6 col-md-6">
                                                     <div class="form-group">
                                                         <label>No. of Vacancies <span
@@ -281,7 +287,7 @@
                                                         </select>
                                                         <span id="select_work_mode_error" style="color:red;display:none;">
                                                             <small>
-                                                                <i>Select Work Mode</i>
+                                                                <i>Select Work Mode </i>
                                                             </small></span>
                                                     </div>
                                                 </div>
@@ -390,7 +396,7 @@
                                                         <div class="row m-b30">
                                                             <div class="col-2 " style="padding-right: 0;">
                                                                 <input type="text" disabled
-                                                                    class="form-control-plaintext " value="+33"
+                                                                    class="form-control-plaintext " value="+356"
                                                                     maxlength="10">
                                                                 {{-- <div class="dropdown bootstrap-select">
 														<select class="" tabindex="null">
@@ -401,19 +407,19 @@
 													</div> --}}
                                                             </div>
                                                             <div class="col-10">
-                                                                <input type="number" id="job_con_phone" maxlength="9"
+                                                                <input type="number" id="job_con_phone" maxlength="8"
                                                                     name="job_con_phone" class="form-control"
-                                                                    placeholder="Enter 9 Digit Mobile No.">
+                                                                    placeholder="Enter 8 Digit Mobile No.">
                                                                 <span id="job_con_phone_error"
                                                                     style="color:red;display:none;">
                                                                     <small>
-                                                                        <i>Please Enter 9 Digit Mobile No. </i>
+                                                                        <i>Please enter 8 digit mobile no. </i>
                                                                     </small>
                                                                 </span>
                                                                 <span id="job_con_phone_limit_error"
                                                                     style="color:red;display:none;">
                                                                     <small>
-                                                                        <i>Mobile no. must be 9 Digits. </i>
+                                                                        <i>Mobile no. must be 8 Digits. </i>
                                                                     </small>
                                                                 </span>
                                                             </div>
@@ -452,14 +458,28 @@
                                         </form>
                                         @else
                                         <div class="container">
-                                            First Update Company Linence Number <a href="{{ route('company-profile') }}"
-                                                target="blank"> Click Here </a>
-                                        </div>
-                                        @endif
-                                    @else
-                                        <div class="container">
                                             No Credit Jobs are Available: <a href="{{ route('employer-plans') }}"
                                                 target="blank"> Renew Now </a>
+                                        </div>
+                                    @endif
+                                    @else
+                                    <div class="container">                                 
+                                       
+                                            <div>Wait Until Document Verify</div>                                      
+                                    </div>
+                                @endif 
+                                        @else
+                                        <div class="container">
+                                            Post unlimited jobs for just <i class="fa fa-euro"></i> 20
+                                            <a  href="{{ route('emp_buy_plan', ['plan_id' => 4, 'amount' => 20])}}">Pay Now</a> 
+                                        </div>
+                                    @endif
+                                        @else
+                                        <div class="container">                                        
+                                           
+                                                <div>Upload Licence Number and owner ID details to start posting jobs<a
+                                                        href="{{ route('company-profile') }}" target="blank"> Click here
+                                                    </a></div>                                      
                                         </div>
                                     @endif
                                 @else

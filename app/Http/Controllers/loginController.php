@@ -55,7 +55,8 @@ class loginController extends Controller
             $booking_date = $currentDate->format('Y-m-d');
             $booking_time = $currentDate->format('H:i:s');
             $time = $booking_date . " " . $booking_time;
-
+            $gst_license = $req->hasFile('gst_license') ? $req->file('gst_license') : '';
+            $owner_id = $req->hasFile('owner_id') ? $req->file('owner_id') : '';
             $plan_id = 1; //Free Plan ID
             $plan_end_duration = 90;
             $plan_expired_on = $currentDate->addDays($plan_end_duration)->format('Y-m-d');
@@ -71,6 +72,8 @@ class loginController extends Controller
                         'c_password' => 'required|string|max:225',
                         'tnc' => 'required|string|max:225',
                         'mob_code' => 'string|max:225',
+                        'gst_license' => 'nullable|file|mimes:jpg,png,pdf|max:2048',
+                        'owner_id'    => 'nullable|file|mimes:jpg,png,pdf|max:2048',
                     ];
 
 
@@ -80,7 +83,26 @@ class loginController extends Controller
                     if (!$validate->fails()) {
                         // return $req->all();
                         try {
-
+                            $id = Session::has('emp_user_id') ? Session::get('emp_user_id') : 0;
+                        
+                            $gst_license_filename = null;
+                            $owner_id_filename = null;
+                            if ($req->hasFile('gst_license')) {
+                                $file = $req->file('gst_license');
+                                $gst_license_filename = 'gst_' . time() . '_' . $id . '.' . $file->getClientOriginalExtension();
+                                $gst_license = file_upload($file, 'storage/employer/gst_license/', $gst_license_filename);
+                                if (!$gst_license) {
+                                    echo json_encode(['code' => 201, 'message' => 'GST License upload failed!', "icon" => "error"]);
+                                }   
+                            }
+                            if ($req->hasFile('owner_id')) {
+                                $file = $req->file('owner_id');
+                                $owner_id_filename = 'ownerid_' . time() . '_' . $id . '.' . $file->getClientOriginalExtension();
+                                $owner_id = file_upload($file, 'storage/employer/owner_id/', $owner_id_filename);
+                                if (!$owner_id) {
+                                    echo json_encode(['code' => 201, 'message' => 'Owner Id upload failed!', "icon" => "error"]);
+                                }
+                            }
                             $user_id = Employer::create([
                                 'fullname' => $name,
                                 'mobile' => $contact_no,
@@ -95,6 +117,8 @@ class loginController extends Controller
                                 'password' => Hash::make($password),
                                 'is_deleted' => 'No',
                                 'register_date' => $time,
+                                'gst_license' => $gst_license_filename,
+                                 'owner_id' => $owner_id_filename,
                             ]);
 
                             $emp_id = $user_id->id;
@@ -425,6 +449,29 @@ class loginController extends Controller
             }
         } else {
             return redirect('verified-mail')->with('msg', 'Link has been Expired')->with('status', 'false');
+        }
+    }
+    public function verifydocument($id)
+    {        
+        if (!empty($id)) {
+
+            $id =  Crypt::decrypt($id);
+                $is_exist =   is_exist('employers', ['id' => $id, 'document_verification' => 'Yes']);
+                if ($is_exist === 0) {
+                    $verifid =   Employer::where(['id' => $id])->update(['document_verification' => 'Yes']);
+                    $data =Employer::where(['id' => $id])->first();
+                    if ($verifid === 1) {
+                          mail_send(43, ['#Name#'], [ucfirst($data->fullname)], $data->email);
+                        return redirect('verified-document')->with('msg', $data->company_name.' are Successfully Verified')->with('status', 'true');
+                    } else {
+                        return redirect('verified-document')->with('msg', 'Unable to Verify')->with('status', 'false');
+                    }
+                } else {
+                    return redirect('verified-document')->with('msg', 'Something Went Wrong')->with('status', 'false');
+                }
+           
+        } else {
+            return redirect('verified-document')->with('msg', 'Link has been Expired')->with('status', 'false');
         }
     }
     public function emailVerifyLinkResend(Request $req)

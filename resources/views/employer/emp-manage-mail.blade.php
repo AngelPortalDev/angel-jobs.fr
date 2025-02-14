@@ -1,4 +1,3 @@
-
 @extends('layouts.main')
 @section('content')
 
@@ -21,10 +20,10 @@
 									<h5 class="font-weight-700 float-start text-uppercase">Manage Email Templates</h5>
 									<div class="float-end" style="display: flex;align-items: center;">
                                     <div class="me-2 btn btn-outline-primary"><a href="{{ route('add-email-template') }}">Add Template</div>
-                                    <div class="job-links-email" style="margin-right: 20px;">
+                                    {{-- <div class="job-links-email" style="margin-right: 20px;">
                                             <a href="javascript:void(0);"><i class="ti-trash"></i></a>                                        
-                                    </div>
-                                    <div class="">
+                                    </div> --}}
+                                    {{-- <div class="">
 										<span class="select-title">Sort by</span>
 										<select>
 											<option>All</option>
@@ -32,7 +31,7 @@
 											<option>Rejected</option>
 
 										</select>
-                                    </div>
+                                    </div> --}}
 
                                         
 									</div>
@@ -130,16 +129,19 @@
 
 
 
-	<script>
-		function myFunction() {
-		  var x = document.getElementById("myDIV");
-		  if (x.style.display === "none") {
-			x.style.display = "block";
-		  } else {
-			x.style.display = "none";
-		  }
-		}
-	</script>
+
 
 <!-- Import footer  -->
 @endsection()
+
+
+<script>
+    function myFunction() {
+      var x = document.getElementById("myDIV");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+    }
+</script>

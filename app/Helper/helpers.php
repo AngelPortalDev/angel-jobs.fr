@@ -183,7 +183,7 @@ if (!function_exists('getCurrentPlan')) {
     }
 }
 if (!function_exists('mail_send')) {
-    function mail_send($tmpl_id, $repl_contain, $repl_value, $sendto,$sendcc=[])
+    function mail_send($tmpl_id, $repl_contain, $repl_value, $sendto,$sendcc=[],$attachments = [])
     {
        
         
@@ -198,17 +198,18 @@ if (!function_exists('mail_send')) {
             $data['newSubject'],
             $data['newContain'],
             $sendto,
-            $sendcc
+            $sendcc,
+            $attachments
         );
 
     }
 }
 if (!function_exists('send')) {
-    function send($subject, $sendingData, $sendto,$sendcc = [])
+    function send($subject, $sendingData, $sendto,$sendcc = [],$attachments = [])
     {
         
         try {
-            Queue::push(new SendActionMails($subject, $sendingData, $sendto,$sendcc));
+            Queue::push(new SendActionMails($subject, $sendingData, $sendto,$sendcc,$attachments));
             return TRUE;
         } catch (\Exception $error) {
             return FALSE;

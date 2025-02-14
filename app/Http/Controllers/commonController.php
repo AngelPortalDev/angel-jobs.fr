@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\{job_posting_view as Jobs,employer_plan as EmpPlan,jobseeker_plan as JsPlan, employer as Employer, employer_payment as EmpPayments, jobseeker_profile as JobseekerProf, jobseeker_payment as JsPayement};
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Session, Http, DB, Validator, Storage, Log, Mail};
+use Illuminate\Support\Facades\{Crypt, Session, Http, DB, Validator, Storage, Log, Mail};
 use Carbon\Carbon;
 use Razorpay\Api\Api;
 
@@ -965,6 +965,30 @@ class commonController extends Controller
                                                 'left_credit_job_posting_plan' => $newLeftCredit
                                             ];
                                         }
+                                        if(isset($payment[0]->plan_id) && $payment[0]->plan_id == 4){
+                                        
+                                            $empolyerdata=Employer::where('id', $payment[0]->emp_id)->first();
+                                                $attachments = [
+                                                    ['path' => storage_path('app/public/employer/gst_license/'.$empolyerdata->gst_license),
+                                                        'name' => $empolyerdata->gst_license,
+                                                        'mime' => mime_content_type(storage_path('app/public/employer/gst_license/'.$empolyerdata->gst_license)), 
+                                                    ],
+                                                    [
+                                                    'path' => storage_path('app/public/employer/owner_id/'.$empolyerdata->owner_id),
+                                                        'name' => $empolyerdata->owner_id,
+                                                        'mime' => mime_content_type(storage_path('app/public/employer/owner_id/'.$empolyerdata->owner_id)), 
+                                                    ],
+                                                ];
+                                            $dyc_id = Crypt::encrypt($payment[0]->emp_id);
+                                            $link= env('APP_URL') . "/verfiy-document/empolyer/" . $dyc_id;
+                                            $repl_contain=['#company_name#', '#Name#', '#Email#', '#payment_id#', '#date#','#Link#'];
+                                            $repl_value=[$empolyerdata->company_name,$empolyerdata->fullname,$empolyerdata->email, $request->razorpay_payment_id,now(),$link];
+                                            $sendto='info@angel-jobs.com';
+                                            $sendcc=[];
+                                            
+                                            $send = mail_send(42, $repl_contain, $repl_value, $sendto, $sendcc, $attachments);
+                                            
+                                        } 
                                     }
                                 }else{
                                     $mainTableSelect = [

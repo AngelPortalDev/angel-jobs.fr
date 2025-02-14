@@ -188,6 +188,9 @@ $(document).ready(function () {
         $("#ProfileSubmit").removeClass("d-none").addClass("d-block");
         $(".submitButton").removeClass("d-none").addClass("d-block");
         $("#emp_profile_view").show();
+        $("input[type='file']").removeAttr("disabled");
+        $(".viewgst").hide();
+        $(".edit_gst").show();
     });
     $("#emp_profile_view").on("click", function (event) {
         event.preventDefault();
@@ -201,6 +204,8 @@ $(document).ready(function () {
         $(".slec").addClass("d-none").removeClass("d-block");
         $("#ProfileSubmit").addClass("d-none").removeClass("d-block");
         $(".submitButton").addClass("d-none").removeClass("d-block");
+        $(".viewgst").show();
+        $(".edit_gst").hide();
     });
     $("#cat").on("change", function (event) {
         event.preventDefault();
@@ -301,6 +306,54 @@ $(document).ready(function () {
             },
         });
     });
+    $("#gst_license, #owner_id").change(function () {
+       
+        var allowedExtensions = ["pdf", "png", "jpg", "jpeg"];
+        var maxSize = 2 * 1024 * 1024;
+        var gst_licence = $("#gst_license")[0].files;
+        var owner_id = $("#owner_id")[0].files;
+        $("#gst_license_file_error").hide();
+        $("#gst_license_size_error").hide();
+        $("#owner_id_file_error").hide();
+        $("#owner_id_file_error").hide();
+        if (gst_licence.length > 0) {
+            var gstFile = gst_licence[0];
+            var gstExtension = gstFile.name.split(".").pop().toLowerCase();
+    
+            if (!allowedExtensions.includes(gstExtension)) {
+                $("#gst_license_file_error").show();
+                $("#regSubmit").attr("disabled", "true");
+                $("#ProfileSubmit").attr("disabled", "true");
+                
+            } else if (gstFile.size > maxSize) {
+                $("#gst_license_size_error").show();
+                $("#ProfileSubmit").attr("disabled", "true");      
+                $("#regSubmit").attr("disabled", "true");          
+            }else {
+                $("#regSubmit").removeAttr("disabled");
+                $("#ProfileSubmit").removeAttr("disabled");
+            }
+          
+        }  
+        if (owner_id.length > 0) {
+            var ownerFile = owner_id[0];
+            var ownerExtension = ownerFile.name.split(".").pop().toLowerCase();
+    
+            if (!allowedExtensions.includes(ownerExtension)) {
+                $("#owner_id_file_error").show();   
+                $("#ProfileSubmit").attr("disabled", "true");  
+                $("#regSubmit").attr("disabled", "true");          
+            } else if (ownerFile.size > maxSize) {
+                $("#owner_id_size_error").show();  
+                $("#ProfileSubmit").attr("disabled", "true");
+                $("#regSubmit").attr("disabled", "true");             
+            }else {
+                $("#regSubmit").removeAttr("disabled");
+                $("#ProfileSubmit").removeAttr("disabled");
+            }
+        }
+      
+    });
     // Registration form Employer
     $("#regSubmit").click(function (event) {
         event.preventDefault();
@@ -321,6 +374,10 @@ $(document).ready(function () {
         var password = $("#emp_password").val();
         var c_password = $("#c_password").val();
         var checkbox = $("#tnc");
+        var gst_licence = $("#gst_license")[0].files;
+        var owner_id = $("#owner_id")[0].files;
+        var allowedExtensions = ["pdf", "png", "jpg", "jpeg"];
+        var maxSize = 2 * 1024 * 1024; 
         // var mob_code = $("#mob_code").val();
         var passwordRegex =
             /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/;
@@ -389,8 +446,8 @@ $(document).ready(function () {
             $("#tnc_error").show();
             return;
         }
-        var form = $("#regFrom").serialize();
-        // var form = new FormData($("#regFrom")[0]);
+        //var form = $("#regFrom").serialize();
+         var form = new FormData($("#regFrom")[0]);
         if (
             com_name != "" &&
             fullname != "" &&
@@ -407,6 +464,8 @@ $(document).ready(function () {
                 type: "POST",
                 data: form,
                 dataType: "json",
+                processData: false,
+                contentType: false,
                 headers: {
                     "X-CSRF-TOKEN": csrfToken,
                 },
@@ -540,6 +599,7 @@ $(document).ready(function () {
             return;
         }
         if (contact_no.length < 9) {
+           
             $("#contact_no_error").text("Mobile no should be exactly 9 digits.");
             $("#contact_no_error").show();
             return;

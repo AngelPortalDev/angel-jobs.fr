@@ -17,13 +17,15 @@ class SendActionMails implements ShouldQueue
     protected $content;
     protected $recipient;
     protected $sendcc;
+    public $attachments;
 
-    public function __construct($subject, $content, $recipient,$sendcc=[])
+    public function __construct($subject, $content, $recipient,$sendcc=[],$attachments = [])
     {
         $this->subject = $subject;
         $this->content = $content;
         $this->recipient = $recipient ?? 'test@gmail.com';
         $this->sendcc = $sendcc;
+        $this->attachments = $attachments;
     }
 
 
@@ -37,6 +39,14 @@ class SendActionMails implements ShouldQueue
             $message->subject($this->subject);
             if ($this->sendcc) {
                 $message->cc($this->sendcc);
+            }
+            if($this->attachments){
+                foreach ($this->attachments as $attachment) {
+                    $message->attach($attachment['path'], [
+                        'as' => $attachment['name'],
+                        'mime' => $attachment['mime'],
+                    ]);
+                }
             }
         });
     }

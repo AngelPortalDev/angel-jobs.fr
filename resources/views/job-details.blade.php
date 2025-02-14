@@ -382,7 +382,7 @@
                 );
 
             @endphp
-            @if (!session()->has('emp_username'))
+            @if (!session()->has('emp_username') && $action === null)
                 @if (count($getData_jobs) > 1)
                     <!-- Similar Jobs -->
                     <div class="section-full latest-jobs pt-md-5 pt-3 bg-white similar-jobs-section-main">
