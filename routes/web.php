@@ -121,14 +121,14 @@ Route::group(['prefix' => 'employer', 'middleware' => 'EmpAuth'], function () {
     Route::get('emp-logout', [loginController::class, 'logout'])->name('logout');
     Route::view('emp-create-mail', 'employer/emp-create-mail');
     Route::view('emp-send-mail', 'employer/emp-send-mail');
-    Route::view('emp-manage-mail', 'employer/emp-manage-mail')->name('manage-mails');
+    // Route::view('emp-manage-mail', 'employer/emp-manage-mail')->name('manage-mails');
     Route::get('receipt/{id}', [jobSeekerProfile::class,'downloadInvoice'])->name('receiptemp');
     Route::view('add-email-template', 'employer/add-email-template')->name('add-email-template');
     //Route::post('add-email-template',[AdminCommon::class, 'addEmailTemplate'])->name('emp-add-template');
     
     Route::view('add-email-template', 'employer/add-email-template')->name('add-email-template');
     Route::post('emp-email-template',[AdminCommon::class, 'addEmailTemplate'])->name('emp-add-template');
-    Route::get('email-view', [AdminCommon::class, 'getEmailTemplate'])->name('emp-manage-mails');
+    Route::get('email-view', [AdminCommon::class, 'getEmailTemplate'])->name('manage-mails');
     Route::get('email-edit-view/{temp_id}', [AdminCommon::class, 'editTemplate'])->name('empedit-template');
     Route::post('update-email-template', [AdminCommon::class, 'updateEmailTemplate'])->name('update-template');  
     Route::get('send-bulk-mail', [employerProfile::class, 'sendmail'])->name('sendmail');
@@ -168,7 +168,7 @@ Route::post('pass-change', [loginController::class, 'changePassword']);
 // js & Emp Common Route
 Route::get('verfiy-mail/{cat}/{id}', [loginController::class, 'verifyMail']);
 Route::post('verfiy-resend', [loginController::class, 'emailVerifyLinkResend']);
-
+Route::get('verfiy-document/empolyer/{id}', [loginController::class, 'verifydocument']);
 
 // Reset Passwords
 Route::post('reset-password-link', [loginController::class, 'resetPassLinkSend']);
@@ -181,7 +181,7 @@ Route::get('top-search-bar', [commonController::class, 'searchJobs']);
 Route::post('filter_list', [commonController::class, 'filter_list']);
 
 // Job Details Page
-Route::get('job-details-view/{enc_id}', [JobPostingController::class, 'jobDetailsView']);
+Route::get('job-details-view/{enc_id}/{action?}', [JobPostingController::class, 'jobDetailsView']);
 Route::get('emp-details-view/{id}', [employerProfile::class, 'empDetailsView']);
 
 

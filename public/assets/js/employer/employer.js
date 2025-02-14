@@ -4,12 +4,12 @@ $(document).ready(function () {
     var reader = new FileReader();
     var img = new Image();
         function loadJobseeker(records, page, count, total_count, perPage) {
-            $("#jobseekerCount").html(`${count} Jobs Found`);
+            $("#jobseekerCount").html(`${count} Jobseekers Found`);
             // $("#jobResults").html('');      
             if (records.length > 0) {
                 $("#jobseekerResults").html(records);
             } else {
-                $("#jobseekerResults").html("<li>No Jobs Found</li>");
+                $("#jobseekerResults").html("<li>No Jobseekers Found</li>");
             }
             generatePagination(total_count, perPage, page);
         }
@@ -147,14 +147,20 @@ $(document).ready(function () {
         $("#com_name_error").hide();
         $("#license_no_error").hide();
         $("#img_size_error").hide();
-        $("#pan_no_error").hide();
+        // $("#pan_no_error").hide();
+        $("#gst_license_error").hide();
+        $("#owner_id_error").hide();
         $("#about_company_error").hide(); 
         event.preventDefault();
 
         var fullname = $("#full_name").val();
         var com_name = $("#emp_com_name").val();
-        var license_no = $("#license_no").val();
-        var pan_no = $("#pan_no").val();
+        // var license_no = $("#license_no").val();
+        // var pan_no = $("#pan_no").val();
+        var gst_licence = $("#gst_license")[0].files;
+        var owner_id = $("#owner_id")[0].files;
+        var old_gst_license = $("#old_gst_license").val(); 
+        var old_owner_id = $("#old_owner_id").val();
         var about_company = $("#about_company").val();
 
         if (fullname === "") {
@@ -192,16 +198,30 @@ $(document).ready(function () {
         //     $("#pan_no")[0].scrollIntoView({ behavior:'smooth', block: 'center' });
         //     return;
         // }
-        if(pan_no.length>14){
-            $("#pan_no_error").text("Licence No should not be more than 14 characters");
-            $("#pan_no_error").show();
-            $("#pan_no")[0].scrollIntoView({ behavior:'smooth', block: 'center' });
-            return;
+        // if(pan_no.length>14){
+        //     $("#pan_no_error").text("Licence No should not be more than 14 characters");
+        //     $("#pan_no_error").show();
+        //     $("#pan_no")[0].scrollIntoView({ behavior:'smooth', block: 'center' });
+        //     return;
+        // }
+        // if(pan_no === ""){
+        //     $("#pan_no_error").show();
+        //     $("#pan_no")[0].scrollIntoView({ behavior:'smooth', block: 'center' });
+        //     return;
+        // }
+        if(!old_gst_license){
+            if (gst_licence.length === 0) {
+                $("#gst_license_error").show();
+                $("#gst_license")[0].scrollIntoView({ behavior:'smooth', block: 'center' });
+                return;
+            } 
         }
-        if(pan_no === ""){
-            $("#pan_no_error").show();
-            $("#pan_no")[0].scrollIntoView({ behavior:'smooth', block: 'center' });
-            return;
+        if(!old_owner_id){
+            if (owner_id.length === 0) {
+                $("#owner_id_error").show();
+                $("#owner_id")[0].scrollIntoView({ behavior:'smooth', block: 'center' });
+                return;
+            }
         }
         if (about_company === "" || about_company.length > 500) {
                 $("#about_company_error").show();

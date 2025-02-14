@@ -75,7 +75,7 @@
                                               
                                             </div>
                                             <div class="col-md-12">
-                                                <label for="inputAddress" class="form-label">Email Content</label>
+                                                <label for="inputAddress" class="form-label">Email Content<span class="imp-field-star">*</span></label>
                                                 <!-- Div for Quill editor -->
                                                 {{-- <div id="editor" style="min-height: 80px;"></div> --}}
                                                 <div id="quill-editor" class="mb-3" style="height: 300px;">
@@ -88,7 +88,7 @@
                                             <span id ="email_content_error" style="color:red;display:none">Please enter content</span>
                                                 <div class="">
                                                     <button  id="add_template" class="btn btn-primary mb-4 me-2">Add</button>
-                                                    <a href="{{ route('emp-manage-mails') }}">
+                                                    <a href="{{ route('manage-mails') }}">
                                                         <button type="button" class="btn btn-secondary mb-4">Back</button>
                                                     </a>
                                                 </div>
@@ -119,34 +119,36 @@
 
 
 
-    <script>
-    
-        function myFunction() {
-          var x = document.getElementById("myDIV");
-          if (x.style.display === "none") {
-            x.style.display = "block";
-          } else {
-            x.style.display = "none";
-          }
-        }
-    
-        document.addEventListener('DOMContentLoaded', function() {
-            if (document.getElementById('email_content')) {
-                var editor = new Quill('#quill-editor', {
-                    theme: 'snow'
-                });
-                var quillEditor = document.getElementById('email_content');
-                editor.on('text-change', function() {
-                    quillEditor.value = editor.root.innerHTML;
-                });
-    
-                quillEditor.addEventListener('input', function() {
-                    editor.root.innerHTML = quillEditor.value;
-                });
-            }
-        });
-    
-    
-    </script>
+
 <!-- Import footer  -->
 @endsection()
+
+<script>
+    
+    function myFunction() {
+      var x = document.getElementById("myDIV");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.getElementById('email_content')) {
+            var editor = new Quill('#quill-editor', {
+                theme: 'snow'
+            });
+            var quillEditor = document.getElementById('email_content');
+            editor.on('text-change', function() {
+                quillEditor.value = editor.root.innerHTML;
+            });
+
+            quillEditor.addEventListener('input', function() {
+                editor.root.innerHTML = quillEditor.value;
+            });
+        }
+    });
+
+
+</script>

@@ -53,6 +53,82 @@ class employerProfile extends Controller
 
 
 
+    // public function addEmpProfile(Request $req)
+    // {
+
+    //     if ($req->isMethod('POST') && $req->ajax() && session()->has('emp_username')) {
+
+
+    //         $emp_com_name = isset($req->emp_com_name) ? htmlspecialchars($req->input('emp_com_name')) : '';
+    //         $full_name = isset($req->full_name) ? htmlspecialchars($req->input('full_name')) : '';
+    //         $emp_com_type = is_numeric($req->emp_com_type) ? $req->input('emp_com_type') : 0;
+    //         $emp_com_size = is_numeric($req->emp_com_size) ? $req->input('emp_com_size') : 0;
+    //         $emp_com_indus = is_numeric($req->emp_com_indus) ? $req->input('emp_com_indus') : 0;
+    //         $emp_com_city = is_numeric($req->emp_com_city) ? $req->input('emp_com_city') : 0;
+    //         $about_company = isset($req->about_company) ? htmlspecialchars($req->input('about_company')) : '';
+    //         $emp_com_zip = isset($req->emp_com_zip) ? htmlspecialchars($req->input('emp_com_zip')) : '';
+    //         $emp_com_web = isset($req->emp_com_web) ? htmlspecialchars($req->input('emp_com_web')) : '';
+    //         $emp_com_facebook = isset($req->emp_com_facebook) ? htmlspecialchars($req->input('emp_com_facebook')) : '';
+    //         $emp_com_insta = isset($req->emp_com_insta) ? htmlspecialchars($req->input('emp_com_insta')) : '';
+    //         $emp_com_linkedin = isset($req->emp_com_linkedin) ? htmlspecialchars($req->input('emp_com_linkedin')) : '';
+    //         $emp_com_addrss = isset($req->emp_com_addrss) ? htmlspecialchars($req->input('emp_com_addrss')) : '';
+    //         $license_no = isset($req->license_no) ? htmlspecialchars($req->input('license_no')) : '';
+    //         $pan_no = isset($req->pan_no) ? htmlspecialchars($req->input('pan_no')) : '';
+    //         $emp_id = is_numeric($req->emp_id) ? $req->input('emp_id') : 0;
+    //         $rules = [
+    //             "full_name" => "required|string|min:2",
+    //             "emp_com_name" => "required|string",
+    //             "emp_id" => "required",
+    //         ];
+
+    //         $validate = Validator::make($req->only(['full_name', 'emp_com_name', 'emp_id']), $rules);
+
+
+    //         $exists = Employer::where('email', session()->get('emp_username'))->count();
+    //         if ($exists === 1) {
+    //             if (!$validate->fails()) {
+    //                 try {
+
+    //                     $user_id = Employer::where('id', $emp_id)->update([
+    //                         'fullname' => $full_name,
+    //                         'company_name' => $emp_com_name,
+    //                         'company_type' => $emp_com_type,
+    //                         'company_size' => $emp_com_size,
+    //                         'industry' => $emp_com_indus,
+    //                         'address' => $emp_com_addrss,
+    //                         'pan_no' => $pan_no,
+    //                         'license_no' => $license_no,
+    //                         'city' => $emp_com_city,
+    //                         'about_company'=> $about_company,
+    //                         'website' => $emp_com_web,
+    //                         'facebook' => $emp_com_facebook,
+    //                         'instagram' => $emp_com_insta,
+    //                         'linkedin' => $emp_com_linkedin,
+    //                         'zip' => $emp_com_zip,
+    //                         'is_deleted' => 'No',
+    //                     ]);
+    //                     if ($user_id > 0) {
+    //                          mail_send(9, ['#Name#', '#Cat#'], [ucfirst(session()->get('emp_name')), 'Company'], session()->get('emp_username'));
+    //                         echo json_encode(array('code' => 200, 'message' => 'Successfully Updated', 'icon' => 'success'));
+    //                     } else {
+    //                         echo json_encode(['code' => 201, 'message' => 'Unble to Add Details', "icon" => "error"]);
+    //                     }
+    //                 } catch (\Exception $e) {
+    //                     return $e;
+    //                     echo json_encode(['code' => 201, 'message' => 'Unble to Add Details', "icon" => "error"]);
+    //                 }
+    //             } else {
+    //                 echo json_encode(['code' => 201, 'message' => 'Mandatory Field Missing', "icon" => "error"]);
+    //             }
+    //         } else {
+
+    //             echo json_encode(['code' => 201, 'message' => 'User Not Exist', "icon" => "error"]);
+    //         }
+    //     } else {
+
+    //         echo json_encode(['code' => 201, 'message' => 'Someting Went Wronge', "icon" => "error"]);
+    //     }
+    // }
     public function addEmpProfile(Request $req)
     {
 
@@ -75,10 +151,13 @@ class employerProfile extends Controller
             $license_no = isset($req->license_no) ? htmlspecialchars($req->input('license_no')) : '';
             $pan_no = isset($req->pan_no) ? htmlspecialchars($req->input('pan_no')) : '';
             $emp_id = is_numeric($req->emp_id) ? $req->input('emp_id') : 0;
+            
             $rules = [
                 "full_name" => "required|string|min:2",
                 "emp_com_name" => "required|string",
                 "emp_id" => "required",
+                'gst_license' => 'file|mimes:jpg,png,pdf|max:2048',
+                'owner_id'    => 'file|mimes:jpg,png,pdf|max:2048',
             ];
 
             $validate = Validator::make($req->only(['full_name', 'emp_com_name', 'emp_id']), $rules);
@@ -88,6 +167,25 @@ class employerProfile extends Controller
             if ($exists === 1) {
                 if (!$validate->fails()) {
                     try {
+                        $id = Session::has('emp_user_id') ? Session::get('emp_user_id') : 0;
+                        $gst_license = $req->hasFile('gst_license') ? $req->file('gst_license') : '';
+                        $old_gst_name = !empty($req->input('old_gst_license')) ? $req->input('old_gst_license') : '';
+                        $gst_license_filename = $req->hasFile('gst_license') ? 'gst_' . time() . '_' . $id . '.' . $gst_license->getClientOriginalExtension() :  $old_gst_name;
+                        if ($req->hasFile('gst_license')) {
+                            $gst_license = file_upload($gst_license, 'storage/employer/gst_license/', $gst_license_filename, $req->input('old_gst_license'));
+                            if (isset($gst_license) && $gst_license != TRUE) {
+                                echo json_encode(['code' => 201, 'message' => 'GST License upload failed!', "icon" => "error"]);
+                            }
+                        }
+                        $owner_id = $req->hasFile('owner_id') ? $req->file('owner_id') : '';
+                        $old_ownerid_name = !empty($req->input('old_owner_id')) ? $req->input('old_owner_id') : '';
+                        $owner_id_filename = $req->hasFile('owner_id') ? 'ownerid_' . time() . '_' . $id . '.' . $owner_id->getClientOriginalExtension() :  $old_ownerid_name;
+                        if ($req->hasFile('owner_id')) {
+                            $owner_id = file_upload($owner_id, 'storage/employer/owner_id/', $owner_id_filename, $req->input('old_owner_id'));
+                            if (isset($owner_id) && $owner_id != TRUE) {
+                                echo json_encode(['code' => 201, 'message' => 'Owner Id upload failed!', "icon" => "error"]);
+                            }
+                        }
 
                         $user_id = Employer::where('id', $emp_id)->update([
                             'fullname' => $full_name,
@@ -106,6 +204,8 @@ class employerProfile extends Controller
                             'linkedin' => $emp_com_linkedin,
                             'zip' => $emp_com_zip,
                             'is_deleted' => 'No',
+                            'gst_license' => $gst_license_filename,
+                            'owner_id' => $owner_id_filename,
                         ]);
                         if ($user_id > 0) {
                              mail_send(9, ['#Name#', '#Cat#'], [ucfirst(session()->get('emp_name')), 'Company'], session()->get('emp_username'));
@@ -126,10 +226,9 @@ class employerProfile extends Controller
             }
         } else {
 
-            echo json_encode(['code' => 201, 'message' => 'Someting Went Wronge', "icon" => "error"]);
+            echo json_encode(['code' => 201, 'message' => 'Someting Went Wrong', "icon" => "error"]);
         }
     }
-
     public function jobApplications($job_id = "")
     {
         

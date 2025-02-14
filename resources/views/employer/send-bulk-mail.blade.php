@@ -21,9 +21,11 @@
 .side-nav-link.collapsed span.fa.fa-angle-down.float-end{
     transform: rotate(-92deg);
 }
+
 /* .job-bx{
     height:600px;
 } */
+
     </style>
 
     <!-- Content -->
@@ -43,11 +45,11 @@
                             @php
 						 $select = ['free_assign_job_posting', 'left_credit_job_posting_plan', 'plan_id', 'plan_start_from', 'plan_expired_on','license_no','pan_no'];
 						$plan_details = getData('employers', $select, ['email' => session()->get('emp_username')]);
-						// print_r($plan_details);
+						
 						@endphp
 						
 							<div class="job-bx clearfix">
-                                @if(isset($plan_details) && $plan_details[0]->plan_id != 1 && $plan_detail[0]->plan_expired_on >= date('Y-m-d'))
+                                @if(isset($plan_details) && $plan_details[0]->plan_id != 1 && $plan_details[0]->plan_expired_on >= date('Y-m-d'))
 								<div class="job-bx-title clearfix">
 									<h5 class="font-weight-700 float-start text-uppercase">Send Bulk Mails</h5>
 									<div class="float-end" style="display: flex;align-items: center;"></div>
@@ -83,9 +85,10 @@
                                               </select>
                                             </div> --}}
                                             <div class="col-md-6">
-                                                <label for="inputAddress" class="form-label">Select Email Template</label>
+                                                <label for="inputAddress" class="form-label">Select Email Template<span class="imp-field-star">*</span></label>
                                                 <select class="form-control" name="email_template" id="email_template">
-                                                     <option selected  value="">Select</option>
+                                                    
+                                                     
                                                      <option value="{{base64_encode('0')}}">Custom</option>
                                                  @foreach ($templateData as $email_templates)
 												<option value="{{ base64_encode($email_templates->id)}}">{{ $email_templates->template_name}}
@@ -98,12 +101,17 @@
 												</small></span>
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="inputAddress" class="form-label">Select Users</label>
+                                                <label for="inputAddress" class="form-label">Select Users<span class="imp-field-star">*</span></label>
                                                 <select class="form-control" name="select_user[]" id="select_user" multiple>
-                                                     <option value="">Select users</option>
+                                                     <option disabled value="">Select users</option>
                                                      
                                                  @foreach ($query as $user)
+                                                @php
+                                                    $exist=is_exist('employer_viewed_js_contact',['employer_id'=>Session::get('emp_user_id'),'jobseeker_id'=>$user->id]);
+                                                @endphp
+                                                @if($exist != 0)
 												<option value="{{ $user->js_id }}">{{ $user->email}}</option>
+                                                    @endif
 												@endforeach 
                                                 </select>
                                                 <span id="select_user_error" style="color:red;display:none;">
@@ -112,8 +120,8 @@
 												</small></span>
                                             </div>
                                             <div class="col-md-12">
-                                                <label for="inputAddress" class="form-label">Email Subject</label>
-                                                <input type="text" class="form-control"  placeholder=""
+                                                <label for="inputAddress" class="form-label">Email Subject<span class="imp-field-star">*</span></label>
+                                                <input type="text" class="form-control"  placeholder="Please enter subject"
                                                     name="email_subject" id="email_subject" value="">
                                                 {{-- @error('email_subject')
                                                     <span style="color:red;text-transform:capitalize">{{ $message }}</span>
@@ -126,11 +134,11 @@
                                             </div>
 
                                             <div class="col-md-12">
-                                                <label for="inputAddress" class="form-label">Email Content</label>
+                                                <label for="inputAddress" class="form-label">Email Content<span class="imp-field-star">*</span></label>
                                                 <!-- Div for Quill editor -->
                                                 {{-- <div id="editor" style="min-height: 80px;"></div> --}}
                                                 <div id="quill_editor" class="mb-3" style="height: 300px;">
-                                                   
+                                                   Dear #Name#,
 													</div>
 													
 													<input type="hidden" name="email_content" id="email_content" value="">
@@ -142,7 +150,7 @@
                                             </div>
                                                 <div class="">
                                                     <button type="button" id="send-mails" class="btn btn-primary mb-4 me-2">Send</button>
-                                                    <a href="{{ route('emp-manage-mails') }}">
+                                                    <a href="{{ route('manage-mails') }}">
                                                         <button type="button" class="btn btn-secondary mb-4">Back</button>
                                                     </a>
                                                 </div>
@@ -211,4 +219,3 @@
 
 <!-- Import footer  -->
 @endsection()
-

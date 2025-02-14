@@ -96,7 +96,7 @@
                                         <h5 class="font-weight-700 mb-3">EMPLOYER REGISTRATION</h5>
                                         <div id="registration-form" class="tab-pane fade active show">
                                             
-                                            <form class="dez-form " id="regFrom">
+                                            <form class="dez-form " id="regFrom" enctype="multipart/form-data">
                                                 <div class="form-group">
                                                     <input name="com_name"  class="form-control" placeholder="Company Name"
                                                         type="text" id="com_name">
@@ -164,7 +164,48 @@
                                                     </div>
                                                 </div>
 
-
+                                                <div class="form-group">
+                                                    <input name="gst_license" id="gst_license" class="form-control"
+                                                        placeholder="gst_license" type="file" placeholder="Upload Licence number" accept=".png,.jpg,.jpeg,.pdf">                                                    
+                                                        <label for="gst_license">Upload Licence number</label>
+                                                    
+                                                    <span id="gst_license_error" style="color:red;display:none;">
+                                                        <small>
+                                                            <i>Upload Licence number </i>
+                                                        </small>
+                                                    </span>
+                                                    <span id="gst_license_file_error" style="color:red;display:none;">
+                                                        <small>
+                                                            <i>Invalid file type! Only PDF, PNG, and JPG are allowed. </i>
+                                                        </small>
+                                                    </span>
+                                                    <span id="gst_license_size_error" style="color:red;display:none;">
+                                                        <small>
+                                                            <i>File size too large! Maximum allowed size is 2MB. </i>
+                                                        </small>
+                                                    </span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input name="owner_id" id="owner_id" class="form-control"
+                                                        placeholder="owner_id" type="file" placeholder="Upload Owner Id" accept=".png,.jpg,.jpeg,.pdf">                                                    
+                                                        <label for="owner_id">Upload Owner ID</label>
+                                                    
+                                                    <span id="owner_id_error" style="color:red;display:none;">
+                                                        <small>
+                                                            <i>Upload Owner ID </i>
+                                                        </small>
+                                                    </span>
+                                                    <span id="owner_id_file_error" style="color:red;display:none;">
+                                                        <small>
+                                                            <i>Invalid file type! Only PDF, PNG, and JPG are allowed. </i>
+                                                        </small>
+                                                    </span>
+                                                    <span id="owner_id_size_error" style="color:red;display:none;">
+                                                        <small>
+                                                            <i>File size too large! Maximum allowed size is 2MB. </i>
+                                                        </small>
+                                                    </span>
+                                                </div>
                                                 <div class="form-group">
                                                     <input name="password" id="emp_password" placeholder="Password"
                                                         class="form-control" type="password">

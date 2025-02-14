@@ -337,7 +337,7 @@ class JobPostingController extends Controller
         if (session()->has('emp_username')) {
 
 
-            $select = ['free_assign_job_posting', 'left_credit_job_posting_plan', 'plan_id', 'plan_start_from', 'plan_expired_on','license_no','pan_no','cv_access_limit'];
+            $select = ['free_assign_job_posting', 'left_credit_job_posting_plan', 'plan_id', 'plan_start_from', 'plan_expired_on','license_no','pan_no','cv_access_limit','gst_license' ,'owner_id', 'document_verification'];
             $plan_details = getData('employers', $select, ['email' => session()->get('emp_username')]);
             // 1 Free Welcom Plan
          
@@ -505,7 +505,7 @@ class JobPostingController extends Controller
             }
         }
     }
-    public function jobDetailsView($id)
+    public function jobDetailsView($id,$action = null)
     {
      
      
@@ -528,7 +528,7 @@ class JobPostingController extends Controller
                         jobseekerAction('jobseeker_viewed_jobs', $data, $where);
                     }
                     // dd($jobData);
-                    return view('job-details', compact('jobData'));
+                    return view('job-details', compact('jobData','action'));
                 } catch (\Exception $e) {
                     
                     return redirect('top-search-bar')->with('msg', 'Unable to Open');

@@ -94,7 +94,7 @@
 												<input type="text" class="form-control-plaintext textveiw" placeholder="Select Company Size" value="{{ $empData->company_size_name}}" readonly>
 											</div>
 										</div>
-                                        <div class="col-lg-6 col-md-6">
+                                        <div class="col-lg-12 col-md-12">
 											<div class="form-group"  >
 												<label>Industry</label>
 												<select class="slec d-none" name="emp_com_indus" id="emp_com_indus" style="display: none;">
@@ -154,7 +154,7 @@
 										</span>
 										</div>
 									</div> --}}
-									<div class="col-lg-6 col-md-6">
+									{{-- <div class="col-lg-6 col-md-6">
 										<div class="form-group">
 											<label>Company Licence Number <span class="imp-field-star">*</span></label>
 											<input type="text" class="form-control-plaintext" value="{{$empData->pan_no}}" placeholder="Enter Licence Number" name="pan_no" id="pan_no" readonly>
@@ -163,6 +163,98 @@
 												<i>Please provide licence number </i>
 											</small>
 										</span>
+										</div>
+									</div> --}}
+									<div class="col-lg-6 col-md-6">
+										{{-- <div class="form-group">
+											<label for="gst_license">Select GST or Licence number <span class="imp-field-star">*</span></label>
+											<input type="file" class="form-control-plaintext" value="{{$empData->gst_license}}"
+												name="gst_license" id="gst_license" required disabled>
+											<span id="gst_license_error" style="color:red;display:none;">
+												<small>
+													<i>Please provide company license number </i>
+												</small>
+											</span>
+										</div> --}}
+										<div class="form-group">
+											<label for="gst_license">Upload Licence number <span class="imp-field-star">*</span></label>									
+											
+												<div class="viewgst" id="viewgst">
+													@if(isset($empData->gst_license) && !empty($empData->gst_license))
+													<p>Current License: <a href="{{ Storage::url('employer/gst_license/' . $empData->gst_license) }}" target="_blank">View File</a></p>
+													@else
+													<p>Upload Licence number</p>
+													@endif
+												</div>
+										
+												<div class="edit_gst" id="edit_gst" style="display:none">
+													@if(isset($empData->gst_license) && !empty($empData->gst_license))
+													<p>Current  License: <a href="{{ Storage::url('employer/gst_license/' . $empData->gst_license) }}" target="_blank">View File</a></p>
+													@else
+													<p>Upload Licence number</p>
+													@endif
+													<input type="file" class="form-control-plaintext" value=""
+													name="gst_license" id="gst_license" required disabled accept=".png,.jpg,.jpeg,.pdf">
+													<input type="hidden" name="old_gst_license" id="old_gst_license" value="{{ $empData->gst_license}}">
+												<span id="gst_license_error" style="color:red;display:none;">
+													<small>
+														<i>Please upload GST or Licence number </i>
+													</small>
+												</span>
+												<span id="gst_license_file_error" style="color:red;display:none;">
+													<small>
+														<i>Invalid file type! Only PDF, PNG, and JPG are allowed. </i>
+													</small>
+												</span>
+												<span id="gst_license_size_error" style="color:red;display:none;">
+													<small>
+														<i>File size too large! Maximum allowed size is 2MB. </i>
+													</small>
+												</span>
+												</div>
+										
+												
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-6">
+										<div class="form-group">
+											<label for="owner_id">Upload Owner ID<span class="imp-field-star">*</span></label>                                                    
+
+											<div class="viewgst" id="viewgst">
+												@if(isset($empData->owner_id) && !empty($empData->owner_id))
+												<p>Current Owner ID: <a href="{{ Storage::url('employer/owner_id/' . $empData->owner_id) }}" target="_blank">View File</a></p>
+												@else
+												<p>Upload Owner ID</p>
+												@endif
+											</div>
+
+											<div class="edit_gst" id="edit_gst" style="display:none">
+												@if(isset($empData->owner_id) && !empty($empData->owner_id))
+												<p>Current Owner ID: <a href="{{ Storage::url('employer/owner_id/' . $empData->owner_id) }}" target="_blank">View File</a></p>
+												
+												
+												@else
+												<p>Upload Owner ID</p>
+												@endif
+												<input type="file" class="form-control-plaintext" value="{{$empData->owner_id}}"
+												name="owner_id" id="owner_id" required disabled accept=".png,.jpg,.jpeg,.pdf">
+												<input type="hidden" name="old_owner_id" id="old_owner_id" value="{{ $empData->owner_id }}">
+												<span id="owner_id_error" style="color:red;display:none;">
+												<small>
+													<i>Please upload owner ID </i>
+												</small>
+											</span>
+											<span id="owner_id_file_error" style="color:red;display:none;">
+												<small>
+													<i>Invalid file type! Only PDF, PNG, and JPG are allowed. </i>
+												</small>
+											</span>
+											<span id="owner_id_size_error" style="color:red;display:none;">
+												<small>
+													<i>File size too large! Maximum allowed size is 2MB. </i>
+												</small>
+											</span>
+											</div>
 										</div>
 									</div>
 									<div class="col-lg-12 col-md-12">
