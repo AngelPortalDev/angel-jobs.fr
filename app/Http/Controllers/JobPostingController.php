@@ -231,7 +231,7 @@ class JobPostingController extends Controller
                                 $dyc_id = base64_encode($postingID);
                                 
                                 $link =  env('APP_URL') . "/job-details-view/" . $dyc_id;
-                                mail_send(19, ['#Name#', '#Link#'], [ucfirst($job_con_person), $link], $sendto);
+                                mail_send(19, ['#Name#', '#Link#'], [ucfirst($job_con_person), $link], $sendto,$sendcc);
                                 echo json_encode(array('code' => 200, 'message' => 'Successfully Posted', 'icon' => 'success'));
                             }
                         } catch (\Exception $e) {
@@ -583,7 +583,7 @@ class JobPostingController extends Controller
                         $username = Session::get('js_name');
                         $jobdata = getData('job_posting_view', ['id', 'job_title', 'is_deleted', 'status', 'approval_status', 'contact_email', 'contact_person', 'company_name'], ['id' => $job_id, 'is_deleted' => 'No', 'status' => 'Live', 'approval_status' => 'APPROVED']);
                         $result = jobseekerAction($table, $data, $where);
-                        if (isset($result) && $result === true) {
+                         if (isset($result) && ($result === true || $result > 0)) {
                             mail_send(40, ['#Name#', '#Job_title#', '#contact_person#', '#company_name#'], [$username, $jobdata[0]->job_title, $jobdata[0]->contact_person, $jobdata[0]->company_name], $jobdata[0]->contact_email);
                         }
                     } else {
@@ -644,7 +644,7 @@ class JobPostingController extends Controller
                         $jobdata = getData('job_posting_view', ['id', 'job_title', 'is_deleted', 'status', 'approval_status', 'company_name'], ['id' => $job_id, 'is_deleted' => 'No', 'status' => 'Live', 'approval_status' => 'APPROVED']);
                        
                         $result = jobseekerAction($table, $data, $where);
-                        if (isset($result) && $result != 0) {
+                        if (isset($result) && ($result === true || $result > 0)) {
                             mail_send(41, ['#Name#', '#Job_title#', '#company_name#'], [$jsdta[0]->fullname, $jobdata[0]->job_title, $jobdata[0]->company_name], $jsdta[0]->email);
                         }
                        

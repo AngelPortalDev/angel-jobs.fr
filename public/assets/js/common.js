@@ -412,10 +412,6 @@ $(document).ready(function () {
             $("#contact_no_error").show();
             return;
         }
-        // if (contact_no.length < 8) {
-        //     $("#contact_no_error").show();
-        //     return;
-        // }
         if (contact_no.length < 9) {
             $("#contact_no_error").text("Mobile no should be 9 digits.");
             $("#contact_no_error").show();

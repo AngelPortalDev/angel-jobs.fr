@@ -208,7 +208,7 @@ class employerProfile extends Controller
                             'owner_id' => $owner_id_filename,
                         ]);
                         if ($user_id > 0) {
-                             mail_send(9, ['#Name#', '#Cat#'], [ucfirst(session()->get('emp_name')), 'Company'], session()->get('emp_username'));
+                             mail_send(9, ['#Name#', '#Cat#'], [ucfirst($full_name), 'Company'], session()->get('emp_username'));
                             echo json_encode(array('code' => 200, 'message' => 'Successfully Updated', 'icon' => 'success'));
                         } else {
                             echo json_encode(['code' => 201, 'message' => 'Unble to Add Details', "icon" => "error"]);
@@ -603,7 +603,7 @@ class employerProfile extends Controller
                 if (!empty($lists->profile_img) && $lists->profile_img !== '') {
                     
                     $imagePath = Storage::path("storage/jobseeker/profile_image/{$lists->profile_img}");
-                  
+                    
                     if (file_exists($imagePath)) {
                         // If the image exists, display it
                         $img = "<img alt='' src='" . Storage::url("jobseeker/profile_image/{$lists->profile_img}") . "'>";
