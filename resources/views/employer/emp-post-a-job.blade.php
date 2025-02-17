@@ -31,14 +31,17 @@
                                                 $tooltip = 'Free Credit : 0, Plan Credit : 0';
                                                 $totalposting = '0';
                                             }
-                                            $plan=getData('employer_plan',['id','cv_access_limit'],['id'=>$plan_detail->plan_id]);
-                                           
-                                            // if($plan_detail->plan_id == 1){$total = 500;
-                                            // }else{$total = 500 + $plan[0]->cv_access_limit ;}
+                                            $plan=getData('employer_plan',['id','cv_access_limit'],['id'=>$plan_detail->plan_id]);                                         
                                             
-                                            $total =$plan[0]->cv_access_limit;
-                                            $tooltipresume = "Remaining : $plan_detail->cv_access_limit, Total: " .  $total;
-                                            $viewcv=$total-$plan_detail->cv_access_limit;
+
+                                            if ($plan_detail->plan_id == 1) {
+                                                $total = 500;
+                                            } else {
+                                                $total = 500 + $plan[0]->cv_access_limit;
+                                            }
+                                            $tooltipresume =
+                                                "Remaining : $plan_detail->cv_access_limit, Total: " . $total;
+                                            $viewcv = $total - $plan_detail->cv_access_limit;
                                         @endphp
                                         <h5 class="font-weight-700 float-start text-uppercase">Post A Job</h5>
                                      {{-- <p class="site-button button-sm float-end btn-success" data-bs-toggle="tooltip"
