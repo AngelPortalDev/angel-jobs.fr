@@ -33,8 +33,10 @@
                                             }
                                             $plan=getData('employer_plan',['id','cv_access_limit'],['id'=>$plan_detail->plan_id]);
                                            
-                                            if($plan_detail->plan_id == 1){$total = 500;
-                                            }else{$total = 500 + $plan[0]->cv_access_limit ;}
+                                            // if($plan_detail->plan_id == 1){$total = 500;
+                                            // }else{$total = 500 + $plan[0]->cv_access_limit ;}
+                                            
+                                            $total =$plan[0]->cv_access_limit;
                                             $tooltipresume = "Remaining : $plan_detail->cv_access_limit, Total: " .  $total;
                                             $viewcv=$total-$plan_detail->cv_access_limit;
                                         @endphp
@@ -470,8 +472,14 @@
                                 @endif 
                                         @else
                                         <div class="container">
-                                            Post unlimited jobs for just <i class="fa fa-euro"></i> 20
-                                            <a  href="{{ route('emp_buy_plan', ['plan_id' => 4, 'amount' => 20])}}">Pay Now</a> 
+                                            @php
+                                            $plan = getData('employer_plan',['id', 'plan_amount', 'plan_name', 'plan_duration','job_post_limit'],['id' => 4, 'is_deleted' => 'No'],);
+   
+                                           @endphp
+   
+                                           Post unlimited jobs for just <i class="fa fa-euro"></i> 20
+                                           <a  href="{{ route('emp_buy_plan', ['plan_id' => $plan[0]->id, 'amount' => $plan[0]->plan_amount])}}">Pay Now</a>
+                                             
                                         </div>
                                     @endif
                                         @else

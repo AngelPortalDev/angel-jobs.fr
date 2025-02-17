@@ -584,8 +584,12 @@ class adminCommonController extends Controller
                     
                     $data=DB::table('email_templates')->insert(['status' => $status, 'template_name' => $template_name, 'email_subject' => $email_subject, 'email_content' => $email_content, 'type' => $type, 'added_by' => $addedvy]);
                     if(isset($data) && $data === true){
-                    return redirect($redirect)->with('msg', 'Succefully Added');
-                    }
+                        if(session()->has('admin_username')){
+                     return redirect($redirect)->with('msg', 'Succefully Added');
+                        }else{
+                            return response()->json(['code' => 200,'message' => 'Successfully updated','icon' => 'success',]);
+                     }
+                 }
 
                 } catch (\Exception $th) {
                     return redirect()->back()->with('msg', 'Unable to Create');
