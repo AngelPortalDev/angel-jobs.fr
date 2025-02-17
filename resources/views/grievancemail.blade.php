@@ -12,17 +12,19 @@
     <p><strong>Country Code:</strong> {{ $country_code }}</p>
     <p><strong>Contact Number:</strong> {{ $contact_no }}</p>
     <p><strong>Email:</strong> {{ $email }}</p>
+    @if (isset($address) && !empty($address))
     <p><strong>Address:</strong> {{ $address }}</p>
-    <p><strong>Report URL:</strong> <a href="{{ $report_url }}" target="_blank">{{ $report_url }}</a></p>
-    <p><strong>Date of Occurrence:</strong> {{ $date_oc }}</p>
-
-    <p><strong>Message:</strong></p>
-    <p>{{ $datameg }}</p> 
-
-
-    @if (isset($grfile_name) && !empty($grfile_name))
-        <p><strong>Grievance File:</strong> <a href="https://www.angel-jobs.fr/storage/grivance_doc/{{$grfile_name}}" target="_blank">Download File</a></p>
     @endif
+    @if (isset($report_url) && !empty($report_url))
+    <p><strong>Report URL:</strong> <a href="{{ $report_url }}" target="_blank">{{ $report_url }}</a></p>
+    @endif
+    @if (isset($date_oc) && !empty($date_oc))
+    <p><strong>Date of Occurrence:</strong> {{ $date_oc }}</p>
+    @endif
+    <p><strong>Message:</strong>{{ $datameg }}</p> 
+
+
+ 
 
     <p>Thank you for your submission!</p>
 

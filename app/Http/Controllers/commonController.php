@@ -1246,15 +1246,21 @@ class commonController extends Controller
                 }
                 // if ($logo_uploaded === TRUE) {
                     try {
-                        DB::table('grievance')->insert(['name' => $name, 'country_code' => $country_code, 'contact_no' => $contact_no, 'email' => $email, 'address' => $address, 'report_url' => $report_url, 'date_oc' => $date_oc, 'confirm' => $confirm, 'message' => $message, 'tnc' => $tnc,'grfile'=>$grfile_name]);
+                        DB::table('grievance')->insert(['name' => $name, 'country_code' => $country_code, 'contact_no' => $contact_no, 'email' => $email, 'address' => $address, 'report_url' => $report_url, 'date_oc' => $date_oc, 'grfile' => $grfile_name,'confirm' => $confirm, 'message' => $message, 'tnc' => $tnc]);
                         $datameg= $message;
-                        $data=['name' => $name, 'country_code' => $country_code, 'contact_no' => '+91', 'email' => $email, 'address' => $address, 'report_url' => $report_url, 'date_oc' => $date_oc, 'confirm' => $confirm, 'datameg' => $datameg, 'tnc' => $tnc,'grfile_name'=>$grfile_name];
+                        $data=['name' => $name, 'country_code' => $country_code, 'contact_no' => '+91'.$contact_no, 'email' => $email, 'address' => $address, 'report_url' => $report_url, 'date_oc' => $date_oc,'grfile' => $grfile_name, 'confirm' => $confirm, 'datameg' => $datameg, 'tnc' => $tnc];
                         $user['to'] = 'info@angel-jobs.com';
-                        $send = Mail::send('grievancemail', $data, function ($mes) use ($user, $email, $name,) {
+                        $send = Mail::send('grievancemail', $data, function ($mes) use ($user, $email, $name, $grfile) {
                             $mes->from(env('MAIL_FROM_ADDRESS'));
                             $mes->to($user['to']);
-                            $mes->subject('Enquiry Givance Form from Angel-jobs.fr');
-                            $mes->replyTo($email, $name);
+                            $mes->subject('Enquiry Grievance Form from Angel-jobs.mt');
+                            $mes->replyTo($email, $name);                  
+                            if ($grfile) {
+                                $mes->attach($grfile->getRealPath(), [
+                                    'as' => $grfile->getClientOriginalName(), 
+                                    'mime' => $grfile->getMimeType(), 
+                                ]);
+                            }
                         });
     
                         // mail_send(9, ['#Name#', '#Cat#'], ['', $cat], session()->get('emp_username'));
