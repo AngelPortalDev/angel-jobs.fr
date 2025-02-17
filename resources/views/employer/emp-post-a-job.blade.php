@@ -411,17 +411,17 @@
                                                             <div class="col-10">
                                                                 <input type="number" id="job_con_phone" maxlength="8"
                                                                     name="job_con_phone" class="form-control"
-                                                                    placeholder="Enter 8 Digit Mobile No.">
+                                                                    placeholder="Enter 9 Digit Mobile No.">
                                                                 <span id="job_con_phone_error"
                                                                     style="color:red;display:none;">
                                                                     <small>
-                                                                        <i>Please enter 8 digit mobile no. </i>
+                                                                        <i>Please enter 9 digit mobile no. </i>
                                                                     </small>
                                                                 </span>
                                                                 <span id="job_con_phone_limit_error"
                                                                     style="color:red;display:none;">
                                                                     <small>
-                                                                        <i>Mobile no. must be 8 Digits. </i>
+                                                                        <i>Mobile no. must be 9 Digits. </i>
                                                                     </small>
                                                                 </span>
                                                             </div>

@@ -719,7 +719,8 @@ class employerProfile extends Controller
             $emails_subject = isset($req->email_subject) ? htmlspecialchars($req->input('email_subject')) : '';
             $email_content = isset($req->email_content) ? htmlspecialchars_decode($req->input('email_content')) : '';
             $ids = explode(',', $selected_emails);
-            $emailFrom = session::get('emp_name');
+            // $emailFrom = session::get('emp_name');
+            $emailFrom = getData('employer_view',['id','company_name','fullname'],['id' => session::get('emp_user_id')]);   
             $emailFromAddress = session::get('emp_username');
             $employer_data = getEmails('jobseeker_view', ['js_id', 'fullname', 'email'], ['js_id', 'IN', $ids]);
            
@@ -728,7 +729,7 @@ class employerProfile extends Controller
                    
                     $personalized_content = str_replace('#Name#', $employer->fullname, $email_content);
         
-                    SendEmailJob::dispatch($emails_subject, $personalized_content, $employer->fullname, $employer->email,$emailFrom, $emailFromAddress);
+                    SendEmailJob::dispatch($emails_subject, $personalized_content, $employer->fullname, $employer->email,$emailFrom[0]->company_name, $emailFromAddress);
                 }
         
                 return response()->json(['code' => 200, 'message' => 'Emails are being sent.']);
