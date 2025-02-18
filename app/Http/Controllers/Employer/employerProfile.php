@@ -695,16 +695,35 @@ class employerProfile extends Controller
             $templateData=getData('email_templates',['id','template_name'],['is_deleted' => 'No', 'added_by' => $id,'status' =>'APPROVED']);
            
             $query = DB::table('job_application_history')
-            ->select('jobseeker_view.fullname', 'jobseeker_view.email','jobseeker_view.js_id') 
-            ->leftJoin('job_posting_view', 'job_application_history.job_id', '=', 'job_posting_view.id')
+            ->select(
+                'jobseeker_view.fullname', 
+                'jobseeker_view.email', 
+                'jobseeker_view.js_id', 
+                'job_application_history.is_shortlisted', 
+                'jobseeker_view.id', 
+                'job_application_history.applied_on'
+            )
             ->leftJoin('jobseeker_view', 'jobseeker_view.js_id', '=', 'job_application_history.js_id')
-            ->where(function($query) {
-                $query->whereNotNull('job_application_history.applied_on') 
-                      ->orWhere('job_application_history.is_shortlisted', 'Yes'); 
+            ->leftJoin('job_posting_view', function ($join) use ($id) {
+                $join->on('job_posting_view.id', '=', 'job_application_history.job_id')
+                     ->where('job_posting_view.posted_by', '=', $id);
             })
-            ->where('job_application_history.employer_id', $id) 
+            ->where('job_application_history.is_shortlisted', 'Yes')
+            ->where(function($query) use ($id) {
+                $query->where('job_application_history.employer_id', $id)
+                      ->orWhere(function($query) use ($id) {
+                          $query->whereNotNull('job_application_history.applied_on') 
+                                ->whereNull('job_application_history.employer_id');
+                      });
+            })
+            ->orWhere(function($query) use ($id) {
+                $query->where('job_posting_view.posted_by', $id); 
+            })
             ->orderBy('job_application_history.applied_on', 'DESC')
-            ->get();  
+            ->get();
+        
+        $query = $query->unique('email');
+       
                    
            return view('employer.send-bulk-mail',compact('templateData','query'));
         }

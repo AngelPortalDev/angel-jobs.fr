@@ -170,7 +170,7 @@
 													@endif
                                                 </td>
                                                 <td class="application text-primary" style="text-wrap: nowrap;">
-                                                    <div class="mb-0 badge {{ $jobDatas->approval_status == '1' ? 'bg-success' : 'bg-warning text-dark' }}"
+                                                    <div class="mb-0 badge {{ $jobDatas->approval_status == 'APPROVED' ? 'bg-success' : 'bg-warning text-dark' }}"
                                                         style="padding:8px 15px; font-size:12px">
                                                         {{ $jobDatas->approval_status }}
                                                     </div>
