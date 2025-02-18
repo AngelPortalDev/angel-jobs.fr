@@ -764,13 +764,307 @@ class commonController extends Controller
         }
     }
 
+    // public function processCallback(Request $request, $order_id, $session)
+    // {
+    //     if ($request->isMethod('POST') && isset($order_id) && !empty($order_id) && isset($session) && !empty($session)) {
+    //         $callbackData = $request->all();   
+    //         $eventType = $callbackData['event_type'] ?? null;
+
+    //         try{
+
+    //             switch ($eventType) {
+    //                 case 'initiated':
+
+    //                     break;
+    //                 case 'processed':
+
+    //                     break;
+    //                 case 'guaranteed':
+    //                     Log::info('Payment Guaranteed', $request->all());
+                        
+    //                     if ($session == 'jobseeker') {
+    //                         $table = 'jobseeker_payments';
+    //                         $mainTable = 'jobseekers';
+    //                         $plantable = 'jobseeker_plan';
+    //                         $column  = 'js_id';
+    //                     } elseif ($session == 'employer') {
+    //                         $table = 'employer_payments';
+    //                         $mainTable = 'employers';
+    //                         $plantable = 'employer_plan';
+    //                         $column  = 'emp_id';
+    //                     }
+                        
+    //                     // $payment = DB::table($table)
+    //                     // ->where('status', '1')
+    //                     // ->where('order_id', $order_id)
+    //                     // ->latest()
+    //                     // ->first();
+                    
+    //                     $payment = getData($table, [$column, 'plan_id'], ['status' => '1', 'order_id' => $order_id], '1', 'id', 'DESC');
+    //                     if (isset($payment) && !empty($payment)) {
+
+    //                         $carbonDate = Carbon::now();
+    //                         $formattedDate = $carbonDate->format('Y-m-d');
+    //                         $currentDate = Carbon::parse($formattedDate);
+    //                         $addedDays = 0;
+    //                         while ($addedDays < 7) {
+    //                             $currentDate->addDay();
+    //                             if ($currentDate->isWeekday()) {
+    //                                 $addedDays++;
+    //                             }
+    //                         }
+    //                         $transaction = '';
+    //                         $type = '';
+    //                         $brand = '';
+    //                         $exp_month = '';
+    //                         $exp_year = '';
+
+    //                         $paymentMethod = $callbackData['data']['payment_method'];
+
+    //                         $transaction = '';
+                            
+    //                         if($paymentMethod['type']){
+    //                             $type = $paymentMethod['type'];
+    //                         }
+    //                         $where = ['order_id' => $order_id];
+    //                         $select = [
+    //                             'status' => '3',
+    //                         ];
+
+    //                         // $plan = DB::table($plantable)->where(['id' => $payment->plan_id])->first();
+
+    //                         $plan = getData($plantable, ['plan_duration'], ['id' => $payment[0]->plan_id]);
+    //                         if (isset($plan) && !empty($plan)) {
+    //                             $planDuration = isset($plan[0]->plan_duration) ? $plan[0]->plan_duration : 0;
+    //                             $addedDate = $carbonDate->copy()->addDays($planDuration);
+    //                             if($plantable == 'employer_plan'){
+    //                                 $plan = getData($plantable, ['job_post_limit', 'plan_duration','cv_access_limit'], ['id' => $payment[0]->plan_id]);
+    //                                 if (isset($plan) && !empty($plan)) {
+    //                                     $jobPostLimit  = isset($plan[0]->job_post_limit) ? $plan[0]->job_post_limit : 0;
+    //                                     $CvaccessLimit  = isset($plan[0]->cv_access_limit) ? $plan[0]->cv_access_limit : 0;
+    //                                     $currentLeftCredit = getData($mainTable, ['left_credit_job_posting_plan','cv_access_limit'], ['id' => $payment[0]->$column]);
+    //                                     // $currentLeftCredit = DB::table($mainTable)->where('id', $payment->$column)->value('left_credit_job_posting_plan');
+    //                                     if (isset($currentLeftCredit) && !empty($currentLeftCredit)) {
+    //                                         $newLeftCredit = $currentLeftCredit[0]->left_credit_job_posting_plan + $jobPostLimit;
+    //                                         $newcvLeftCredit= $currentLeftCredit[0]->cv_access_limit +  $CvaccessLimit;
+    //                                         $mainTableSelect = [
+    //                                             'plan_id' => $payment[0]->plan_id, 
+    //                                             'plan_start_from' => now(), 
+    //                                             'plan_expired_on' => $addedDate->toDateString(),
+    //                                             'left_credit_job_posting_plan' => $newLeftCredit,
+    //                                             'cv_access_limit' => $newcvLeftCredit
+    //                                         ];
+    //                                     }
+    //                                 }
+    //                             }else{
+    //                                 $mainTableSelect = [
+    //                                     'plan_id' => $payment[0]->plan_id,
+    //                                 ];
+
+    //                                 // $existingProfile = DB::table('jobseeker_profiles')->where('js_id', $payment->$column)->first();
+    //                                 $existingProfile = getData('jobseeker_profiles', ['js_id'], ['js_id' => $payment[0]->$column]);
+    //                                 if (isset($existingProfile) && !empty($existingProfile)) {
+    //                                     $sel = [
+    //                                         'plan_start_from' => now(), 
+    //                                         'plan_expired_on' => $addedDate->toDateString(),
+    //                                     ];
+    //                                     $updateJobSeekerTable = processData(['jobseeker_profiles', 'id'], $sel, ['js_id' => $payment[0]->$column]);
+
+    //                                 }else{
+    //                                     $newProfileData = [
+    //                                         'js_id' => $payment[0]->$column,
+    //                                         'plan_start_from' => now(),
+    //                                         'plan_expired_on' => $addedDate->toDateString(),
+    //                                     ];
+    //                                     // $jobSeekerProfile = DB::table('jobseeker_profiles')->insert($newProfileData);
+                                        
+    //                                     $jobSeekerProfile = processData(['jobseeker_profiles', 'id'], $newProfileData);
+    //                                 }
+    //                             }
+    //                         }
+                            
+    //                         $updatePayment = processData([$table, 'id'], $select, $where);
+    //                         if (isset($updatePayment) && $updatePayment['status'] === true) {
+    //                             $updateMainTable = processData([$mainTable, 'id'], $mainTableSelect, ['id' => $payment[0]->$column]);
+    //                         }
+    //                     }
+    //                     // return $this->success();
+    //                     break;
+    //                 case 'delivered':
+    //                     Log::info('Payment Delivered', $request->all());
+                        
+    //                     if ($session == 'jobseeker') {
+    //                         $table = 'jobseeker_payments';
+    //                         $mainTable = 'jobseekers';
+    //                         $plantable = 'jobseeker_plan';
+    //                         $column  = 'js_id';
+    //                     } elseif ($session == 'employer') {
+    //                         $table = 'employer_payments';
+    //                         $mainTable = 'employers';
+    //                         $plantable = 'employer_plan';
+    //                         $column  = 'emp_id';
+    //                     }
+                        
+    //                     // $payment = DB::table($table)
+    //                     // ->where('status', '1')
+    //                     // ->where('order_id', $order_id)
+    //                     // ->latest()
+    //                     // ->first();
+                    
+    //                     $payment = getData($table, [$column, 'plan_id'], ['status' => '1', 'order_id' => $order_id], '1', 'id', 'DESC');
+    //                     if (isset($payment) && !empty($payment)) {
+
+    //                         $carbonDate = Carbon::now();
+    //                         $formattedDate = $carbonDate->format('Y-m-d');
+    //                         $currentDate = Carbon::parse($formattedDate);
+    //                         $addedDays = 0;
+    //                         while ($addedDays < 7) {
+    //                             $currentDate->addDay();
+    //                             if ($currentDate->isWeekday()) {
+    //                                 $addedDays++;
+    //                             }
+    //                         }
+    //                         $transaction = '';
+    //                         $type = '';
+    //                         $brand = '';
+    //                         $exp_month = '';
+    //                         $exp_year = '';
+
+    //                         $paymentMethod = $callbackData['data']['payment_method'];
+
+    //                         $transaction = '';
+                            
+    //                         if($paymentMethod['type']){
+    //                             $type = $paymentMethod['type'];
+    //                         }
+    //                         $where = ['order_id' => $order_id];
+    //                         $select = [
+    //                             'status' => '3',
+    //                         ];
+
+    //                         // $plan = DB::table($plantable)->where(['id' => $payment->plan_id])->first();
+
+    //                         $plan = getData($plantable, ['plan_duration'], ['id' => $payment[0]->plan_id]);
+    //                         if (isset($plan) && !empty($plan)) {
+    //                             $planDuration = isset($plan[0]->plan_duration) ? $plan[0]->plan_duration : 0;
+    //                             $addedDate = $carbonDate->copy()->addDays($planDuration);
+    //                             if($plantable == 'employer_plan'){
+    //                                 $plan = getData($plantable, ['job_post_limit', 'plan_duration','cv_access_limit'], ['id' => $payment[0]->plan_id]);
+    //                                 if (isset($plan) && !empty($plan)) {
+    //                                     $jobPostLimit  = isset($plan[0]->job_post_limit) ? $plan[0]->job_post_limit : 0;
+    //                                     $CvaccessLimit  = isset($plan[0]->cv_access_limit) ? $plan[0]->cv_access_limit : 0;
+    //                                     $currentLeftCredit = getData($mainTable, ['left_credit_job_posting_plan','cv_access_limit'], ['id' => $payment[0]->$column]);
+    //                                     // $currentLeftCredit = DB::table($mainTable)->where('id', $payment->$column)->value('left_credit_job_posting_plan');
+    //                                     if (isset($currentLeftCredit) && !empty($currentLeftCredit)) {
+    //                                         $newLeftCredit = $currentLeftCredit[0]->left_credit_job_posting_plan + $jobPostLimit;
+    //                                         $newcvLeftCredit= $currentLeftCredit[0]->cv_access_limit +  $CvaccessLimit;
+    //                                         $mainTableSelect = [
+    //                                             'plan_id' => $payment[0]->plan_id, 
+    //                                             'plan_start_from' => now(), 
+    //                                             'plan_expired_on' => $addedDate->toDateString(),
+    //                                             'left_credit_job_posting_plan' => $newLeftCredit
+    //                                         ];
+    //                                     }
+    //                                     if(isset($payment[0]->plan_id) && $payment[0]->plan_id == 4){
+                                        
+    //                                         $empolyerdata=Employer::where('id', $payment[0]->emp_id)->first();
+    //                                             $attachments = [
+    //                                                 ['path' => storage_path('app/public/employer/gst_license/'.$empolyerdata->gst_license),
+    //                                                     'name' => $empolyerdata->gst_license,
+    //                                                     'mime' => mime_content_type(storage_path('app/public/employer/gst_license/'.$empolyerdata->gst_license)), 
+    //                                                 ],
+    //                                                 [
+    //                                                 'path' => storage_path('app/public/employer/owner_id/'.$empolyerdata->owner_id),
+    //                                                     'name' => $empolyerdata->owner_id,
+    //                                                     'mime' => mime_content_type(storage_path('app/public/employer/owner_id/'.$empolyerdata->owner_id)), 
+    //                                                 ],
+    //                                             ];
+    //                                         $dyc_id = Crypt::encrypt($payment[0]->emp_id);
+    //                                         $link= env('APP_URL') . "/verfiy-document/empolyer/" . $dyc_id;
+    //                                         $repl_contain=['#company_name#', '#Name#', '#Email#', '#payment_id#', '#date#','#Link#'];
+    //                                         $repl_value=[$empolyerdata->company_name,$empolyerdata->fullname,$empolyerdata->email, $order_id,now(),$link];
+    //                                         $sendto='info@angel-jobs.com';
+    //                                         $sendcc=[];
+                                            
+    //                                         $send = mail_send(42, $repl_contain, $repl_value, $sendto, $sendcc, $attachments);
+                                            
+    //                                     } 
+    //                                 }
+    //                             }else{
+    //                                 $mainTableSelect = [
+    //                                     'plan_id' => $payment[0]->plan_id,
+    //                                 ];
+
+    //                                 // $existingProfile = DB::table('jobseeker_profiles')->where('js_id', $payment->$column)->first();
+    //                                 $existingProfile = getData('jobseeker_profiles', ['js_id'], ['js_id' => $payment[0]->$column]);
+    //                                 if (isset($existingProfile) && !empty($existingProfile)) {
+    //                                     $sel = [
+    //                                         'plan_start_from' => now(), 
+    //                                         'plan_expired_on' => $addedDate->toDateString(),
+    //                                     ];
+    //                                     $updateJobSeekerTable = processData(['jobseeker_profiles', 'id'], $sel, ['js_id' => $payment[0]->$column]);
+
+    //                                 }else{
+    //                                     $newProfileData = [
+    //                                         'js_id' => $payment[0]->$column,
+    //                                         'plan_start_from' => now(),
+    //                                         'plan_expired_on' => $addedDate->toDateString(),
+    //                                     ];
+    //                                     // $jobSeekerProfile = DB::table('jobseeker_profiles')->insert($newProfileData);
+                                        
+    //                                     $jobSeekerProfile = processData(['jobseeker_profiles', 'id'], $newProfileData);
+    //                                 }
+    //                             }
+    //                         }
+                            
+    //                         $updatePayment = processData([$table, 'id'], $select, $where);
+    //                         if (isset($updatePayment) && $updatePayment['status'] === true) {
+    //                             $updateMainTable = processData([$mainTable, 'id'], $mainTableSelect, ['id' => $payment[0]->$column]);
+    //                         }
+    //                     }
+    //                     // return $this->success();
+                            
+    //                     break;
+    //                 case 'failed':
+    //                     Log::error('Failed to update payment or order status for failed payment.');
+    //                     // return $this->success();
+
+    //                     break;
+    //                 case 'cancelled':
+    //                     if (session()->has('js_username')) {
+    //                         $table = 'jobseeker_payments';
+    //                     } elseif (session()->has('emp_username')) {
+    //                         $table = 'employer_payments';
+    //                     }
+    //                     $where = ['order_id' => $order_id];
+    //                     $select = [
+    //                         'status' => '2',
+    //                     ];
+    //                     $updatePayment = processData([$table, 'id'], $select, $where);
+    //                     Log::error('Failed to update payment or order status for cancelled payment.');
+    //                     // return $this->success();
+                        
+    //                     break;
+    //                 default:
+    //                     Log::info("Unknown Event Type: $eventType");
+    //                     break;
+    //             }
+            
+    //         } catch (\Exception $e) {
+    //             Log::error("Payment processing error: " . $e->getMessage());
+    //         }
+    //     }else {
+    //         Log::error("Invalid Paramater");
+    //     }
+    // }
     public function processCallback(Request $request, $order_id, $session)
     {
+        
         if ($request->isMethod('POST') && isset($order_id) && !empty($order_id) && isset($session) && !empty($session)) {
-            $callbackData = $request->all();   
+            $callbackData = $request->all();
             $eventType = $callbackData['event_type'] ?? null;
 
-            try{
+            try {
 
                 switch ($eventType) {
                     case 'initiated':
@@ -781,7 +1075,7 @@ class commonController extends Controller
                         break;
                     case 'guaranteed':
                         Log::info('Payment Guaranteed', $request->all());
-                        
+
                         if ($session == 'jobseeker') {
                             $table = 'jobseeker_payments';
                             $mainTable = 'jobseekers';
@@ -793,13 +1087,13 @@ class commonController extends Controller
                             $plantable = 'employer_plan';
                             $column  = 'emp_id';
                         }
-                        
+
                         // $payment = DB::table($table)
                         // ->where('status', '1')
                         // ->where('order_id', $order_id)
                         // ->latest()
                         // ->first();
-                    
+
                         $payment = getData($table, [$column, 'plan_id'], ['status' => '1', 'order_id' => $order_id], '1', 'id', 'DESC');
                         if (isset($payment) && !empty($payment)) {
 
@@ -822,22 +1116,22 @@ class commonController extends Controller
                             $paymentMethod = $callbackData['data']['payment_method'];
 
                             $transaction = '';
-                            
-                            if($paymentMethod['type']){
+
+                            if ($paymentMethod['type']) {
                                 $type = $paymentMethod['type'];
                             }
                             $where = ['order_id' => $order_id];
-                            $select = [
-                                'status' => '3',
-                            ];
+                            $select = ['status' => '3'];
 
                             // $plan = DB::table($plantable)->where(['id' => $payment->plan_id])->first();
 
                             $plan = getData($plantable, ['plan_duration'], ['id' => $payment[0]->plan_id]);
+                          
                             if (isset($plan) && !empty($plan)) {
                                 $planDuration = isset($plan[0]->plan_duration) ? $plan[0]->plan_duration : 0;
                                 $addedDate = $carbonDate->copy()->addDays($planDuration);
                                 if($plantable == 'employer_plan'){
+                                    $ej_id = $payment[0]->$column;
                                     $plan = getData($plantable, ['job_post_limit', 'plan_duration','cv_access_limit'], ['id' => $payment[0]->plan_id]);
                                     if (isset($plan) && !empty($plan)) {
                                         $jobPostLimit  = isset($plan[0]->job_post_limit) ? $plan[0]->job_post_limit : 0;
@@ -855,44 +1149,87 @@ class commonController extends Controller
                                                 'cv_access_limit' => $newcvLeftCredit
                                             ];
                                         }
+                                        
                                     }
-                                }else{
+                                  
+                                        if(isset($payment[0]->plan_id) && $payment[0]->plan_id == 4){
+                                            $empolyerdata=Employer::where('id', $payment[0]->emp_id)->first();
+                                                $attachments = [
+                                                    ['path' => storage_path('app/public/employer/gst_license/'.$empolyerdata->gst_license),
+                                                        'name' => $empolyerdata->gst_license,
+                                                        'mime' => mime_content_type(storage_path('app/public/employer/gst_license/'.$empolyerdata->gst_license)), 
+                                                    ],
+                                                    [
+                                                    'path' => storage_path('app/public/employer/owner_id/'.$empolyerdata->owner_id),
+                                                        'name' => $empolyerdata->owner_id,
+                                                        'mime' => mime_content_type(storage_path('app/public/employer/owner_id/'.$empolyerdata->owner_id)), 
+                                                    ],
+                                                ];
+                                            $dyc_id = Crypt::encrypt($payment[0]->emp_id);
+                                            $link= env('APP_URL') . "/verfiy-document/empolyer/" . $dyc_id;
+                                            $repl_contain=['#company_name#', '#Name#', '#Email#', '#payment_id#', '#date#','#Link#'];
+                                            $repl_value=[$empolyerdata->company_name,$empolyerdata->fullname,$empolyerdata->email, $order_id,now(),$link];
+                                            $sendto='info@angel-jobs.com';
+                                            $sendcc=[];
+                                            
+                                            $send = mail_send(42, $repl_contain, $repl_value, $sendto, $sendcc, $attachments);
+                                           
+                                        }  
+                                } else {
+                                   
                                     $mainTableSelect = [
                                         'plan_id' => $payment[0]->plan_id,
                                     ];
+                                    $payments = json_decode($payment, true);
 
+                                    // Log the first js_id
+                                     Log::info("Payments Js: " . $payments[0]['js_id']);
+
+                                    // Or loop through all records if there are multiple payments
+                                   
+                                   
+                                    $mainTableSelect = [
+                                        'plan_id' => $payment[0]->plan_id,
+                                    ];
+                                    $ej_id=$payments[0]['js_id'];
+                                    Log::info("ej_id". $ej_id);
                                     // $existingProfile = DB::table('jobseeker_profiles')->where('js_id', $payment->$column)->first();
-                                    $existingProfile = getData('jobseeker_profiles', ['js_id'], ['js_id' => $payment[0]->$column]);
+                                    $existingProfile = getData('jobseeker_profiles', ['js_id'], ['js_id' => $payments[0]['js_id']]);
+                                    Log::info("exitdata " . $existingProfile);
                                     if (isset($existingProfile) && !empty($existingProfile)) {
+                                     
                                         $sel = [
-                                            'plan_start_from' => now(), 
-                                            'plan_expired_on' => $addedDate->toDateString(),
-                                        ];
-                                        $updateJobSeekerTable = processData(['jobseeker_profiles', 'id'], $sel, ['js_id' => $payment[0]->$column]);
-
-                                    }else{
-                                        $newProfileData = [
-                                            'js_id' => $payment[0]->$column,
+                                            'js_id' => $payments[0]['js_id'],
                                             'plan_start_from' => now(),
                                             'plan_expired_on' => $addedDate->toDateString(),
                                         ];
+                                        Log::info("sel ".  $payments[0]['js_id']);
+                                        $updateJobSeekerTable = processData(['jobseeker_profiles', 'id'], $sel, ['js_id' => $payments[0]['js_id']]);
+                                    } else {
+                                       
+                                        $newProfileData = [
+                                            'js_id' => $payments[0]['js_id'],
+                                            'plan_start_from' => now(),
+                                            'plan_expired_on' => $addedDate->toDateString(),
+                                        ];
+                                        Log::info("newProfileData ".  $payments[0]['js_id']);
                                         // $jobSeekerProfile = DB::table('jobseeker_profiles')->insert($newProfileData);
-                                        
+
                                         $jobSeekerProfile = processData(['jobseeker_profiles', 'id'], $newProfileData);
                                     }
                                 }
                             }
-                            
+                            Log::info("ej_id". $ej_id);
                             $updatePayment = processData([$table, 'id'], $select, $where);
                             if (isset($updatePayment) && $updatePayment['status'] === true) {
-                                $updateMainTable = processData([$mainTable, 'id'], $mainTableSelect, ['id' => $payment[0]->$column]);
+                                $updateMainTable = processData([$mainTable, 'id'], $mainTableSelect, ['id' => $ej_id]);
                             }
                         }
                         // return $this->success();
                         break;
                     case 'delivered':
                         Log::info('Payment Delivered', $request->all());
-                        
+
                         if ($session == 'jobseeker') {
                             $table = 'jobseeker_payments';
                             $mainTable = 'jobseekers';
@@ -904,13 +1241,13 @@ class commonController extends Controller
                             $plantable = 'employer_plan';
                             $column  = 'emp_id';
                         }
-                        
+
                         // $payment = DB::table($table)
                         // ->where('status', '1')
                         // ->where('order_id', $order_id)
                         // ->latest()
                         // ->first();
-                    
+
                         $payment = getData($table, [$column, 'plan_id'], ['status' => '1', 'order_id' => $order_id], '1', 'id', 'DESC');
                         if (isset($payment) && !empty($payment)) {
 
@@ -933,8 +1270,8 @@ class commonController extends Controller
                             $paymentMethod = $callbackData['data']['payment_method'];
 
                             $transaction = '';
-                            
-                            if($paymentMethod['type']){
+
+                            if ($paymentMethod['type']) {
                                 $type = $paymentMethod['type'];
                             }
                             $where = ['order_id' => $order_id];
@@ -948,7 +1285,7 @@ class commonController extends Controller
                             if (isset($plan) && !empty($plan)) {
                                 $planDuration = isset($plan[0]->plan_duration) ? $plan[0]->plan_duration : 0;
                                 $addedDate = $carbonDate->copy()->addDays($planDuration);
-                                if($plantable == 'employer_plan'){
+                                if ($plantable == 'employer_plan') {
                                     $plan = getData($plantable, ['job_post_limit', 'plan_duration','cv_access_limit'], ['id' => $payment[0]->plan_id]);
                                     if (isset($plan) && !empty($plan)) {
                                         $jobPostLimit  = isset($plan[0]->job_post_limit) ? $plan[0]->job_post_limit : 0;
@@ -959,38 +1296,15 @@ class commonController extends Controller
                                             $newLeftCredit = $currentLeftCredit[0]->left_credit_job_posting_plan + $jobPostLimit;
                                             $newcvLeftCredit= $currentLeftCredit[0]->cv_access_limit +  $CvaccessLimit;
                                             $mainTableSelect = [
-                                                'plan_id' => $payment[0]->plan_id, 
-                                                'plan_start_from' => now(), 
+                                                'plan_id' => $payment[0]->plan_id,
+                                                'plan_start_from' => now(),
                                                 'plan_expired_on' => $addedDate->toDateString(),
-                                                'left_credit_job_posting_plan' => $newLeftCredit
+                                                'left_credit_job_posting_plan' => $newLeftCredit,
+                                                'cv_access_limit' => $newcvLeftCredit
                                             ];
                                         }
-                                        if(isset($payment[0]->plan_id) && $payment[0]->plan_id == 4){
-                                        
-                                            $empolyerdata=Employer::where('id', $payment[0]->emp_id)->first();
-                                                $attachments = [
-                                                    ['path' => storage_path('app/public/employer/gst_license/'.$empolyerdata->gst_license),
-                                                        'name' => $empolyerdata->gst_license,
-                                                        'mime' => mime_content_type(storage_path('app/public/employer/gst_license/'.$empolyerdata->gst_license)), 
-                                                    ],
-                                                    [
-                                                    'path' => storage_path('app/public/employer/owner_id/'.$empolyerdata->owner_id),
-                                                        'name' => $empolyerdata->owner_id,
-                                                        'mime' => mime_content_type(storage_path('app/public/employer/owner_id/'.$empolyerdata->owner_id)), 
-                                                    ],
-                                                ];
-                                            $dyc_id = Crypt::encrypt($payment[0]->emp_id);
-                                            $link= env('APP_URL') . "/verfiy-document/empolyer/" . $dyc_id;
-                                            $repl_contain=['#company_name#', '#Name#', '#Email#', '#payment_id#', '#date#','#Link#'];
-                                            $repl_value=[$empolyerdata->company_name,$empolyerdata->fullname,$empolyerdata->email, $request->razorpay_payment_id,now(),$link];
-                                            $sendto='info@angel-jobs.com';
-                                            $sendcc=[];
-                                            
-                                            $send = mail_send(42, $repl_contain, $repl_value, $sendto, $sendcc, $attachments);
-                                            
-                                        } 
                                     }
-                                }else{
+                                } else {
                                     $mainTableSelect = [
                                         'plan_id' => $payment[0]->plan_id,
                                     ];
@@ -999,36 +1313,35 @@ class commonController extends Controller
                                     $existingProfile = getData('jobseeker_profiles', ['js_id'], ['js_id' => $payment[0]->$column]);
                                     if (isset($existingProfile) && !empty($existingProfile)) {
                                         $sel = [
-                                            'plan_start_from' => now(), 
+                                            'plan_start_from' => now(),
                                             'plan_expired_on' => $addedDate->toDateString(),
                                         ];
                                         $updateJobSeekerTable = processData(['jobseeker_profiles', 'id'], $sel, ['js_id' => $payment[0]->$column]);
-
-                                    }else{
+                                    } else {
                                         $newProfileData = [
                                             'js_id' => $payment[0]->$column,
                                             'plan_start_from' => now(),
                                             'plan_expired_on' => $addedDate->toDateString(),
                                         ];
                                         // $jobSeekerProfile = DB::table('jobseeker_profiles')->insert($newProfileData);
-                                        
+
                                         $jobSeekerProfile = processData(['jobseeker_profiles', 'id'], $newProfileData);
                                     }
                                 }
                             }
-                            
+
                             $updatePayment = processData([$table, 'id'], $select, $where);
                             if (isset($updatePayment) && $updatePayment['status'] === true) {
                                 $updateMainTable = processData([$mainTable, 'id'], $mainTableSelect, ['id' => $payment[0]->$column]);
                             }
                         }
                         // return $this->success();
-                            
+
                         break;
                     case 'failed':
                         Log::error('Failed to update payment or order status for failed payment.');
                         // return $this->success();
-
+                       
                         break;
                     case 'cancelled':
                         if (session()->has('js_username')) {
@@ -1043,21 +1356,19 @@ class commonController extends Controller
                         $updatePayment = processData([$table, 'id'], $select, $where);
                         Log::error('Failed to update payment or order status for cancelled payment.');
                         // return $this->success();
-                        
+                       
                         break;
                     default:
                         Log::info("Unknown Event Type: $eventType");
                         break;
                 }
-            
             } catch (\Exception $e) {
                 Log::error("Payment processing error: " . $e->getMessage());
             }
-        }else {
+        } else {
             Log::error("Invalid Paramater");
         }
     }
-    
     public function paymentResponse($order_id, $plantable)
     {
         if (isset($order_id) && !empty($order_id) && isset($plantable) && !empty($plantable)) {
@@ -1248,7 +1559,7 @@ class commonController extends Controller
                     try {
                         DB::table('grievance')->insert(['name' => $name, 'country_code' => $country_code, 'contact_no' => $contact_no, 'email' => $email, 'address' => $address, 'report_url' => $report_url, 'date_oc' => $date_oc, 'grfile' => $grfile_name,'confirm' => $confirm, 'message' => $message, 'tnc' => $tnc]);
                         $datameg= $message;
-                        $data=['name' => $name, 'country_code' => $country_code, 'contact_no' => '+91'.$contact_no, 'email' => $email, 'address' => $address, 'report_url' => $report_url, 'date_oc' => $date_oc,'grfile' => $grfile_name, 'confirm' => $confirm, 'datameg' => $datameg, 'tnc' => $tnc];
+                        $data=['name' => $name, 'country_code' => $country_code, 'contact_no' => $contact_no, 'email' => $email, 'address' => $address, 'report_url' => $report_url, 'date_oc' => $date_oc,'grfile' => $grfile_name, 'confirm' => $confirm, 'datameg' => $datameg, 'tnc' => $tnc];
                         $user['to'] = 'info@angel-jobs.com';
                         $send = Mail::send('grievancemail', $data, function ($mes) use ($user, $email, $name, $grfile) {
                             $mes->from(env('MAIL_FROM_ADDRESS'));

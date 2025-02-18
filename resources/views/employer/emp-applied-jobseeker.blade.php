@@ -54,7 +54,18 @@
 														</span>
 												</div>
 												<div class="job-post-info">
-													<h5 class="m-b0"><a href="{{ route('emp-js-view', $js_id)}}" target="_blank">{{$appliedDatas->fullname}}</a></h5>
+													<h5 class="m-b0"><a href="{{ route('emp-js-view', $js_id)}}" target="_blank">{{$appliedDatas->fullname}}</a>
+														@if (!empty($appliedDatas->status) && $appliedDatas->status == 3)
+														@php
+															$expiredat = getData('jobseeker_profiles',['js_id', 'plan_expired_on'],['js_id' => base64_decode($js_id)]);
+														@endphp
+														@if ($expiredat[0]->plan_expired_on >= date('Y-m-d'))
+															<img src= "{{ asset('images/premium_badge_new.svg') }}"
+																alt='Premium Member' class='premium-badge'
+																style='width:25px; height:25px; margin-left: 5px;'>
+														@endif
+													@endif
+													</h5>
 													<ul>
 														<li><i class="fa fa-briefcase"></i>Job Title: {!! $appliedDatas->job_title !!}</li>
 													</ul>

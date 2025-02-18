@@ -42,7 +42,7 @@
                             {{-- <div class="job-bx-title clearfix">
                                 <h5 class="font-weight-700 float-start text-uppercase">Grievance Form</h5>
                             </div> --}}
-                            <form id="grievanceForm" action="{{url('/grivance')}}" method="POST">
+                            <form id="grievanceForm" action="{{url('/grivance')}}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row m-b30">
                                     <div class="col-lg-12 col-md-12">
