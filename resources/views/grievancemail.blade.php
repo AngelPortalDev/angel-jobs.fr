@@ -9,8 +9,7 @@
     <h2>Grievance Form Submission</h2>
 
     <p><strong>Name:</strong> {{ $name }}</p>
-    <p><strong>Country Code:</strong> {{ $country_code }}</p>
-    <p><strong>Contact Number:</strong> {{ $contact_no }}</p>
+    <p><strong>Contact Number:</strong>{{ $country_code }}  {{ $contact_no }}</p>
     <p><strong>Email:</strong> {{ $email }}</p>
     @if (isset($address) && !empty($address))
     <p><strong>Address:</strong> {{ $address }}</p>

@@ -46,6 +46,7 @@ Route::get('employer-home', [employerProfile::class, 'indexemployer'])->name('em
 Route::view('reset-password-1', 'reset-password-1')->name('reset-password-1');
 Route::view('reset-password-2', 'reset-password-2')->name('reset-password-2');
 Route::view('verified-mail', 'verified-mail')->name('verified-mail');
+Route::view('verified-document', 'verified-document')->name('verified-document');
 Route::view('not-found', 'not-found');
 Route::view('thank-you', 'thank-you')->name('thank-you');
 Route::view('invoice', 'invoice')->name('invoice');

@@ -982,7 +982,7 @@ class commonController extends Controller
                                             $dyc_id = Crypt::encrypt($payment[0]->emp_id);
                                             $link= env('APP_URL') . "/verfiy-document/empolyer/" . $dyc_id;
                                             $repl_contain=['#company_name#', '#Name#', '#Email#', '#payment_id#', '#date#','#Link#'];
-                                            $repl_value=[$empolyerdata->company_name,$empolyerdata->fullname,$empolyerdata->email, $request->razorpay_payment_id,now(),$link];
+                                            $repl_value=[$empolyerdata->company_name,$empolyerdata->fullname,$empolyerdata->email, $order_id,now(),$link];
                                             $sendto='info@angel-jobs.com';
                                             $sendcc=[];
                                             
@@ -1248,7 +1248,7 @@ class commonController extends Controller
                     try {
                         DB::table('grievance')->insert(['name' => $name, 'country_code' => $country_code, 'contact_no' => $contact_no, 'email' => $email, 'address' => $address, 'report_url' => $report_url, 'date_oc' => $date_oc, 'grfile' => $grfile_name,'confirm' => $confirm, 'message' => $message, 'tnc' => $tnc]);
                         $datameg= $message;
-                        $data=['name' => $name, 'country_code' => $country_code, 'contact_no' => '+91'.$contact_no, 'email' => $email, 'address' => $address, 'report_url' => $report_url, 'date_oc' => $date_oc,'grfile' => $grfile_name, 'confirm' => $confirm, 'datameg' => $datameg, 'tnc' => $tnc];
+                        $data=['name' => $name, 'country_code' => $country_code, 'contact_no' => $contact_no, 'email' => $email, 'address' => $address, 'report_url' => $report_url, 'date_oc' => $date_oc,'grfile' => $grfile_name, 'confirm' => $confirm, 'datameg' => $datameg, 'tnc' => $tnc];
                         $user['to'] = 'info@angel-jobs.com';
                         $send = Mail::send('grievancemail', $data, function ($mes) use ($user, $email, $name, $grfile) {
                             $mes->from(env('MAIL_FROM_ADDRESS'));
