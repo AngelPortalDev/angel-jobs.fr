@@ -174,25 +174,33 @@
                                     </div>
 
                                 </div> --}}
-                                        @if ($job->hide_contact_details === 'No')
+                                            @if ($job->hide_contact_details === 'No')
                                             <div class="company-contact-deatils">
                                                 <h5 class="font-weight-600 more-info jd-heading">Contact Details</h5>
                                                 <div class="dez-divider divider-2px bg-gray-dark mb-2 mt-0"></div>
                                                 <div class="company-profile-decription">
                                                     <div class="  ">
                                                         <label>Contact Person: </label>
-                                                        <span>{{ $job->contact_person }}</span>
+                                                        <span>{{ isset($job->contact_person) && $job->contact_person != 'Angel Portal'  ? $job->contact_person : 'Not Disclosed' }}</span>
                                                     </div>
 
                                                     <div class="  ">
                                                         <label>Mobile No: </label>
-                                                        <span>+33 {{ $job->contact_phone }}</span>
+                                                        <span> {{ isset($job->contact_phone) && $job->contact_person != 'Angel Portal' ? '+91'.' '.$job->contact_phone : 'Not Disclosed' }}</span>
                                                     </div>
 
                                                     <div class="  ">
                                                         <label>Email: </label>
-                                                        <span>{{ $job->contact_email }}</span>
+                                                        <span>{{ isset($job->contact_email) && $job->contact_person != 'Angel Portal' ? $job->contact_email : 'Not Disclosed' }}</span>
                                                     </div>
+                                                </div>
+                                            </div>
+                                        @else
+                                            <div class="company-contact-deatils">
+                                                <h5 class="font-weight-600 more-info jd-heading">Contact Details</h5>
+                                                <div class="dez-divider divider-2px bg-gray-dark mb-2 mt-0"></div>
+                                                <div class="company-profile-decription">
+                                                    <p>Not Disclosed</p>
                                                 </div>
                                             </div>
                                         @endif

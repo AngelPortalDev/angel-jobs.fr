@@ -33,7 +33,11 @@
                             <form action="" method="POST">
                                 @csrf
                                 <input type="hidden" value="" class="session_id" name="session_id">
+                                @if (session()->has('emp_username'))
+                                <a href="{{route('post-job')}}" class="btn btn-primary">Go To Post a job</a>
+                                @else
                                 <a href="/" class="btn btn-primary">Go To HomePage</a>
+                                @endif
                             </form>
                         </div>
                     </div>
