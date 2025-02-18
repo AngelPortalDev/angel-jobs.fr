@@ -494,14 +494,14 @@
                                                     </li>
                                                     {{-- <li><i class='far fa-bookmark'></i>{{$lists->job_type_name}} </li> --}}
                                                     <li>
-                                                        @if ($lists->salary_hide === 'No')
+                                                       
                                                             <span> <i class="fa fa-euro"></i>
                                                                 {{ empty($lists->job_salary_to_name) ? 'Not Disclosed' : $lists->job_salary_to_name }}</span>
                                                     </li>
                                                     <li>
                                                         <span><i class="fas fa-tasks" ></i>{{ isset($lists->job_type_name) ? $lists->job_type_name : 'Not Disclosed' }}</span>
                                                     </li>
-                            @endif
+                          
                             <br>
                             <li class="mt-2"><i class='far fa-clock'></i>
                                 Published {{ duration($lists->posted_on) }} ago</li>
