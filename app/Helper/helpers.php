@@ -145,10 +145,24 @@ if (!function_exists('file_upload')) {
     {
         
         if (isset($file) && !empty($file) && isset($folder) && !empty($folder) && isset($filename) && !empty($filename)) {
-            $is_uploaded = Storage::disk('local')->putFileAs($folder, $file, $filename);
+            //$is_uploaded = Storage::disk('local')->putFileAs($folder, $file, $filename);
             // $is_uploaded = Storage::disk('s3')->put($filename, file_get_contents($file)); //AWS S3 
             // $is_uploaded = $file->storeAs($folder, $filename, 's3');
-            
+            $filePath = $file->getRealPath();
+            if (function_exists('passthru')) {
+                ob_start();
+                passthru("clamscan $filePath", $returnCode);
+                $scanResult = ob_get_clean();
+                if ($returnCode === 0 && str_contains($scanResult, 'OK')) {
+                    return FALSE;
+                }else{
+                    $is_uploaded = Storage::disk('local')->putFileAs($folder, $file, $filename);
+                }
+            }else{
+                $is_uploaded = Storage::disk('local')->putFileAs($folder, $file, $filename);
+                
+            }  
+            }
            
             if (isset($is_uploaded) && !empty($is_uploaded)) {
                 if (!empty($old_file) && isset($old_file) && file_exists($folder . "/" . $old_file)) {
