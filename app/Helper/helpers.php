@@ -161,7 +161,6 @@ if (!function_exists('file_upload')) {
             }else{
                 $is_uploaded = Storage::disk('local')->putFileAs($folder, $file, $filename);
                 
-            }  
             }
            
             if (isset($is_uploaded) && !empty($is_uploaded)) {
