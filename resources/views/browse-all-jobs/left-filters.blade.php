@@ -53,7 +53,7 @@
 
 					<div class="search-bx style-1 search-field-js">
 						<div class="input-group">
-							<input class="form-control" value="" data-classfil="main_indus_list" placeholder="Search Industry" data-list="2" type="text">
+							<input class="form-control" id="search-industry" value="" data-classfil="main_indus_list" placeholder="Search Industry" data-list="2" type="text">
 							<button type="button" class="btn btn-primary btn-sm" id="clear-search-industry">Clear</button>
 						</div>
 					</div>

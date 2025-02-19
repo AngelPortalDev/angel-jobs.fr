@@ -162,7 +162,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <span>Copyright © 2024 by <a href="https://www.angel-jobs.fr"> www.angel-jobs.fr</a>. All Rights
+                    <span>Copyright © 2025 by <a href="https://www.angel-jobs.fr"> www.angel-jobs.fr</a>. All Rights
                         Reserved.</span>
                 </div>
             </div>

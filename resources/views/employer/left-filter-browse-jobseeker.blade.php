@@ -133,8 +133,7 @@
 				<div class="acod-content">
 					@foreach (getDropDownlist('experiances', ['experiance', 'id']) as $data)
 					<div class="form-check">
-						<input class="form-check-input exp_fil" name="left_exp_fil[]" id="{{$data->id}}" type="radio"
-							value="{{$data->id}}">
+						<input class="form-check-input exp_fil" name="left_exp_fil[]" id="{{$data->id}}" type="radio" value="{{$data->id}}">
 						<label class="form-check-label" for="{{$data->id}}" id="left_fulltime_fil">{{$data->experiance}}
 						</label>
 					</div>
