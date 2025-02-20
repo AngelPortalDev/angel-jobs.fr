@@ -1,6 +1,22 @@
 @php
 	$route= \Route::currentRouteName();
 @endphp 
+<style>
+    @media (max-width: 991px) {
+    
+    .profile-edit .candidate-info .candidate-detail{
+        text-align: center!important;
+    }
+    .jobseeker-top-info-sec{
+        width:100%;
+        text-align: center;
+    }
+    .list-right .list-item,.list-left .list-item{
+        display: inline-block;
+        padding-left: 10px;
+    }
+    }
+    </style>
 <div class="sticky-top">
     <div class="candidate-info company-info">
         {{-- <div class="candidate-detail text-center">
@@ -21,7 +37,7 @@
                 </div>
             </div>
         </div> --}}
-        <ul>
+        <ul class="d-none d-lg-block">
             <li><a href="{{ route('js-profile') }}"  @if ($route == 'js-profile')
 							class="active"
 						@endif>

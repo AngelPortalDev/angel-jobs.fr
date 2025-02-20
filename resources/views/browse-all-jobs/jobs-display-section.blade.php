@@ -1,4 +1,7 @@
 <div class="col-xl-9 col-lg-8 col-md-7">
+	<div class="showfilter">
+        <a href="javascript:void(0)" class="site-button arrow-btn filter_open" onclick="openNav()" id="open2">Show Filter<span><i class="fas fa-arrow-alt-circle-right ps-1"></i></span></a>
+    </div>
 	<div class="job-bx-title clearfix">
 		<h5 class="font-weight-700 float-start text-uppercase" id="jobCount">{{ $count ?? 0 }} Jobs Found</h5>
 		<div class="float-end">
@@ -60,11 +63,11 @@
 			
 			<div id="paginationLinks" class="pagination-bx">
 				
-
+				@if(isset($totalPages) && $totalPages !=0 )
             <ul class="pagination">
                 <!-- Previous Button -->
                 <li class="page-item {{ $currentPage == 1 ? 'disabled' : '' }}">
-                    <a class="page-link" href="javascript:void(0);" data-page="{{ $currentPage - 1 }}">Previous</a>
+                    <a class="page-link" href="javascript:void(0);" data-page="{{ $currentPage - 1 }}">« Prev</a>
                 </li>
             
                 @for ($i = 1; $i <= $totalPages; $i++)
@@ -81,9 +84,10 @@
             
                 <!-- Next Button -->
                 <li class="page-item {{ $currentPage == $totalPages ? 'disabled' : '' }}">
-                    <a class="page-link" href="javascript:void(0);" data-page="{{ $currentPage + 1 }}">Next</a>
+                    <a class="page-link" href="javascript:void(0);" data-page="{{ $currentPage + 1 }}">Next »</a>
                 </li>
             </ul>
+			@endif
 			</div>
 			
 		{{-- <ul class="pagination">

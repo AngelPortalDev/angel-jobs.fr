@@ -200,7 +200,15 @@
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script>
+	function openNav() {       
+	  document.getElementById("filter-sidebar").style.width = "320px";
+	}
 
+	function closeNav() {
+	  document.getElementById("filter-sidebar").style.width = "0";
+	}
+</script>
 {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> --}}
 <script>
     // Search Dropdown

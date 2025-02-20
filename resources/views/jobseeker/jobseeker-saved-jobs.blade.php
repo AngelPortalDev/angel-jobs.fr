@@ -4,6 +4,16 @@
         input:focus {
             outline: none;
         }
+		@media only screen and (max-width: 767px) {
+		.job-post-info a.site-button{
+			position: absolute;
+			bottom: 35px;
+			margin-left: 10px;
+		}
+		.section-full:last-child{
+			padding-top: 0px;
+		}
+	}
     </style>
     <!-- Content -->
 

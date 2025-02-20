@@ -837,6 +837,7 @@ $(document).ready(function () {
             },
             success: function (res) {
                 $("#loader").fadeOut();
+                $("#jobseekerCount")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
                 loadJobseeker(res.html, res.page, res.count, res.total_count, res.perPage);
                 $('#pageDropdownem').selectpicker();
             },
@@ -865,7 +866,7 @@ $(document).ready(function () {
             },
             success: function (res) {
                 $("#loader").fadeOut();
-                
+                $("#jobseekerCount")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
                 loadJobseeker(res.html, res.page, res.count, res.total_count, res.perPage);
     
                 $('#pageDropdownem').selectpicker();

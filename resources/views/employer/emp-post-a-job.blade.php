@@ -1,6 +1,10 @@
 @extends('layouts.main')
 @section('content')
-
+<style>
+    .job-bx.submit-resume .job-bx-title.clearfix p,.job-bx.submit-resume .job-bx-title.clearfix h5{
+       float: none !important;
+   }
+   </style>
     <!-- Content -->
     <div class="page-content bg-white">
         <!-- contact area -->

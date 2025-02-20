@@ -208,10 +208,10 @@ li.site-button{
                     <!-- Main Nav -->
                     <div class="header-nav navbar-collapse collapse justify-content-start main-header-menu" id="navbarNavDropdown">
 						<div class="logo-header logo-dark">
-							<a href="index.php"><img src="{{ asset('images/angel-jIndialogo.png')}}" alt=""></a>
+							<a href="{{url('/')}}"><img src="{{ asset('images/angel-jobs-France.png') }}" alt=""></a>
 						</div>
 						<div class="logo-header logo-white">
-							<a href="index.php"><img src="{{ asset('images/angel-jIndialogo.png')}}" alt=""></a>
+							<a href="{{url('/')}}"><img src="{{ asset('images/angel-jobs-France.png') }}" alt=""></a>
                         </div>
 					@if (session()->has('emp_username'))
 					{{-- Employer Header --}}

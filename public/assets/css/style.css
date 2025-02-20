@@ -12879,7 +12879,8 @@ ol.commentlist li .star-rating {
 	.mo-left .navbar-toggler.open:after{
 		background-color: rgba(0, 0, 0, 0.6);
 		content: "";
-		height: 100%;
+		/* height: 100%; */
+        height:auto;
 		left: 0;
 		position: fixed;
 		right: 0;

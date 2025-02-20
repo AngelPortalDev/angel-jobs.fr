@@ -4,6 +4,11 @@
         input:focus {
             outline: none;
         }
+		@media only screen and (max-width: 767px) {
+		.section-full:last-child{
+			padding-top: 0px;
+		}
+	}
     </style>
     <!-- Content -->
 
