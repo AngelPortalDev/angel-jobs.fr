@@ -31,7 +31,7 @@
 											@endif
 										</div>
 									</div>
-									<ul clas="d-none d-lg-block">
+									<ul class="d-none d-lg-block">
 						
 						<li><a href="{{route('company-profile')}}"  @if ($route == 'company-profile')
 							class="active"

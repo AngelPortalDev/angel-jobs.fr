@@ -1005,8 +1005,8 @@ $(document).ready(function () {
                 },
                 success: function (res) {
                     $("#loader").fadeOut();
-                    console.log("Pagination AJAX Success:", res);
-                   
+                    // console.log("Pagination AJAX Success:", res);
+                    document.getElementById("filter-sidebar").style.width = "0";
                         loadJobs(res.html, res.page, res.count, res.total_count, res.perPage);
                         $('#pageDropdown').selectpicker();
                 },

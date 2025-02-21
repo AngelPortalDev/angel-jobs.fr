@@ -799,11 +799,13 @@ $(document).ready(function () {
             },
             success: function (res) {
                 $("#loader").fadeOut();
+                document.getElementById("filter-sidebar").style.width = "0";
                 var records = res.html;
                 var page = res.page;                    
                 var count = res.count;           
                 var lastpage = res.last_page;         // console.warn(page+'<= this is page'+count+'this is count');            
                 loadJobseeker(res.html, res.page, res.count, res.total_count, res.perPage);
+                
                 $('#pageDropdownem').selectpicker();
             },
             error: function (xhr, status, error) {
