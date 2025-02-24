@@ -1,3 +1,6 @@
+
+
+
 <div class="row">
 	<div class="col-md-12 col-lg-12">
 		<div id="filter-sidebar" class="filter-sidebar hide-23-23 showfilter">
@@ -8,6 +11,7 @@
 			</div>
 			<div class="page_sidebar show-hide-sidebar">
 				<form class="left_filters">
+					<div class="">
 					<h6 class="title"><i class="fa fa-sliders m-r5"></i> Refined By <a href="{{url('top-search-bar')}}"
 							class="font-12 float-end">Reset All</a></h6>
 			
@@ -22,7 +26,7 @@
 						<div id="vacancy-type" class="acod-body collapse show">
 							<div class="acod-content">
 								{{-- @php $checked = $list[0]->job_type_name; @endphp --}}
-								@foreach (getDropDownlist('job_types', ['job_type', 'id'])->sortby('id') as $data)
+								@foreach (getDropDownlist('job_types', ['job_type', 'id']) as $data)
 			
 								<div class="form-check">
 									<input class="form-check-input job_type_fil" name="left_jtype_fil[]"
@@ -50,22 +54,14 @@
 						</div>
 						<div id="industry" class="acod-body collapse show">
 							<div class="acod-content" id="industry_list">
-							{{-- <div class="search-bx style-1 search-field-js">
-									<div class="input-group">
-										<input class="form-control list_filt" value="" data-classfil="main_indus_list" placeholder="Search Industry" data-list="2" type="text">
-										<span class="input-group-btn" style="display: none">
-											<button type="button" class="fa fa-close text-primary"></button>
-										</span> 
-									</div>
-							</div> --}}
 			
 								<div class="search-bx style-1 search-field-js">
 									<div class="input-group">
-										<input class="form-control" id="search-industry" value="" data-classfil="main_indus_list" placeholder="Search Industry" data-list="2" type="text">
-										<button type="button" class="btn btn-primary btn-sm" id="clear-search-industry">Clear</button>
+										<input class="form-control search-industry" data-classfil="main_indus_list" placeholder="Search Industry" data-list="3" type="text">
+										<button type="button" class="btn btn-primary btn-sm clear-search-industry" id="clear-search-industry">Clear</button>
 									</div>
 								</div>
-								<div id="main_indus_list">
+								<div class="main_indus_list mobile-view">
 									@foreach (getDropDownlist('industries', ['id', 'industries_name']) as $index =>  $data)
 										<div class="form-check indus-item" style="{{ $index >= 5 ? 'display: none;' : '' }}">
 											<input class="form-check-input indus_fil" name="left_indus_fil[]" id="industry{{$data->id}}" type="checkbox" value="{{$data->id}}">
@@ -74,21 +70,8 @@
 									@endforeach
 								</div>
 								@if (count(getDropDownlist('industries', ['id', 'industries_name'])) > 5)
-									<button id="show-more-industry" class="btn btn-primary btn-sm mt-2">Show More</button>
+									<button id="show-more-industry" class="btn btn-primary btn-sm mt-2 show-more-industry">Show More</button>
 								@endif
-			
-			
-								{{-- <div id="main_indus_list">
-								@foreach (getDropDownlist('industries', ['id', 'industries_name']) as $data)
-								<div class="form-check old_list">
-									<input class="form-check-input indus_fil " name="left_indus_fil[]"  id="industry{{$data->id}}"
-										type="checkbox" value="{{$data->id}}">
-									<label class="form-check-label" for="industry{{$data->id}}"
-										id="left_indus_fil">{{$data->industries_name}}
-									</label>
-								</div>
-								@endforeach
-							</div> --}}
 							</div>
 			
 							{{-- Serach bar --}}
@@ -109,31 +92,26 @@
 						<div id="location" class="acod-body collapse show">
 			
 							<div class="acod-content" id="location_list">
-								{{-- <div class="search-bx style-1 search-field-js">
-									<div class="input-group">
-										<input class="form-control list_filt" value="" data-classfil="main_loc_list" placeholder="Search Location" data-list="3" type="text"> 
-										<span class="input-group-btn" style="display: none">
-											<button type="button" class="fa fa-close text-primary"></button>
-										</span> 
-									</div>
-								</div> --}}
-			
 								<div class="search-bx style-1 search-field-js">
 									<div class="input-group">
-										<input class="form-control" id="search-location" placeholder="Search Location" data-classfil="main_loc_list" data-list="3" type="text">
-										<button type="button" class="btn btn-primary btn-sm" id="clear-search-location">Clear</button>
+										<input class="form-control search-location-js" placeholder="Search Location" data-classfil="main_loc_list" data-list="3" type="text">
+										<button type="button" class="btn btn-primary btn-sm clear-search-location-js">Clear</button>
 									</div>
 								</div>
-								<div id="main_loc_list">
+								
+								<!-- Location List -->
+								<div class="main_loc_list location-list-js mobile-view">
 									@foreach (getDropDownlist('cities', ['id', 'city_name']) as $index => $data)
-										<div class="form-check location-item" style="{{ $index >= 5 ? 'display: none;' : '' }}">					
+										<div class="form-check location-item-js" style="{{ $index >= 5 ? 'display: none;' : '' }}">
 											<input class="form-check-input loc_fil" name="left_loc_fil[]" id="location{{$data->id}}" type="checkbox" value="{{$data->id}}">
 											<label class="form-check-label" for="location{{$data->id}}">{{$data->city_name}}</label>
 										</div>
 									@endforeach
 								</div>
+								
+								<!-- Show More Button -->
 								@if (count(getDropDownlist('cities', ['id', 'city_name'])) > 5)
-									<button id="show-more-location" class="btn btn-primary btn-sm mt-2">Show More</button>
+									<button class="btn btn-primary btn-sm mt-2 show-more-location-js">Show More</button>
 								@endif
 							</div>
 			
@@ -154,11 +132,11 @@
 							<div class="acod-content">
 								<div class="search-bx style-1 search-field-js">
 									<div class="input-group">
-										<input class="form-control" value="" data-classfil="main_edu_list" placeholder="Search Education" data-list="1" type="text">
-										<button type="button" class="btn btn-primary btn-sm" id="clear-search-education">Clear</button>
+										<input class="form-control search-education" value="" data-classfil="main_edu_list" placeholder="Search Education" data-list="1" type="text">
+										<button type="button" class="btn btn-primary btn-sm clear-search-education" id="clear-search-education">Clear</button>
 									</div>
 								</div>
-								<div id="main_edu_list">
+								<div class="main_edu_list mobile-view">
 									@foreach (getDropDownlist('qualifications', ['id', 'educational_qualification']) as $index => $data)
 										<div class="form-check edu-item" style="{{ $index >= 5 ? 'display: none;' : '' }}">
 											<input class="form-check-input edu_fil" name="left_edu_fil[]" id="education{{$data->id}}" type="checkbox" value="{{$data->id}}">
@@ -167,7 +145,7 @@
 									@endforeach
 								</div>
 								@if (count(getDropDownlist('qualifications', ['id', 'educational_qualification'])) > 5)
-									<button id="show-more-education" class="btn btn-primary btn-sm mt-2">Show More</button>
+									<button id="show-more-education" class="btn btn-primary btn-sm mt-2 show-more-education">Show More</button>
 								@endif
 							</div>
 			
@@ -232,7 +210,7 @@
 						<div class="acod-head">
 							<h6 class="acod-title">
 								<a data-bs-toggle="collapse" href="#salary" class="collapsed">
-									Salary (Monthly)
+									Salary (Annually)
 								</a>
 							</h6>
 						</div>
@@ -300,7 +278,7 @@
 			
 			
 								<div id="main_desig_list">
-								@foreach (getDropDownlist('designations', ['role_name', 'id']) as $data)
+								@foreach (getDropDownlist('designations', ['role_name', 'id'], 5) as $data)
 								<div class="form-check old_list">
 									<input class="form-check-input desig_fil " name="left_desig_fil[]"  id="desig{{$data->id}}"
 										type="checkbox" value="{{$data->id}}">
@@ -312,12 +290,12 @@
 							</div> --}}
 							<div class="search-bx style-1 search-field-js">
 								<div class="input-group">
-									<input class="form-control" value="" id="search-designation" data-classfil="main_desig_list" placeholder="Search Designation" data-list="4" type="text">
-									<button type="button" class="btn btn-primary btn-sm" id="clear-search-designation">Clear</button>
+									<input class="form-control search-designation" value="" id="search-designation" data-classfil="main_desig_list" placeholder="Search Designation" data-list="4" type="text">
+									<button type="button" class="btn btn-primary btn-sm clear-search-designation" id="clear-search-designation">Clear</button>
 								</div>
 							</div>
 							
-							<div id="main_desig_list">
+							<div class="main_desig_list mobile-view">
 								@foreach (getDropDownlist('designations', ['role_name', 'id']) as $data)
 									<div class="form-check design-item" style="{{ $loop->index >= 5 ? 'display: none;' : '' }}">
 										<input class="form-check-input desig_fil" name="left_desig_fil[]" id="desig{{$data->id}}" type="checkbox" value="{{$data->id}}">
@@ -327,7 +305,7 @@
 							</div>
 							
 							@if (count(getDropDownlist('designations', ['role_name', 'id'])) > 5)
-								<button id="show-more-designation" class="btn btn-primary btn-sm mt-2">Show More</button>
+								<button id="show-more-designation" class="btn btn-primary btn-sm mt-2 show-more-designation">Show More</button>
 							@endif
 							
 							</div>
@@ -337,14 +315,13 @@
 			
 						</div>
 					</div>
-			
+						</div>
 				</form>
+
 			</div>
+		</div>
 	</div>
 </div>
-</div>
-
-
 <aside id="accordion1" class="sticky-top sidebar-filter">
 	<form class="left_filters">
 		<div class="hidefilter">
@@ -390,22 +367,16 @@
 			</div>
 			<div id="industry" class="acod-body collapse show">
 				<div class="acod-content" id="industry_list">
-				{{-- <div class="search-bx style-1 search-field-js">
-						<div class="input-group">
-							<input class="form-control list_filt" value="" data-classfil="main_indus_list" placeholder="Search Industry" data-list="2" type="text">
-							<span class="input-group-btn" style="display: none">
-								<button type="button" class="fa fa-close text-primary"></button>
-							</span> 
-						</div>
-				</div> --}}
 
 					<div class="search-bx style-1 search-field-js">
 						<div class="input-group">
-							<input class="form-control" id="search-industry" value="" data-classfil="main_indus_list" placeholder="Search Industry" data-list="2" type="text">
-							<button type="button" class="btn btn-primary btn-sm" id="clear-search-industry">Clear</button>
+							<input class="form-control search-industry" data-classfil="main_indus_lisst" placeholder="Search Industry" data-list="3" type="text">
+
+							{{-- <input class="form-control" id="search-industry" data-classfil="main_indus_list" placeholder="Search Industry" data-list="3" type="text"> --}}
+							<button type="button" class="btn btn-primary btn-sm clear-search-industry" id="clear-search-industry">Clear</button>
 						</div>
 					</div>
-					<div id="main_indus_list">
+					<div class="main_indus_list desktop-view">
 						@foreach (getDropDownlist('industries', ['id', 'industries_name']) as $index =>  $data)
 							<div class="form-check indus-item" style="{{ $index >= 5 ? 'display: none;' : '' }}">
 								<input class="form-check-input indus_fil" name="left_indus_fil[]" id="industry{{$data->id}}" type="checkbox" value="{{$data->id}}">
@@ -414,21 +385,8 @@
 						@endforeach
 					</div>
 					@if (count(getDropDownlist('industries', ['id', 'industries_name'])) > 5)
-						<button id="show-more-industry" class="btn btn-primary btn-sm mt-2">Show More</button>
+						<button id="show-more-industry" class="btn btn-primary btn-sm mt-2 show-more-industry">Show More</button>
 					@endif
-
-
-					{{-- <div id="main_indus_list">
-					@foreach (getDropDownlist('industries', ['id', 'industries_name'], 5) as $data)
-					<div class="form-check old_list">
-						<input class="form-check-input indus_fil " name="left_indus_fil[]"  id="industry{{$data->id}}"
-							type="checkbox" value="{{$data->id}}">
-						<label class="form-check-label" for="industry{{$data->id}}"
-							id="left_indus_fil">{{$data->industries_name}}
-						</label>
-					</div>
-					@endforeach
-				</div> --}}
 				</div>
 
 				{{-- Serach bar --}}
@@ -436,6 +394,7 @@
 
 			</div>
 		</div>
+
 		<div class="panel">
 			<div class="acod-head">
 				<h6 class="acod-title">
@@ -459,20 +418,24 @@
 
 					<div class="search-bx style-1 search-field-js">
 						<div class="input-group">
-							<input class="form-control" id="search-location" placeholder="Search Location" data-classfil="main_loc_list" data-list="3" type="text">
-							<button type="button" class="btn btn-primary btn-sm" id="clear-search-location">Clear</button>
+							<input class="form-control search-location-js" placeholder="Search Location" data-classfil="main_loc_list" data-list="3" type="text">
+							<button type="button" class="btn btn-primary btn-sm clear-search-location-js">Clear</button>
 						</div>
 					</div>
-					<div id="main_loc_list">
+					
+					<!-- Location List -->
+					<div class="main_loc_list location-list-js desktop-view">
 						@foreach (getDropDownlist('cities', ['id', 'city_name']) as $index => $data)
-							<div class="form-check location-item" style="{{ $index >= 5 ? 'display: none;' : '' }}">					
+							<div class="form-check location-item-js" style="{{ $index >= 5 ? 'display: none;' : '' }}">
 								<input class="form-check-input loc_fil" name="left_loc_fil[]" id="location{{$data->id}}" type="checkbox" value="{{$data->id}}">
 								<label class="form-check-label" for="location{{$data->id}}">{{$data->city_name}}</label>
 							</div>
 						@endforeach
 					</div>
+					
+					<!-- Show More Button -->
 					@if (count(getDropDownlist('cities', ['id', 'city_name'])) > 5)
-						<button id="show-more-location" class="btn btn-primary btn-sm mt-2">Show More</button>
+						<button class="btn btn-primary btn-sm mt-2 show-more-location-js">Show More</button>
 					@endif
 				</div>
 
@@ -493,11 +456,11 @@
 				<div class="acod-content">
 					<div class="search-bx style-1 search-field-js">
 						<div class="input-group">
-							<input class="form-control" value="" data-classfil="main_edu_list" placeholder="Search Education" data-list="1" type="text">
-							<button type="button" class="btn btn-primary btn-sm" id="clear-search-education">Clear</button>
+							<input class="form-control search-education" value="" data-classfil="main_edu_list" placeholder="Search Education" data-list="1" type="text">
+							<button type="button" class="btn btn-primary btn-sm clear-search-education" id="clear-search-education">Clear</button>
 						</div>
 					</div>
-					<div id="main_edu_list">
+					<div class="main_edu_list desktop-view">
 						@foreach (getDropDownlist('qualifications', ['id', 'educational_qualification']) as $index => $data)
 							<div class="form-check edu-item" style="{{ $index >= 5 ? 'display: none;' : '' }}">
 								<input class="form-check-input edu_fil" name="left_edu_fil[]" id="education{{$data->id}}" type="checkbox" value="{{$data->id}}">
@@ -506,7 +469,7 @@
 						@endforeach
 					</div>
 					@if (count(getDropDownlist('qualifications', ['id', 'educational_qualification'])) > 5)
-						<button id="show-more-education" class="btn btn-primary btn-sm mt-2">Show More</button>
+						<button id="show-more-education" class="btn btn-primary btn-sm mt-2 show-more-education">Show More</button>
 					@endif
 				</div>
 
@@ -517,8 +480,6 @@
 			</div>
 			
 		</div>
-
-		
 
 		
 
@@ -573,7 +534,7 @@
 			<div class="acod-head">
 				<h6 class="acod-title">
 					<a data-bs-toggle="collapse" href="#salary" class="collapsed">
-						Salary (Monthly)
+						Salary (Annually)
 					</a>
 				</h6>
 			</div>
@@ -653,12 +614,12 @@
 				</div> --}}
 				<div class="search-bx style-1 search-field-js">
 					<div class="input-group">
-						<input class="form-control" value="" id="search-designation" data-classfil="main_desig_list" placeholder="Search Designation" data-list="4" type="text">
-						<button type="button" class="btn btn-primary btn-sm" id="clear-search-designation">Clear</button>
+						<input class="form-control search-designation" value="" id="search-designation" data-classfil="main_desig_list" placeholder="Search Designation" data-list="4" type="text">
+						<button type="button" class="btn btn-primary btn-sm clear-search-designation" id="clear-search-designation">Clear</button>
 					</div>
 				</div>
 				
-				<div id="main_desig_list">
+				<div class="main_desig_list desktop-view">
 					@foreach (getDropDownlist('designations', ['role_name', 'id']) as $data)
 						<div class="form-check design-item" style="{{ $loop->index >= 5 ? 'display: none;' : '' }}">
 							<input class="form-check-input desig_fil" name="left_desig_fil[]" id="desig{{$data->id}}" type="checkbox" value="{{$data->id}}">
@@ -668,7 +629,7 @@
 				</div>
 				
 				@if (count(getDropDownlist('designations', ['role_name', 'id'])) > 5)
-					<button id="show-more-designation" class="btn btn-primary btn-sm mt-2">Show More</button>
+					<button id="show-more-designation" class="btn btn-primary btn-sm mt-2 show-more-designation">Show More</button>
 				@endif
 				
 				</div>

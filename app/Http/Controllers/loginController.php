@@ -113,6 +113,7 @@ class loginController extends Controller
                                 'plan_expired_on' => $plan_expired_on,
                                 'free_assign_job_posting' => $plan_details[0]->job_post_limit,
                                 'cv_access_limit' => $plan_details[0]->cv_access_limit,
+                                'cv_access_total' => $plan_details[0]->cv_access_limit,
                                 'company_name' => $com_name,
                                 'password' => Hash::make($password),
                                 'is_deleted' => 'No',

@@ -1156,17 +1156,19 @@ class commonController extends Controller
                                     if (isset($plan) && !empty($plan)) {
                                         $jobPostLimit  = isset($plan[0]->job_post_limit) ? $plan[0]->job_post_limit : 0;
                                         $CvaccessLimit  = isset($plan[0]->cv_access_limit) ? $plan[0]->cv_access_limit : 0;
-                                        $currentLeftCredit = getData($mainTable, ['left_credit_job_posting_plan','cv_access_limit'], ['id' => $payment[0]->$column]);
+                                        $currentLeftCredit = getData($mainTable, ['left_credit_job_posting_plan','cv_access_limit','cv_access_total'], ['id' => $payment[0]->$column]);
                                         // $currentLeftCredit = DB::table($mainTable)->where('id', $payment->$column)->value('left_credit_job_posting_plan');
                                         if (isset($currentLeftCredit) && !empty($currentLeftCredit)) {
                                             $newLeftCredit = $currentLeftCredit[0]->left_credit_job_posting_plan + $jobPostLimit;
                                             $newcvLeftCredit= $currentLeftCredit[0]->cv_access_limit +  $CvaccessLimit;
+                                            $newcvTotal=$currentLeftCredit[0]->cv_access_total + $CvaccessLimit;
                                             $mainTableSelect = [
                                                 'plan_id' => $payment[0]->plan_id, 
                                                 'plan_start_from' => now(), 
                                                 'plan_expired_on' => $addedDate->toDateString(),
                                                 'left_credit_job_posting_plan' => $newLeftCredit,
-                                                'cv_access_limit' => $newcvLeftCredit
+                                                'cv_access_limit' => $newcvLeftCredit,
+                                                'cv_access_total' => $newcvTotal
                                             ];
                                         }
                                         
@@ -1311,17 +1313,19 @@ class commonController extends Controller
                                     if (isset($plan) && !empty($plan)) {
                                         $jobPostLimit  = isset($plan[0]->job_post_limit) ? $plan[0]->job_post_limit : 0;
                                         $CvaccessLimit  = isset($plan[0]->cv_access_limit) ? $plan[0]->cv_access_limit : 0;
-                                        $currentLeftCredit = getData($mainTable, ['left_credit_job_posting_plan','cv_access_limit'], ['id' => $payment[0]->$column]);
+                                        $currentLeftCredit = getData($mainTable, ['left_credit_job_posting_plan','cv_access_limit','cv_access_total'], ['id' => $payment[0]->$column]);
                                         // $currentLeftCredit = DB::table($mainTable)->where('id', $payment->$column)->value('left_credit_job_posting_plan');
                                         if (isset($currentLeftCredit) && !empty($currentLeftCredit)) {
                                             $newLeftCredit = $currentLeftCredit[0]->left_credit_job_posting_plan + $jobPostLimit;
                                             $newcvLeftCredit= $currentLeftCredit[0]->cv_access_limit +  $CvaccessLimit;
+                                            $newcvTotal=$currentLeftCredit[0]->cv_access_total + $CvaccessLimit;
                                             $mainTableSelect = [
-                                                'plan_id' => $payment[0]->plan_id,
-                                                'plan_start_from' => now(),
+                                                'plan_id' => $payment[0]->plan_id, 
+                                                'plan_start_from' => now(), 
                                                 'plan_expired_on' => $addedDate->toDateString(),
                                                 'left_credit_job_posting_plan' => $newLeftCredit,
-                                                'cv_access_limit' => $newcvLeftCredit
+                                                'cv_access_limit' => $newcvLeftCredit,
+                                                'cv_access_total' => $newcvTotal
                                             ];
                                         }
                                     }
