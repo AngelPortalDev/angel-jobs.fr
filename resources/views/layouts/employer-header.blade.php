@@ -258,7 +258,7 @@
                         <a href="javascript:void(0);" class="site-button plans-btn">Email<i class="fa fa-angle-down" aria-hidden="true"></i></a>
                         <ul class="sub-menu">
                             <li><a class="dez-page" href="{{route('manage-mails')}}">Manage Email Templates</a></li>
-                            <li><a class="dez-page" href="{{ route('employer-plans') }}">Email Templates</a></li>
+                            {{-- <li><a class="dez-page" href="{{ route('employer-plans') }}">Email Templates</a></li> --}}
                             <li><a class="dez-page" href="{{route('sendmail')}}"> Send Bulk Email</a></li>
                         </ul>
                     </li>

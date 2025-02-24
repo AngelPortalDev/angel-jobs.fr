@@ -63,7 +63,7 @@
         <h3 class="thank-you-text">Thank You!</h3>
         <h6 class="payment-successful-text">Payment Done Successfully</h6>
         <p class="redirect-text">You will be redirected to the home page shortly. <br /> or 
-            @if(session()->has('js_username'))<a href="{{ url('/') }}" class="home-link"> click khere to return to the home page</a> 
+            @if(session()->has('js_username'))<a href="{{ url('/') }}" class="home-link"> click here to return to the home page</a> 
             @else <a href="{{ route('post-job') }}" class="home-link"> Return to Post Jobs</a>
                 @endif </p>
                 </div>
