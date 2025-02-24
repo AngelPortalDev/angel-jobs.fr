@@ -45,7 +45,7 @@ class adminJsController extends Controller
 
             $jobseekerData = Jobseeker::select('jobseekers.*', 'jobseeker_plan.plan_name')->leftJoin('jobseeker_plan', 'jobseeker_plan.id', '=', 'jobseekers.plan_id')->where('jobseekers.is_delete', 'No')->orderBy('id', 'DESC')->get();
            
-            return view('admin.jobseeker.Jobseeker-main-view', compact('jobseekerData'));
+            return view('admin.Jobseeker.jobseeker-main-view', compact('jobseekerData'));
         }
     }
     public function jsProfileView($js_id)
@@ -58,7 +58,7 @@ class adminJsController extends Controller
             $jsUserData = DB::table('jobseeker_view')->where('js_id', $js_id)->where('is_delete', 'No')->orderBy('id', 'DESC')->get();
 
 
-            return view('admin.jobseeker.jobseeker-view', compact('jsUserData'));
+            return view('admin.Jobseeker.jobseeker-view', compact('jsUserData'));
         }
     }
     public function jsProfileditView($emp_id)
@@ -70,7 +70,7 @@ class adminJsController extends Controller
             $jsUserData = DB::table('jobseeker_view')->where('js_id', $emp_id)->where('is_delete', 'No')->get();
 
 
-            return view('admin.jobseeker.jobseeker-edit', compact('jsUserData'));
+            return view('admin.Jobseeker.jobseeker-edit', compact('jsUserData'));
         }
     }
 
@@ -448,7 +448,7 @@ class adminJsController extends Controller
         if (session()->has('admin_username')) {
 
             $jsPlanData = DB::table('jobseeker_plan')->where('is_deleted', 'No')->get();
-            return view('admin.jobseeker.jobseeker-plan-list', compact('jsPlanData'));
+            return view('admin.Jobseeker.jobseeker-plan-list', compact('jsPlanData'));
         }
     }
 }

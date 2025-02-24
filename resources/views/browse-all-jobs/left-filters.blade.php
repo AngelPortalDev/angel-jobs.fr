@@ -30,8 +30,8 @@
 			
 								<div class="form-check">
 									<input class="form-check-input job_type_fil" name="left_jtype_fil[]"
-										id="function-services-{{$data->id}}" type="checkbox" value="{{base64_encode($data->id)}}">
-									<label class="form-check-label" for="function-services-{{$data->id}}"
+										id="mbfunction-services-{{$data->id}}" type="checkbox" value="{{base64_encode($data->id)}}">
+									<label class="form-check-label" for="mbfunction-services-{{$data->id}}"
 										id="left_intern_fil">{{ $data->job_type}} 
 										{{-- <span>({{is_exist('job_posting_view',['job_type'=>$data->id, 'is_deleted'=>'No','status'=>'Live'])}})</span>  --}}
 									</label>
@@ -64,8 +64,8 @@
 								<div class="main_indus_list mobile-view">
 									@foreach (getDropDownlist('industries', ['id', 'industries_name']) as $index =>  $data)
 										<div class="form-check indus-item" style="{{ $index >= 5 ? 'display: none;' : '' }}">
-											<input class="form-check-input indus_fil" name="left_indus_fil[]" id="industry{{$data->id}}" type="checkbox" value="{{$data->id}}">
-											<label class="form-check-label" for="industry{{$data->id}}">{{$data->industries_name}}</label>
+											<input class="form-check-input indus_fil" name="left_indus_fil[]" id="mbindustry{{$data->id}}" type="checkbox" value="{{$data->id}}">
+											<label class="form-check-label" for="mbindustry{{$data->id}}">{{$data->industries_name}}</label>
 										</div>
 									@endforeach
 								</div>
@@ -103,8 +103,8 @@
 								<div class="main_loc_list location-list-js mobile-view">
 									@foreach (getDropDownlist('cities', ['id', 'city_name']) as $index => $data)
 										<div class="form-check location-item-js" style="{{ $index >= 5 ? 'display: none;' : '' }}">
-											<input class="form-check-input loc_fil" name="left_loc_fil[]" id="location{{$data->id}}" type="checkbox" value="{{$data->id}}">
-											<label class="form-check-label" for="location{{$data->id}}">{{$data->city_name}}</label>
+											<input class="form-check-input loc_fil" name="left_loc_fil[]" id="mblocation{{$data->id}}" type="checkbox" value="{{$data->id}}">
+											<label class="form-check-label" for="mblocation{{$data->id}}">{{$data->city_name}}</label>
 										</div>
 									@endforeach
 								</div>
@@ -139,8 +139,8 @@
 								<div class="main_edu_list mobile-view">
 									@foreach (getDropDownlist('qualifications', ['id', 'educational_qualification']) as $index => $data)
 										<div class="form-check edu-item" style="{{ $index >= 5 ? 'display: none;' : '' }}">
-											<input class="form-check-input edu_fil" name="left_edu_fil[]" id="education{{$data->id}}" type="checkbox" value="{{$data->id}}">
-											<label class="form-check-label" for="education{{$data->id}}">{{$data->educational_qualification}}</label>
+											<input class="form-check-input edu_fil" name="left_edu_fil[]" id="mbeducation{{$data->id}}" type="checkbox" value="{{$data->id}}">
+											<label class="form-check-label" for="mbeducation{{$data->id}}">{{$data->educational_qualification}}</label>
 										</div>
 									@endforeach
 								</div>
@@ -171,9 +171,9 @@
 							<div class="acod-content">
 								@foreach (getDropDownlist('experiances', ['experiance', 'id']) as $data)
 								<div class="form-check">
-									<input class="form-check-input exp_fil" name="left_exp_fil[]" id="{{$data->id}}" type="radio"
+									<input class="form-check-input exp_fil" name="left_exp_fil[]" id="mb{{$data->id}}" type="radio"
 										value="{{$data->id}}">
-									<label class="form-check-label" for="{{$data->id}}" id="left_fulltime_fil">{{$data->experiance}}
+									<label class="form-check-label" for="mb{{$data->id}}" id="left_fulltime_fil">{{$data->experiance}}
 									</label>
 								</div>
 								@endforeach
@@ -210,7 +210,7 @@
 						<div class="acod-head">
 							<h6 class="acod-title">
 								<a data-bs-toggle="collapse" href="#salary" class="collapsed">
-									Salary (Annually)
+									Salary (Monthly)
 								</a>
 							</h6>
 						</div>
@@ -218,9 +218,9 @@
 							<div class="acod-content">
 								@foreach (getDropDownlist('salary_ranges', ['salary_range', 'id']) as $data)
 								<div class="form-check">
-									<input class="form-check-input sal_fil" name="left_sal_fil[]" id="salary-op{{$data->id}}"
+									<input class="form-check-input sal_fil" name="left_sal_fil[]" id="mbsalary-op{{$data->id}}"
 										type="checkbox" value="{{$data->id}}">
-									<label class="form-check-label" for="salary-op{{$data->id}}"
+									<label class="form-check-label" for="mbsalary-op{{$data->id}}"
 										id="left_sal1_fil"> {{$data->salary_range}} 
 										{{-- <span>(0)</span>  --}}
 									</label>
@@ -298,8 +298,8 @@
 							<div class="main_desig_list mobile-view">
 								@foreach (getDropDownlist('designations', ['role_name', 'id']) as $data)
 									<div class="form-check design-item" style="{{ $loop->index >= 5 ? 'display: none;' : '' }}">
-										<input class="form-check-input desig_fil" name="left_desig_fil[]" id="desig{{$data->id}}" type="checkbox" value="{{$data->id}}">
-										<label class="form-check-label" for="desig{{$data->id}}" id="left_desig_fil">{{$data->role_name}}</label>
+										<input class="form-check-input desig_fil" name="left_desig_fil[]" id="mbdesig{{$data->id}}" type="checkbox" value="{{$data->id}}">
+										<label class="form-check-label" for="mbdesig{{$data->id}}" id="left_desig_fil">{{$data->role_name}}</label>
 									</div>
 								@endforeach
 							</div>
@@ -344,9 +344,8 @@
 					<div class="form-check">
 						<input class="form-check-input job_type_fil" name="left_jtype_fil[]"
 							id="function-services-{{$data->id}}" type="checkbox" value="{{base64_encode($data->id)}}">
-						<label class="form-check-label" for="function-services-{{$data->id}}"
-							id="left_intern_fil">{{ $data->job_type}} 
-							{{-- <span>({{is_exist('job_posting_view',['job_type'=>$data->id, 'is_deleted'=>'No','status'=>'Live'])}})</span>  --}}
+						<label class="form-check-label" for="function-services-{{$data->id}}" id="left_intern_fil">{{ $data->job_type}} 
+							
 						</label>
 					</div>
 					@endforeach
@@ -534,7 +533,7 @@
 			<div class="acod-head">
 				<h6 class="acod-title">
 					<a data-bs-toggle="collapse" href="#salary" class="collapsed">
-						Salary (Annually)
+						Salary (Monthly)
 					</a>
 				</h6>
 			</div>

@@ -98,7 +98,7 @@
                                                             src="{{ Storage::url("jobseeker/profile_image/".$jsData->profile_img) }}" alt="" style="height:110%;width:100%;">
 												@else
 												 <img class="avatar-md rounded-circle bx-s"
-                                                            src="{{ Storage::url("no-image.jpg") }}" alt="">
+                                                            src="{{ asset('images/user_profile.png') }}" alt="">
 												@endif
                                                 <td>{{ !empty($jsData->fullname) ? $jsData->fullname : '' }}</td>
                                                 <td>{{ !empty($jsData->email) ? $jsData->email : '' }}</td>

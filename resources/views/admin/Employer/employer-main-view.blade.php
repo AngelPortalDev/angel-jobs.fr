@@ -94,7 +94,7 @@
                                                             src="{{ Storage::url("employer/profile_image/".$empData->profile_img) }}" alt="" style='height:100%;width:100%'>
 												@else
 												 <img class="avatar-md rounded-circle bx-s"
-                                                            src="{{ Storage::url("no-image.jpg") }}" alt="" style='height:100%;width:100%'>
+                                                            src="{{ Storage::url('employer/profile_image/employer.png') }}" alt="" style='height:100%;width:100%'>
 												@endif
                                                 <td>{{ !empty($empData->fullname) ? $empData->fullname : '' }}</td>
                                                 <td>{{ !empty($empData->company_name) ? $empData->company_name : '' }}</td>

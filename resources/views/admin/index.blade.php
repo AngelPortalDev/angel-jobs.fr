@@ -123,7 +123,7 @@
                                               @if (Storage::disk('public')->exists("jobseeker/profile_image/".$jsData->profile_img) && isset($jsData->profile_img))
                                                 <img src="{{ Storage::disk('public')->url("jobseeker/profile_image/".$jsData->profile_img) }}" alt="">
                                             @else
-                                                <img src="{{ Storage::url("no-image.jpg") }}" alt="">
+                                                <img src="{{ asset('images/user_profile.png') }}" alt="">
                                             @endif
                                                         </td>
                                                         <td>{{ isset($jsData->fullname) ? $jsData->fullname : ''}}</td>
@@ -188,10 +188,10 @@
                                                     <tr>
                                                         <td>{{$i}}</td>
                                                         <td class="jobseeker-profile-photo">
-                                            @if (Storage::disk('public')->exists("jobseeker/profile_image/".$emp_Data->profile_img) && isset($emp_Data->profile_img))
+                                            @if (Storage::disk('public')->exists("employer/profile_image/".$emp_Data->profile_img) && isset($emp_Data->profile_img))
                                                 <img src="{{ Storage::disk('public')->url("employer/profile_image/".$emp_Data->profile_img) }}" alt="">
                                             @else
-                                                <img src="{{ Storage::url("no-image.jpg") }}" alt="">
+                                                <img src="{{ Storage::url('employer/profile_image/employer.png') }}" alt="">
                                             @endif
                                                         </td>
                                                         <td>{{ isset($emp_Data->fullname) ? $emp_Data->fullname : ''}}</td>

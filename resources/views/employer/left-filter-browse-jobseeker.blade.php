@@ -72,8 +72,8 @@
 										<div class="main_loc_list location-list-js mobile-view">
 											@foreach (getDropDownlist('cities', ['id', 'city_name']) as $index => $data)
 												<div class="form-check location-item-js" style="{{ $index >= 5 ? 'display: none;' : '' }}">
-													<input class="form-check-input loc_fil" name="left_loc_fil[]" id="location{{$data->id}}" type="checkbox" value="{{$data->id}}">
-													<label class="form-check-label" for="location{{$data->id}}">{{$data->city_name}}</label>
+													<input class="form-check-input loc_fil" name="left_loc_fil[]" id="mblocation{{$data->id}}" type="checkbox" value="{{$data->id}}">
+													<label class="form-check-label" for="mblocation{{$data->id}}">{{$data->city_name}}</label>
 												</div>
 											@endforeach
 										</div>
@@ -169,8 +169,8 @@
 										<div class="main_edu_list mobile-view">
 											@foreach (getDropDownlist('qualifications', ['id', 'educational_qualification']) as $index => $data)
 												<div class="form-check edu-item" style="{{ $index >= 5 ? 'display: none;' : '' }}">
-													<input class="form-check-input edu_fil" name="left_edu_fil[]" id="education{{$data->id}}" type="checkbox" value="{{$data->id}}">
-													<label class="form-check-label" for="education{{$data->id}}">{{$data->educational_qualification}}</label>
+													<input class="form-check-input edu_fil" name="left_edu_fil[]" id="mbeducation{{$data->id}}" type="checkbox" value="{{$data->id}}">
+													<label class="form-check-label" for="mbeducation{{$data->id}}">{{$data->educational_qualification}}</label>
 												</div>
 											@endforeach
 										</div>
@@ -212,7 +212,7 @@
 								<div class="acod-head">
 									<h6 class="acod-title"> 
 										<a data-bs-toggle="collapse"  href="#salary" class="collapsed" >
-											Salary (Annually)
+											Salary (Monthly)
 										</a>
 									</h6>
 								</div>
@@ -443,7 +443,7 @@
 					<div class="acod-head">
 						<h6 class="acod-title"> 
 							<a data-bs-toggle="collapse"  href="#salary" class="collapsed" >
-								Salary (Annually)
+								Salary (Monthly)
 							</a>
 						</h6>
 					</div>

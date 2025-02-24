@@ -323,7 +323,7 @@ class adminEmployerController extends Controller
         if (session()->has('admin_username')) {
 
             $EmpPlanData = DB::table('employer_plan')->where('is_deleted', 'No')->get();
-            return view('admin.employer.employer-plan-list', compact('EmpPlanData'));
+            return view('admin.Employer.employer-plan-list', compact('EmpPlanData'));
         }
     }
     

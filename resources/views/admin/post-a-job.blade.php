@@ -225,7 +225,19 @@
 												</small></span>
                                                 </select>
                                             </div>
-
+                                            <div class="col-md-4">
+											
+                                                <label for="inputAddress" class="form-label">Select Work Mode<span class="imp-field-star"> *</span></label>
+                                              <select class="form-select  mb-2" id="select_work_mode" name="select_work_mode[]" multiple>
+												<option value="1">Remote</option>
+												<option value="2">WFO</option>
+												<option value="3">Hybrid</option>
+											</select>
+											<span id="job_type_error" style="color:red;display:none;">
+												<small>
+													<i>Please provide job type </i>
+												</small></span>
+                                            </div>
                                             <div class="  col-md-12">
                                                 <label for="inputAddress" class="form-label">Job Description <span class="imp-field-star"> *</span></label>
                                                 	{{-- <textarea class="form-control mb-2" id="job_disc" name="job_disc"></textarea> --}}
