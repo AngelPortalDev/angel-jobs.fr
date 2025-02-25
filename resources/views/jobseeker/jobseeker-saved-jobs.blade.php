@@ -40,7 +40,7 @@
 								<div class="job-bx-title clearfix">
 									<h5 class="font-weight-700 float-start text-uppercase">
 										@if(count($savedJobs) > 0)
-										{{count($savedJobs)}} Saved Jobs</h5>
+										{{$totalCount}} Saved Jobs</h5>
 										@else
 										No jobs saved yet
 										@endif
@@ -110,15 +110,9 @@
 								</li>
 									@endforeach
 							</ul>
-								{{-- <div class="pagination-bx float-end">
-									<ul class="pagination">
-										<li class="previous"><a href="javascript:void(0);"><i class="ti-arrow-left"></i> Prev</a></li>
-										<li class="active"><a href="javascript:void(0);">1</a></li>
-										<li><a href="javascript:void(0);">2</a></li>
-										<li><a href="javascript:void(0);">3</a></li>
-										<li class="next"><a href="javascript:void(0);">Next <i class="ti-arrow-right"></i></a></li>
-									</ul>
-								</div> --}}
+								<div class="pagination-bx float-end">
+									{{$savedJobs->links()}}
+								</div>
 							</div>
 
 						</div>
