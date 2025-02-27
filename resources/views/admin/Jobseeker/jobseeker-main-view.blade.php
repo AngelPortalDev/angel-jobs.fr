@@ -178,7 +178,7 @@
                                          <div class="input-group">
                                             <select class="form-select" style="padding: 5px 0px 5px 5px;" name="mob_code" id="mob_code">
                                             <option value="" selected>Select</option>
-                                            <option value="+356">+356</option>
+                                            <option value="+33">+33</option>
                                                 @foreach (getDropDownlist('country_master',['id','country_code']) as $countylist)
                                             <option value="{{$countylist->country_code}}">{{$countylist->country_code}}</option>
                                                 @endforeach ()

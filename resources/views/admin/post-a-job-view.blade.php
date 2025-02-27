@@ -140,7 +140,30 @@
                                         </div>
                                         <br>
                                         <div class="row g-2">
-
+                                            <div class="col-md-4">
+												@php $workmode = explode(',', $jobDatas->work_mode);
+                                                
+                                                $workModes = [];
+                                                    if (in_array('1', $workmode)) $workModes[] = 'Remote';
+                                                    if (in_array('2', $workmode)) $workModes[] = 'WFO';
+                                                    if (in_array('3', $workmode)) $workModes[] = 'Hybrid';
+                                                    @endphp
+                                                <label for="inputAddress" class="form-label">Select Work Mode<span class="imp-field-star"> *</span></label><br>
+                                                @if(count($workModes) > 0)
+                                                {{ implode(', ', $workModes) }}
+                                                    @else
+                                                 Work mode not selected
+                                                @endif
+                                              {{-- <select class="form-select  mb-2" id="select_work_mode" name="select_work_mode[]" multiple>
+												<option value="1" @if (in_array('1', $workmode)) selected @endif>Remote</option>
+												<option value="2" @if (in_array('2', $workmode)) selected @endif>WFO</option>
+												<option value="3" @if (in_array('3', $workmode)) selected @endif>Hybrid</option>
+											</select> --}}
+											<span id="job_type_error" style="color:red;display:none;">
+												<small>
+													<i>Please provide job type </i>
+												</small></span>
+                                            </div>
                                            <div class="   col-md-4">
                                             	@php
 													$skill_keyword = explode(',', $jobDatas->skill_keyword);
@@ -202,7 +225,7 @@
                                            <div class="   col-md-4">
                                                 <label for="inputAddress" class="form-label">Mobile No <span class="imp-field-star"> *</span></label>
                                                 <div class="input-group">
-                                                    <input type="text" disabled id="inputState" class="form-control"  value="+356">
+                                                    <input type="text" disabled id="inputState" class="form-control"  value="+33">
                                                     <input class="form-control" type="number" value="{{$jobDatas->contact_phone}}"  id="job_con_phone" maxlength="8" name="job_con_phone" required="" placeholder="+1234567890" style="width: 50%;" readonly>
                                                 </div>
                                             </div>

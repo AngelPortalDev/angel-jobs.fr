@@ -46,7 +46,7 @@
 	<link href="{{ asset('css/select2.min.css')}}" rel="stylesheet" />
 		<!-- Theme Config Js -->
 	<script src="{{asset('admin/assets/js/config.js')}}"></script>
-
+    <script type="text/javascript" src="{{ asset('js/sweetalert.min.js')}}"></script>
 	
 	 <script>
       function checkalert(msg) {

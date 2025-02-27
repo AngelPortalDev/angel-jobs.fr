@@ -59,12 +59,12 @@
                                                     value="{{ !empty($empUserData[0]->industry_name) ? $empUserData[0]->industry_name : 'NA' }}" readonly>
                                             </div>
 
-                                            <div class="  col-md-4">
+                                            {{-- <div class="  col-md-4">
                                                 <label for="inputAddress" class="form-label">Company License Number
                                                 </label>
                                                 <input type="text" readonly class="form-control" id="inputAddress"
                                                     placeholder="Company License Number" value="{{ !empty($empUserData[0]->license_no) ? $empUserData[0]->license_no : 'NA' }}">
-                                            </div>
+                                            </div> --}}
 
                                             <div class="col-md-2 edit-profile-photo">
                                                 <label for="inputAddress" class="form-label">Update Profile Photo
@@ -84,7 +84,22 @@
 
 
                                             </div>
-
+                                            <div class="   col-md-4">
+                                                <label for="inputAddress" class="form-label">Current GST License:</label>
+                                                @if(isset($empUserData[0]->gst_license) && !empty($empUserData[0]->gst_license))
+                                                <p><a href="{{ Storage::url('employer/gst_license/' . $empUserData[0]->gst_license) }}" target="_blank">View File</a></p>
+                                                @else
+                                                <p>Not Upload GST </p>
+                                                @endif
+                                            </div>
+                                            <div class="   col-md-4">
+                                                <label for="inputAddress" class="form-label">Current Owner ID: </label>
+                                                @if(isset($empUserData[0]->owner_id) && !empty($empUserData[0]->owner_id))
+												<p><a href="{{ Storage::url('employer/owner_id/' . $empUserData[0]->owner_id) }}" target="_blank">View File</a></p>
+												@else
+												<p>Not upload owner ID</p>
+												@endif
+                                            </div>
 
                                         </div>
 
@@ -98,7 +113,7 @@
                                             <div class="col-md-1">
                                                 <label for="inputAddress" class="form-label">Code</label>
                                                 <input type="text" readonly class="form-control" id="inputAddress"
-                                                    placeholder="Mobile" value="+356" readonly>
+                                                    placeholder="Mobile" value="+33" readonly>
                                             </div>
                                             <div class="  col-md-2">
                                                 <label for="inputAddress" class="form-label">Mobile</label>
@@ -207,23 +222,28 @@
                                             </div>
 
                                             <div class="  col-md-2">
-                                                <label for="inputAddress" class="form-label">Active Jobs</label>
+                                                <label for="inputAddress" class="form-label">Approved Jobs</label>
                                                 <input type="text" readonly class="form-control" id="inputAddress"
-                                                     value="{{ is_exist('job_postings', ['posted_by'=>$empUserData[0]->id,'status'=>'Live' ])}}" readonly>
+                                                     value="{{ is_exist('job_postings', ['posted_by'=>$empUserData[0]->id,'status'=>'APPROVED' ])}}" readonly>
                                             </div>
-                                            <div class="  col-md-3">
+                                            
+                                            <div class="  col-md-2">
                                                 <label for="inputAddress" class="form-label">Highlighted Jobs</label>
                                                 <input type="text" readonly class="form-control" id="inputAddress"
                                                     placeholder="07-02-2024" value="{{ is_exist('job_postings', ['posted_by'=>$empUserData[0]->id,'job_highlighted'=>'Yes' ])}}" readonly>
                                             </div>
 
-                                            <div class="  col-md-3">
+                                            <div class="  col-md-2">
                                                 <label for="inputAddress" class="form-label">Applied Jobseekers</label>
                                                 <input type="text" readonly class="form-control" id="inputAddress"
-                                                    placeholder="07-02-2024" value="{{ is_exist('job_application_history', ['employer_id'=>$empUserData[0]->id])}}">
+                                                    placeholder="07-02-2024" value="{{$appliedcount}}">
                                             </div>
                                             <div class="  col-md-2">
-                                                <label for="inputAddress" class="form-label">Shortlisted Applications</label>
+                                                <label for="inputAddress" class="form-label"> Shortlisted Applications</label>
+                                                <input type="text" readonly class="form-control" id="inputAddress"
+                                                    value="{{$Shortappliedcount}}" readonly>
+                                            <div class="  col-md-2">
+                                                <label for="inputAddress" class="form-label">Shortlisted Jobseekers</label>
                                                 <input type="text" readonly class="form-control" id="inputAddress"
                                                     value="{{ is_exist('job_application_history', ['employer_id'=>$empUserData[0]->id, 'is_shortlisted'=>'Yes'])}}" readonly>
                                             </div>

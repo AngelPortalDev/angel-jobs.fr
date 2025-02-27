@@ -27,7 +27,9 @@
                                             <select class="form-select  mb-2" name="emp_id" id="emp_id">
                                                <option value="" selected>Select Employer</option>
 										@foreach (getDropDownlist('employers', ['company_name', 'id']) as $employers)
+                                        @if (isset($employers->company_name) && !empty($employers->company_name))
 										<option value="{{ base64_encode($employers->id)}}" >{{ $employers->company_name}}</option>
+                                        @endif
 										@endforeach
                                         </select> 
                                         <span id="employer_error" style="color:red;display:none;">
@@ -210,7 +212,7 @@
                                         </div>
                                         <br>
                                         <div class="row g-2">
-
+                                            
                                            <div class="   col-md-4">
                                                 <label for="inputAddress" class="form-label">Skills <span class="imp-field-star"> *</span></label>
                                                 <select  class="form-select  mb-2" id="job_skills" size="3" name="job_skills[]" multiple>
@@ -305,16 +307,16 @@
                                            <div class="   col-md-4">
                                                 <label for="inputAddress" class="form-label">Mobile No <span class="imp-field-star"> *</span></label>
                                                 <div class="input-group">
-                                                    <input type="text" disabled id="inputState" class="form-select"  value="+356">
+                                                    <input type="text" disabled id="inputState" class="form-select"  value="+33">
                                                     <input class="form-control" type="number" id="job_con_phone" maxlength="8" name="job_con_phone" required="" placeholder="+1234567890" style="width: 50%;">
                                                     <span id="job_con_phone_error" style="color:red;display:none;">
 												<small>
-													<i>Please Provide 8 Digit Mobile No. </i>
+													<i>Please Provide 9 Digit Mobile No. </i>
 												</small>
 											</span>
 											<span id="job_con_phone_limit_error" style="color:red;display:none;">
 												<small>
-													<i>Mobile No. Must be 8 Digit </i>
+													<i>Mobile No. Must be 9 Digit </i>
 												</small>
 
                                                 </div>

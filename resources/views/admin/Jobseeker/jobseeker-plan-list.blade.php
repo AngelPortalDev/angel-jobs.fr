@@ -15,7 +15,7 @@
                                 <div class="card-header jobseeker-header">
                                     <div class="btn-group mb-2 jobsee-header-tabs">
                                       
-                                        <a class="btn btn-primary main-button" role="button"
+                                        {{-- <a class="btn btn-primary main-button" role="button"
                                             data-bs-toggle="modal" data-bs-target="#add-plan-modal">
                                             <i class="bi bi-person-plus-fill"></i> Add 
                                         </a>
@@ -32,7 +32,7 @@
                                         <a class="btn btn-primary main-button" role="button" data-bs-toggle="modal"
                                             data-bs-target="#reject-modal">
                                             <i class="ri-close-circle-fill"></i> Reject
-                                        </a>
+                                        </a> --}}
 {{-- 
                                         <div class="dropdown jobsee-dropdown">
                                             <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"

@@ -37,7 +37,71 @@ $(document).ready(function () {
             reader.readAsDataURL(logo);
         }
     });
-
+    $("#gst_license, #owner_id").change(function () {
+        var allowedExtensions = ["pdf", "png", "jpg", "jpeg"];
+        var maxSize = 2 * 1024 * 1024;
+        var gst_licence = $("#gst_license")[0].files;
+        var owner_id = $("#owner_id")[0].files;
+    
+        $("#gst_license_file_error, #gst_license_size_error, #gst_license_encrypted_error").hide();
+        $("#owner_id_file_error, #owner_id_size_error, #owner_id_encrypted_error").hide();
+    
+        var encryptedFilesCount = 0; 
+        function checkFile(file, type) {
+            if (!file) return false;
+    
+            var fileName = file.name;
+            var fileExtension = fileName.split(".").pop().toLowerCase();
+    
+            // Extension Check
+            if (!allowedExtensions.includes(fileExtension)) {
+                $("#" + type + "_file_error").show();
+                disableSubmit();
+                return;
+            }
+    
+            // Size Check
+            if (file.size > maxSize) {
+                $("#" + type + "_size_error").show();
+                disableSubmit();
+                return;
+            }
+    
+            // Read File for Encrypted PDFs
+            if (fileExtension === "pdf") {
+                var reader = new FileReader(); // ✅ FIX: Define the reader instance
+    
+                reader.onload = function (e) {
+                    var data = new Uint8Array(e.target.result);
+                    var text = new TextDecoder("utf-8").decode(data);
+    
+                    // Check for "Encrypted" keyword in the PDF metadata
+                    if (text.includes("/Encrypt")) {
+                        $("#" + type + "_encrypted_error").show();
+                        encryptedFilesCount++; // Increase encrypted file count
+                        disableSubmit();
+                    } 
+    
+                    // If both files are checked and no encryption found, enable submit
+                    if (encryptedFilesCount === 0) {
+                        enableSubmit();
+                    }
+                };
+    
+                reader.readAsArrayBuffer(file);
+            }
+        }
+        function disableSubmit() {
+            $("#regSubmit, #ProfileSubmit").attr("disabled", "true");
+        }
+        function enableSubmit() {
+            $("#regSubmit, #ProfileSubmit").removeAttr("disabled");
+        }       
+        encryptedFilesCount = 0;
+    
+        if (gst_licence.length > 0) checkFile(gst_licence[0], "gst_license");
+        if (owner_id.length > 0) checkFile(owner_id[0], "owner_id");
+    });
     $(".addEmployer").click(function (event) {
         event.preventDefault();
         $("#bk_com_name_error").hide();
@@ -80,11 +144,11 @@ $(document).ready(function () {
             $("#contact_no_error").show();
             return;
         }
-        if (contact_no.length < 8) {
+        if (contact_no.length < 9) {
             $("#contact_no_error").show();
             return;
         }
-        if (contact_no.length > 8) {
+        if (contact_no.length > 9) {
             $("#contact_no_error").show();
             return;
         }
@@ -97,8 +161,8 @@ $(document).ready(function () {
             return;
         }
 
-        var form = $("#addEmployer").serialize();
-        // var form = new FormData($("#regFrom")[0]);
+        //var form = $("#addEmployer").serialize();
+        var form = new FormData($("#addEmployer")[0]);
         if (
             com_name != "" &&
             fullname != "" &&
@@ -111,6 +175,8 @@ $(document).ready(function () {
                 url: baseUrl + "/admin/employer-add",
                 type: "POST",
                 data: form,
+                contentType: false,
+                processData: false,
                 dataType: "json",
                 headers: {
                     "X-CSRF-TOKEN": csrfToken,
@@ -203,11 +269,11 @@ $(document).ready(function () {
             $("#contact_no_error").show();
             return;
         }
-        if (contact_no.length < 8) {
+        if (contact_no.length < 9) {
             $("#contact_no_error").show();
             return;
         }
-        if (contact_no.length > 8) {
+        if (contact_no.length > 9) {
             $("#contact_no_error").show();
             return;
         }
@@ -322,6 +388,15 @@ $(document).ready(function () {
         }
 
         var form = $(".actionId").serializeArray();
+        var selectedItems = form.filter(item => item.name === 'userId[]');  
+        if (selectedItems.length > 1) {
+            swal({
+                title: "Select only one employer",
+                text: "Please Try Again",
+                icon: "error",
+            });
+            return false;  
+        } 
         $("#loader").fadeIn();
         $.ajax({
             url: baseUrl + "/admin/employer-plan-assign",

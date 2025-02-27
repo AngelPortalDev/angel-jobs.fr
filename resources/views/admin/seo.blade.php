@@ -162,7 +162,7 @@
                                          <div class="input-group">
                                             <select id="inputState" class="form-select" style="padding: 5px 0px 5px 5px;">
                                                 <option>+91</option>
-                                                <option>+356</option>
+                                                <option>+33</option>
                                                 <option>+54</option>
                                                 <option>+78</option>
                                             </select>

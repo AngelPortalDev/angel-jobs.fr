@@ -14,7 +14,7 @@
                             <div class="card">
                                 <div class="card-header jobseeker-header">
                                     <div class="btn-group mb-2 jobsee-header-tabs">
-                                        <a class="btn btn-primary main-button" role="button"
+                                        {{-- <a class="btn btn-primary main-button" role="button"
                                             data-bs-toggle="modal" data-bs-target="#add-plan-modal">
                                             <i class="bi bi-person-plus-fill"></i> Add 
                                         </a>
@@ -31,7 +31,7 @@
                                         <a class="btn btn-primary main-button" role="button" data-bs-toggle="modal"
                                             data-bs-target="#reject-modal">
                                             <i class="ri-close-circle-fill"></i> Reject
-                                        </a>
+                                        </a> --}}
 
                                         {{-- <div class="dropdown jobsee-dropdown">
                                             <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -75,6 +75,7 @@
                                                 <th>Plan Amount</th>
                                                 <th>Duration (Days) </th>
                                                 <th>Plan Currency</th>
+                                                <th>Cv Access Limit</th>
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
@@ -95,6 +96,7 @@
                                                 <td>{{$data->plan_amount}}</td>
                                                 <td>{{$data->plan_duration}}</td>
                                                 <td>{{$data->plan_currency}}</td>
+                                                <td>{{$data->cv_access_limit}}</td>
                                                 <td><i class="ri-user-follow-line"></i> {{$data->status}}</td>
                                                 <td>
                                                     <a href="jobseeker-view.php" class="text-reset fs-16 px-1"

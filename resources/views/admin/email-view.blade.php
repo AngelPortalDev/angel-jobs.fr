@@ -108,7 +108,10 @@
                                                 <td>{{$template->template_name}}</td>
                                                 <td>{{$template->email_subject}}</td>
                                                 <td>
-                                                    @php echo html_entity_decode($template->email_content) @endphp 
+                                                    {{-- @php echo html_entity_decode($template->email_content) @endphp  --}}
+                                                    <div style="width: 400px; height: 300px; overflow: auto;">
+                                                        @php echo html_entity_decode($template->email_content); @endphp
+                                                     </div>
                                                 </td>
                                                 <td>
                                                     <a href="{{route('edit-template-view', base64_encode($template->id))}}" class="text-reset fs-16 px-1"> 
@@ -163,7 +166,7 @@
                                          <div class="input-group">
                                             <select id="inputState" class="form-select" style="padding: 5px 0px 5px 5px;">
                                                 <option>+91</option>
-                                                <option>+356</option>
+                                                <option>+33</option>
                                                 <option>+54</option>
                                                 <option>+78</option>
                                             </select>
