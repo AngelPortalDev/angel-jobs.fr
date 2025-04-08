@@ -139,6 +139,11 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <div class="g-recaptcha" name="g-recaptcha-response" data-sitekey="{{env('GOOGLE_SITE_KEY')}}"> </div>
+                                    </div>
+                                </div>
+                                {{-- <div class="col-lg-12">
                                     <div class="recaptcha-bx">
                                         <div class="input-group">
                                             <div class="g-recaptcha" data-sitekey="<!-- Put reCaptcha Site Key -->"
@@ -148,7 +153,7 @@
                                                 data-recaptcha="true" required data-error="Please complete the Captcha">
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="col-lg-12">
                                     <button name="submit" type="button" value="Submit" class="site-button"
                                         id="submitcontact"> <span>Submit</span> </button>
