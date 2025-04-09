@@ -112,7 +112,7 @@
 
                                         <div class="col-8">
                                             <div class="form-group">
-                                                <input type="tel" id="contact_no" name="contact_no" class="form-control"
+                                                <input type="number" id="contact_no" name="contact_no" class="form-control"
                                                     placeholder="Enter your Mobile No.">
                                                 <span id="contact_no_error" style="color:red;display:none;">
                                                     <small>
