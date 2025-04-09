@@ -12,7 +12,7 @@ class mailController extends Controller
 {
     public function mailEnqiry(Request $req)
     {
-        if ((request()->getHost() === 'www.angel-jobs.in') && env('GOOGLE_SECRET_KEY')) {
+        if ((request()->getHost() === 'www.angel-jobs.fr') && env('GOOGLE_SECRET_KEY')) {
             $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
                 'secret' => env('GOOGLE_SECRET_KEY'),
                 'response' => $req->input('g-recaptcha-response'),
