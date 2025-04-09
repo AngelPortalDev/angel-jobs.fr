@@ -55,8 +55,29 @@ class adminEmployerController extends Controller
            
             $emp_id = base64_decode($emp_id);
             $empUserData = DB::table('employer_view')->where('id', $emp_id)->where('is_deleted', 'No')->orderBy('id', 'DESC')->get();
+            $appliedcount=$query = DB::table('job_application_history')
+            ->select(
+                'job_application_history.js_id',
+                'job_application_history.job_id',
+                'job_application_history.applied_on',)
+                ->leftJoin('job_posting_view', 'job_application_history.job_id', '=', 'job_posting_view.id')
+                ->where('job_posting_view.posted_by', $emp_id)
+                ->whereNotNull('job_application_history.applied_on')
+                ->count();
+$Shortappliedcount=$query = DB::table('job_application_history')
+            ->select(
+                'job_application_history.js_id',
+                'job_application_history.job_id',
+                'job_application_history.job_id',
+                'job_application_history.is_shortlisted',)
+                ->leftJoin('job_posting_view', 'job_application_history.job_id', '=', 'job_posting_view.id')
+                ->where('job_posting_view.posted_by', $emp_id)
+                ->where('job_application_history.is_shortlisted', 'Yes')
+                ->whereNotNull('job_application_history.applied_on')
+                ->count();                            
 
-            return view('admin.Employer.employer-view', compact('empUserData'));
+return view('admin.Employer.employer-view', compact('empUserData','appliedcount','Shortappliedcount'));
+
         }
     }
     public function empProfileditView($emp_id)
@@ -100,8 +121,8 @@ class adminEmployerController extends Controller
                 "full_name" => "required|string|min:3",
                 "company_name" => "required",
                 "emp_id" => "required",
-                "mobile_no" => "required|numeric|min:8",
-                "license_no" => "required",
+                "mobile_no" => "required|numeric|min:9",
+                // "license_no" => "required",
                 // "mobile_no" => "required|string|max:225",
             ];
 
@@ -122,13 +143,13 @@ class adminEmployerController extends Controller
                             $user_id = Employer::where('id', $emp_id)->update([
                                 'fullname' => $full_name,
                                 'company_name' => $emp_com_name,
-                                'mob_code' => '+356',
+                                'mob_code' => '+33',
                                 'mobile' => $mobile_no,
                                 'company_type' => $emp_com_type,
                                 'company_size' => $emp_com_size,
                                 'industry' => $emp_com_indus,
                                 'address' => $emp_com_addrss,
-                                'license_no' => $license_no,
+                                // 'license_no' => $license_no,
                                 'city' => $emp_com_city,
                                 'profile_img' => $logo_name,
                                 'website' => $emp_com_web,
@@ -141,24 +162,24 @@ class adminEmployerController extends Controller
                       
                             if ($user_id > 0 && $logo_uploaded === TRUE) {
                                 // mail_send(9, ['#Name#', '#Cat#'], [ucfirst($full_name), 'Employer'], session()->get('emp_username'));
-                                return  redirect('admin/get-employer-data')->withSuccess('msg', 'Successfully Updated');
+                                return  redirect('admin/get-employer-data')->with('msgs', 'Successfully Updated');
                             } else {
-                                return  redirect('admin/get-employer-data')->withErrors('msg', 'Unable to Add Details');
+                                return  redirect('admin/get-employer-data')->with('msgf', 'Unable to Add Details');
                             }
                         } catch (\Exception $e) {
-                            return  redirect('admin/get-employer-data')->withErrors('msg', 'Unable to Add Details');
+                            return  redirect('admin/get-employer-data')->with('msgf', 'Unable to Add Details');
                         }
                     } else {
-                        return  redirect('admin/get-employer-data')->withErrors('msg', 'Unable to Upload Profile');
+                        return  redirect('admin/get-employer-data')->with('msgf', 'Unable to Upload Profile');
                     }
                 } else {
                     return  redirect("admin/employer-edit-view/$enc_id")->withErrors($validate)->withInput();
                 }
             } else {
-                return  redirect('admin/get-employer-data')->withErrors('msg', 'User Not Exist');
+                return  redirect('admin/get-employer-data')->with('msgf', 'User Not Exist');
             }
         } else {
-            return  redirect('admin/get-employer-data')->withErrors('msg', 'Something Went Wrong');
+            return  redirect('admin/get-employer-data')->with('msgf', 'Something Went Wrong');
         }
     }
     public function addEmployer(Request $req)
@@ -173,7 +194,9 @@ class adminEmployerController extends Controller
             $contact_no = isset($req->contact_no) ? htmlspecialchars($req->input('contact_no')) : '';
             $email = isset($req->addemail) ? htmlspecialchars($req->input('addemail')) : '';
             $password = isset($req->password) ? htmlspecialchars($req->input('password')) : '';
-            $mob_code = "+356";
+            $gst_license = $req->hasFile('gst_license') ? $req->file('gst_license') : '';
+            $owner_id = $req->hasFile('owner_id') ? $req->file('owner_id') : '';
+            $mob_code = "+33";
             $currentDate = Carbon::now('Europe/Paris');
             $booking_date = $currentDate->format('Y-m-d');
             $booking_time = $currentDate->format('H:i:s');
@@ -182,7 +205,7 @@ class adminEmployerController extends Controller
             $plan_id = 1; //Free Plan ID
             $plan_end_duration = 90;
             $plan_expired_on = $currentDate->addDays($plan_end_duration)->format('Y-m-d');
-            $plan_details = $this->EmpPlan->planDetails($plan_id, ['job_post_limit']); // 1 Free Welcom Plan
+            $plan_details = $this->EmpPlan->planDetails($plan_id, ['job_post_limit','cv_access_limit']); // 1 Free Welcom Plan
 
             if (Employer::where('email', $email)->count() === 0) {
                 if (Employer::where('mobile', $contact_no)->where('mob_code', $mob_code)->count() === 0) {
@@ -193,6 +216,8 @@ class adminEmployerController extends Controller
                         'addemail' => 'required|email|max:225',
                         'password' => 'required|string|max:225',
                         'mob_code' => 'string|max:225',
+                        'gst_license' => 'nullable|file|mimes:jpg,png,pdf|max:2048',
+                        'owner_id'    => 'nullable|file|mimes:jpg,png,pdf|max:2048',
                     ];
 
 
@@ -202,6 +227,26 @@ class adminEmployerController extends Controller
                     if (!$validate->fails()) {
 
                         try {
+                            $id = Session::has('emp_user_id') ? Session::get('emp_user_id') : 0;
+                        
+                            $gst_license_filename = null;
+                            $owner_id_filename = null;
+                            if ($req->hasFile('gst_license')) {
+                                $file = $req->file('gst_license');
+                                $gst_license_filename = 'gst_' . time() . '_' . $id . '.' . $file->getClientOriginalExtension();
+                                $gst_license = file_upload($file, 'storage/employer/gst_license/', $gst_license_filename);
+                                if (!$gst_license) {
+                                    echo json_encode(['code' => 201, 'message' => 'GST License upload failed!', "icon" => "error"]);
+                                }   
+                            }
+                            if ($req->hasFile('owner_id')) {
+                                $file = $req->file('owner_id');
+                                $owner_id_filename = 'ownerid_' . time() . '_' . $id . '.' . $file->getClientOriginalExtension();
+                                $owner_id = file_upload($file, 'storage/employer/owner_id/', $owner_id_filename);
+                                if (!$owner_id) {
+                                    echo json_encode(['code' => 201, 'message' => 'Owner Id upload failed!', "icon" => "error"]);
+                                }
+                            }
                             $user_id = Employer::create([
                                 'fullname' => $name,
                                 'mobile' => $contact_no,
@@ -211,10 +256,14 @@ class adminEmployerController extends Controller
                                 'plan_start_from' => $booking_date,
                                 'plan_expired_on' => $plan_expired_on,
                                 'free_assign_job_posting' => $plan_details[0]->job_post_limit,
+                                'cv_access_limit' => $plan_details[0]->cv_access_limit,
+                                'cv_access_total' => $plan_details[0]->cv_access_limit,
                                 'company_name' => $com_name,
                                 'password' => Hash::make($password),
                                 'is_deleted' => 'No',
                                 'register_date' => $time,
+                                'gst_license' => $gst_license_filename,
+                                'owner_id' => $owner_id_filename,
                             ]);
 
                             $emp_id = $user_id->id;
@@ -285,17 +334,24 @@ class adminEmployerController extends Controller
                     DB::beginTransaction();
                     try {
 
-                        $plan_details = $this->EmpPlan->planDetails($plan_id, ['job_post_limit', 'plan_duration']);
+                        $currentLeftCredit = getData('employers', ['left_credit_job_posting_plan','cv_access_limit','cv_access_total'], ['id' => $emp_id]);
+
+                        $plan_details = $this->EmpPlan->planDetails($plan_id, ['job_post_limit', 'plan_duration','cv_access_limit']);
                         $plan_end_duration = $plan_details[0]->plan_duration;
-                        $posting_limit = $plan_details[0]->job_post_limit;
+                        $posting_limit = $currentLeftCredit[0]->left_credit_job_posting_plan + $plan_details[0]->job_post_limit;
+                        
+                        $cv_access_limit = $currentLeftCredit[0]->cv_access_limit + $plan_details[0]->cv_access_limit;
                         $plan_expired_on = $this->currentDate->addDays($plan_end_duration)->format('Y-m-d');
+                        $cv_access_total =$currentLeftCredit[0]->cv_access_total + $plan_details[0]->cv_access_limit;
+                      
+
 
                         $payment_id =  DB::table('employer_payments')->insertGetId([
                             'plan_id' =>
                             $plan_id, 'order_id' => $order_id, 'emp_id' => $emp_id, 'payment_id' => $trans_id, 'payment_amount' => $amount_recieved, 'pay_method' => 'ADMIN', 'status' => 3, 'confirm_by' => $user_id, 'created_at' => $this->time
                         ]);
 
-                        DB::table('employers')->where('id', $emp_id)->update(['plan_id' => $plan_id, 'left_credit_job_posting_plan' => $posting_limit, 'plan_start_from' => $this->date, 'plan_expired_on' => $plan_expired_on, 'last_payment_recieved_id' => $payment_id, 'assign_by' => $user_id, 'last_payment_recieved_on' => $this->date]);
+                        DB::table('employers')->where('id', $emp_id)->update(['plan_id' => $plan_id, 'left_credit_job_posting_plan' => $posting_limit, 'plan_start_from' => $this->date,'cv_access_limit' => $cv_access_limit ,'cv_access_total' => $cv_access_total, 'plan_expired_on' => $plan_expired_on, 'last_payment_recieved_id' => $payment_id, 'assign_by' => $user_id, 'last_payment_recieved_on' => $this->date]);
 
 
                         DB::commit();
@@ -323,7 +379,7 @@ class adminEmployerController extends Controller
         if (session()->has('admin_username')) {
 
             $EmpPlanData = DB::table('employer_plan')->where('is_deleted', 'No')->get();
-            return view('admin.employer.employer-plan-list', compact('EmpPlanData'));
+            return view('admin.Employer.employer-plan-list', compact('EmpPlanData'));
         }
     }
     

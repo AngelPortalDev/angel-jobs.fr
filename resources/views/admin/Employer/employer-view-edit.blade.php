@@ -98,7 +98,7 @@
                                                 </select>
                                             </div>
 
-                                            <div class="  col-md-4">
+                                            {{-- <div class="  col-md-4">
                                                 <label for="inputAddress" class="form-label">Company License Number<span class="imp-field-star"> *</span>
                                                 </label>
                                                 <input type="text" class="form-control" id="inputAddress"
@@ -107,7 +107,7 @@
                                                         <div style="color: red;">{{ $errors->first('license_no') }}</div>
                                                        
                                                     @endif
-                                            </div>
+                                            </div> --}}
 
                                             <div class="col-md-2 edit-profile-photo">
                                                 <label for="inputAddress" class="form-label">Update Profile Photo
@@ -120,7 +120,7 @@
                                                             src="{{ Storage::url("employer/profile_image/".$empUserData[0]->profile_img) }}" alt="">
 												@else
 												 <img class="avatar-md rounded-circle bx-s imagePreview"
-                                                            src="{{ Storage::url("no-image.jpg") }}" alt="">
+                                                            src="{{ Storage::url("employer/profile_image/employer.png") }}" alt="">
 												@endif
                                                     </a>
 											<i class="fas fa-pencil-alt"><input type="file"  class="update-flie image profilePic" name='com_logo' id="com_logo" accept=".png,.jpg,.jpeg"></i>
@@ -142,7 +142,7 @@
                                             <div class="col-md-2">
                                                 <label for="inputAddress" class="form-label">Country Code<span class="imp-field-star"> *</span></label>
                                                 <input type="text" class="form-control" id="inputAddress"
-                                                    placeholder="Mobile" value="+356" readonly>
+                                                    placeholder="Mobile" value="+33" readonly>
                                             </div>
                                             <div class="  col-md-2">
                                                 <label for="inputAddress" class="form-label">Mobile<span class="imp-field-star"> *</span></label>

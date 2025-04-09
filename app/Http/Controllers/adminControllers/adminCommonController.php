@@ -29,8 +29,11 @@ class adminCommonController extends Controller
     {
 
         if (session()->has('admin_username')) {
-            $jobSeekerData = DB::table('jobseeker_view')->select('fullname', 'profile_img', 'email', 'mob_code', 'mobile', 'role_name', 'experiance_name', 'pref_job_type_name', 'created_at',  'updated_at')->where(['is_delete' => 'No'])->orderByDesc('updated_at')->limit(5)->get();
-            $empData = DB::table('employer_view')->select('fullname', 'company_name', 'profile_img', 'email', 'mob_code', 'mobile', 'industry_name', 'plan_name', 'created_at', 'updated_at')->where(['is_deleted' => 'No'])->orderByDesc('updated_at')->limit(5)->get();
+            // $jobSeekerData = DB::table('jobseeker_view')->select('fullname', 'profile_img', 'email', 'mob_code', 'mobile', 'role_name', 'experiance_name', 'pref_job_type_name', 'created_at',  'updated_at')->where(['is_delete' => 'No'])->orderByDesc('updated_at')->limit(5)->get();
+            // $empData = DB::table('employer_view')->select('fullname', 'company_name', 'profile_img', 'email', 'mob_code', 'mobile', 'industry_name', 'plan_name', 'created_at', 'updated_at')->where(['is_deleted' => 'No'])->orderByDesc('updated_at')->limit(5)->get();
+            $jobSeekerData = DB::table('jobseeker_view')->select('fullname', 'profile_img', 'email', 'mob_code', 'mobile', 'role_name', 'experiance_name', 'pref_job_type_name', 'created_at',  'updated_at')->where(['is_delete' => 'No'])->whereNotNull('js_id')->orderByDesc('created_at')->limit(5)->get();
+            $empData = DB::table('employer_view')->select('fullname', 'company_name', 'profile_img', 'email', 'mob_code', 'mobile', 'industry_name', 'plan_name', 'created_at', 'updated_at')->where(['is_deleted' => 'No'])->whereNotNull('id')->orderByDesc('created_at')->limit(5)->get();
+ 
             return view('admin.index', compact('jobSeekerData', 'empData'));
         }
     }
@@ -861,14 +864,20 @@ class adminCommonController extends Controller
     }
     public function editTemplate($temp_id)
     {
-        if (session()->has('admin_username') && !empty($temp_id) && isset($temp_id)) {
+        if (session()->has('admin_username') || session()->has('emp_username') && !empty($temp_id) && isset($temp_id)) {
 
             $temp_id = base64_decode($temp_id);
+            if(session()->has('admin_username')){
+                $templData = DB::table('email_templates')->where('id', $temp_id)->where('is_deleted', 'No')->get();
+                $page='admin.email-update';
+            }else{
+                $templData = DB::table('email_templates')->where('id', $temp_id)->where('is_deleted', 'No')->first();
+                
+                $page='employer.update-email-template';
+            }
 
-            $templData = DB::table('email_templates')->where('id', $temp_id)->where('is_deleted', 'No')->get();
-
-
-            return view('admin.email-update', compact('templData'));
+            return view($page, compact('templData'));
+           
         }
     }
     public function editPlanModalView(Request $req)

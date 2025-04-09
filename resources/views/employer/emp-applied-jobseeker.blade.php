@@ -19,7 +19,7 @@
 							<div class="job-bx clearfix">
 								<div class="job-bx-title clearfix">
 									@if(count($appliedData) > 0)
-									<h5 class="font-weight-700 float-start text-uppercase">Applied Jobseekers</h5>
+									<h5 class="font-weight-700 float-start text-uppercase"> {{ $totalCount }} Applied Jobseekers</h5>
 									@else
 									<h5 class="font-weight-700 float-start text-uppercase">No jobseekers applied yet</h5>
 									@endif
@@ -67,7 +67,7 @@
 													@endif
 													</h5>
 													<ul>
-														<li><i class="fa fa-briefcase"></i>Job Title: {!! $appliedDatas->job_title !!}</li>
+														<li><i class="fa fa-briefcase"></i>Job Title: {!! htmlspecialchars_decode($appliedDatas->job_title) !!}</li>
 													</ul>
 													<ul>
 														<li><i class="fa fa-user"></i>Joining : {{ isset($appliedDatas->notice_name) ?$appliedDatas->notice_name : 'NA'}}</li>
@@ -122,15 +122,9 @@
 										 --}}
 									{{-- @endif  --}}
 								</ul>
-								{{-- <div class="pagination-bx float-end">
-									<ul class="pagination">
-										<li class="previous"><a href="javascript:void(0);"><i class="ti-arrow-left"></i> Prev</a></li>
-										<li class="active"><a href="javascript:void(0);">1</a></li>
-										<li><a href="javascript:void(0);">2</a></li>
-										<li><a href="javascript:void(0);">3</a></li>
-										<li class="next"><a href="javascript:void(0);">Next <i class="ti-arrow-right"></i></a></li>
-									</ul>
-								</div> --}}
+								<div class="pagination-bx float-end">
+									{{$appliedData->links()}}
+								</div>
 							</div>
 						</div>
 					</div>

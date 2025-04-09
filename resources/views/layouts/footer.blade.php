@@ -197,10 +197,19 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="{{ asset('js/common.js') }}"></script>
 <script src="{{ asset('admin/assets/js/vendor/quill.min.js') }}"></script>
+<script src="https://www.google.com/recaptcha/api.js"></script>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script>
+	function openNav() {       
+	  document.getElementById("filter-sidebar").style.width = "320px";
+	}
 
+	function closeNav() {
+	  document.getElementById("filter-sidebar").style.width = "0";
+	}
+</script>
 {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> --}}
 <script>
     // Search Dropdown
@@ -380,26 +389,44 @@
         });
         
         // Define elements for each section
-        const $searchLocation = $('#search-location');
-        const $clearButtonLocation = $('#clear-search-location');
-        const $locationItems = $('#main_loc_list .location-item');
-        const $showMoreLocation = $('#show-more-location');
+        // const $searchLocation = $('#search-location');
+        // const $clearButtonLocation = $('#clear-search-location');
+        // const $locationItems = $('#main_loc_list .location-item');
+        // const $showMoreLocation = $('#show-more-location');
 
-        const $searchIndustry = $('input[data-classfil="main_indus_list"]');
-        const $clearButtonIndustry = $('#clear-search-industry');
-        const $industryItems = $('#main_indus_list .indus-item');
-        const $showMoreIndustry = $('#show-more-industry');
+        // const $searchIndustry = $('input[data-classfil="main_indus_list"]');
+        // const $clearButtonIndustry = $('#clear-search-industry');
+        // const $industryItems = $('#main_indus_list .indus-item');
+        // const $showMoreIndustry = $('#show-more-industry');
 
-        const $searchEducation = $('input[data-classfil="main_edu_list"]');
-        const $clearButtonEducation = $('#clear-search-education');
-        const $educationItems = $('#main_edu_list .edu-item');
-        const $showMoreEducation = $('#show-more-education');
+        // const $searchEducation = $('input[data-classfil="main_edu_list"]');
+        // const $clearButtonEducation = $('#clear-search-education');
+        // const $educationItems = $('#main_edu_list .edu-item');
+        // const $showMoreEducation = $('#show-more-education');
         
-        const $searchDesignation = $('input[data-classfil="main_desig_list"]');
-        const $clearButtonDesignation = $('#clear-search-designation');
-        const $designationItems = $('#main_desig_list .design-item');
-        const $showMoreDesignation = $('#show-more-designation');
+        // const $searchDesignation = $('input[data-classfil="main_desig_list"]');
+        // const $clearButtonDesignation = $('#clear-search-designation');
+        // const $designationItems = $('#main_desig_list .design-item');
+        // const $showMoreDesignation = $('#show-more-designation');
+        const $searchLocation = $('.search-location-js');  
+                const $clearButtonLocation = $('.clear-search-location-js'); 
+                const $locationItems = $('.location-list-js .location-item-js'); 
+                const $showMoreLocation = $('.show-more-location-js'); 
 
+                const $searchIndustry = $('.search-industry');
+                const $clearButtonIndustry = $('.clear-search-industry');
+                const $industryItems = $('.main_indus_list .indus-item');
+                const $showMoreIndustry = $('.show-more-industry');
+        
+                const $searchEducation = $('.search-education');
+                const $clearButtonEducation = $('.clear-search-education');
+                const $educationItems = $('.main_edu_list .edu-item');
+                const $showMoreEducation = $('.show-more-education');
+                
+                const $searchDesignation = $('.search-designation');
+                const $clearButtonDesignation = $('.clear-search-designation');
+                const $designationItems = $('.main_desig_list .design-item');
+                const $showMoreDesignation = $('.show-more-designation');
         // Show/Hide logic for show-more button
         $showMoreLocation.toggle($locationItems.filter(':hidden').length > 0);
         $showMoreIndustry.toggle($industryItems.filter(':hidden').length > 0);
@@ -422,21 +449,21 @@
 
         // Handle search for location
         $searchLocation.on('keyup', function () {
-            searchFilter($searchLocation, $locationItems, $showMoreLocation);
+            searchFilter($(this), $locationItems, $showMoreLocation);
         });
 
         // Handle search for industry
         $searchIndustry.on('keyup', function () {
-            searchFilter($searchIndustry, $industryItems, $showMoreIndustry);
+            searchFilter($(this), $industryItems, $showMoreIndustry);
         });
 
         // Handle search for education
         $searchEducation.on('keyup', function () {
-            searchFilter($searchEducation, $educationItems, $showMoreEducation);
+            searchFilter($(this), $educationItems, $showMoreEducation);
         });
         // Handle search for designation
         $searchDesignation.on('keyup', function () {
-            searchFilter($searchDesignation, $designationItems, $showMoreDesignation);
+            searchFilter($(this), $designationItems, $showMoreDesignation);
         });
 
         // Show more button click behavior
@@ -451,22 +478,58 @@
 
         // Show more location
         $showMoreLocation.on('click', function (event) {
-            showMore($locationItems, $showMoreLocation, event);
+            var $mobileItems = $('.mobile-view .location-item-js');
+                    var $showMoreMobile = $(this);                
+                    var $desktopItems = $('.desktop-view .location-item-js');
+                    var $showMoreDesktop = $(this);
+    
+                    if ($(window).width() <= 767) {  
+                        showMore($mobileItems, $showMoreMobile, event);
+                    } else { 
+                        showMore($desktopItems, $showMoreDesktop, event);
+                    }
         });
 
         // Show more industry
         $showMoreIndustry.on('click', function (event) {
-            showMore($industryItems, $showMoreIndustry, event);
+            var $mobileItems = $('.mobile-view .indus-item');
+                    var $showMoreMobile = $(this);                
+                    var $desktopItems = $('.desktop-view .indus-item');
+                    var $showMoreDesktop = $(this);
+                       
+                        if ($(window).width() <= 767) {  
+                            showMore($mobileItems, $showMoreMobile, event);
+                        } else { 
+                            showMore($desktopItems, $showMoreDesktop, event);
+                        }
         });
 
         // Show more education
         $showMoreEducation.on('click', function (event) {
-            showMore($educationItems, $showMoreEducation, event);
+            var $mobileItems = $('.mobile-view .edu-item');
+                    var $showMoreMobile = $(this);                
+                    var $desktopItems = $('.desktop-view .edu-item');
+                    var $showMoreDesktop = $(this);
+    
+                    if ($(window).width() <= 767) {  
+                        showMore($mobileItems, $showMoreMobile, event);
+                    } else { 
+                        showMore($desktopItems, $showMoreDesktop, event);
+                    }
         });
 
         // Show more designation
         $showMoreDesignation.on('click', function (event) {
-            showMore($designationItems, $showMoreDesignation, event);
+            var $mobileItems = $('.mobile-view .design-item');
+                    var $showMoreMobile = $(this);                
+                    var $desktopItems = $('.desktop-view .design-item');
+                    var $showMoreDesktop = $(this);
+    
+                    if ($(window).width() <= 767) {  
+                        showMore($mobileItems, $showMoreMobile, event);
+                    } else { 
+                        showMore($desktopItems, $showMoreDesktop, event);
+                    }
         });
 
 
@@ -480,19 +543,60 @@
 
         // Handle clearing for industry
         $clearButtonIndustry.on('click', function () {
-            resetDropdown($searchIndustry, $industryItems, $('#clear-search-wrapper-industry'), $showMoreIndustry);
+            var $mobileItems = $('.mobile-view .indus-item');
+                var $showMoreMobile = $(this);                
+                var $desktopItems = $('.desktop-view .indus-item');
+                var $showMoreDesktop = $(this);
+                if ($(window).width() <= 767) {  
+                  
+                  resetDropdown($searchIndustry, $mobileItems, $('#clear-search-wrapper-industry'),$showMoreIndustry);
+              } else { 
+               
+                  resetDropdown($searchIndustry, $desktopItems, $('#clear-search-wrapper-industry'),$showMoreIndustry);
+              }
         });
 
         $clearButtonEducation.on('click', function () {
-            resetDropdown($searchEducation, $educationItems, $('#clear-search-wrapper-education'), $showMoreEducation);
+            var $mobileItems = $('.mobile-view .edu-item');
+                var $showMoreMobile = $(this);                
+                var $desktopItems = $('.desktop-view .edu-item');
+                var $showMoreDesktop = $(this);
+                if ($(window).width() <= 767) {  
+                  
+                  resetDropdown($searchEducation, $mobileItems, $('#clear-search-wrapper-industry'),$showMoreEducation);
+              } else { 
+               
+                  resetDropdown($searchEducation, $desktopItems, $('#clear-search-wrapper-industry'),$showMoreEducation);
+              }
         });
 
         $clearButtonLocation.on('click', function () {
-            resetDropdown($searchLocation, $locationItems, $('#clear-search-wrapper-location'), $showMoreLocation);
+            var $mobileItems = $('.mobile-view .location-item-js');
+                var $showMoreMobile = $(this);                
+                var $desktopItems = $('.desktop-view .location-item-js');
+                var $showMoreDesktop = $(this);     
+                
+                if ($(window).width() <= 767) {  
+                  
+                    resetDropdown($searchLocation, $mobileItems, $('#clear-search-wrapper-location'),$showMoreLocation);
+                } else { 
+                 
+                    resetDropdown($searchLocation, $desktopItems, $('#clear-search-wrapper-location'),$showMoreLocation);
+                }
         });
 
         $clearButtonDesignation.on('click', function () {
-            resetDropdown($searchDesignation, $designationItems, $('#clear-search-wrapper-designation'), $showMoreDesignation);
+            var $mobileItems = $('.mobile-view .design-item');
+                var $showMoreMobile = $(this);                
+                var $desktopItems = $('.desktop-view .design-item');
+                var $showMoreDesktop = $(this);
+
+                if ($(window).width() <= 767) {  
+                    resetDropdown($searchDesignation, $mobileItems, $('#clear-search-wrapper-designation'), $showMoreDesignation);
+                   
+                } else { 
+                    resetDropdown($searchDesignation, $desktopItems, $('#clear-search-wrapper-designation'), $showMoreDesignation);
+                }
         });
 
 

@@ -17,7 +17,11 @@
                         <div class="col-xl-9 col-lg-8 m-b30">
                             <div class="job-bx clearfix">
                                 <div class="job-bx-title clearfix">
-                                    <h5 class="font-weight-700 float-start text-uppercase">Shortlisted Jobseekers</h5>
+                                    @if(count($shortlisted) > 0)
+									<h5 class="font-weight-700 float-start text-uppercase">{{$totalCount}} Jobseekers Shortlisted</h5>
+									@else
+									<h5 class="font-weight-700 float-start text-uppercase">No Shortlisted Jobseekers yet</h5>
+									@endif
                                     {{-- <a href="#" class="site-button button-sm float-end "><i class="fas fa-pencil-alt m-r5"></i> Edit</a> --}}
                                 </div>
                                 <ul class="post-job-bx browse-job-grid post-resume row">
@@ -92,15 +96,9 @@
                                     @endforeach
 
                                 </ul>
-                                {{-- <div class="pagination-bx float-end">
-									<ul class="pagination">
-										<li class="previous"><a href="javascript:void(0);"><i class="ti-arrow-left"></i> Prev</a></li>
-										<li class="active"><a href="javascript:void(0);">1</a></li>
-										<li><a href="javascript:void(0);">2</a></li>
-										<li><a href="javascript:void(0);">3</a></li>
-										<li class="next"><a href="javascript:void(0);">Next <i class="ti-arrow-right"></i></a></li>
-									</ul>
-								</div> --}}
+                                <div class="pagination-bx float-end">
+                                    {{$shortlisted->links()}}
+								</div>
                             </div>
                         </div>
                     </div>

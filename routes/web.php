@@ -264,7 +264,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
     Route::get('admin-job-details-update/{enc_id}',[JobPostingController::class, 'updateViewJob'])->name('admin-job-update');
     Route::get('admin-job-details-view/{enc_id}', [JobPostingController::class, 'adminViewJob'])->name('admin-job-view');
     Route::post('admin-jobs-action',[JobPostingController::class, 'adminJobsAction']);
-    Route::get('admin-jobs-export',[adminEmployerController::class, 'empExports'])->name('jobs-export');
+    Route::get('admin-jobs-export',[adminEmployerController::class, 'jobsExports'])->name('jobs-export');
 
     
     // Js Controller Admin

@@ -1,5 +1,92 @@
 @extends('layouts.main')
 @section('content')
+<style>
+    .showfilter {
+        display: none;
+    }
+
+    @media (max-width: 767px) {
+        .hidefilter {
+            display: none;
+        }
+        .showfilter {
+            display: block;
+        }
+        .filter-sidebar .show-hide-sidebar {
+            padding: 10px 30px 10px 20px;
+            overflow-y: scroll;
+            position: relative;
+            width: calc(100% + 17px);
+            min-height: 300px;
+            display: block;
+            height: 100%;
+        }
+        .page_sidebar {
+            position: relative;
+            width: 100%;
+            margin-bottom: 30px;               
+            padding: 1rem 1rem;
+        }
+        .filt-head {
+            display: flex;
+            padding: 0 1rem 1rem 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .filt-head .filt-first {
+            flex: 1;
+            margin: 0;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .filter-sidebar .closebtn {
+            position: relative;
+            font-size: 36px;
+            margin-left: 00px;
+            font-weight: 500;
+            text-align: center;
+            font-size: 14px;
+            padding: 0;
+            color: #2d4767;
+        }
+        h6.acod-title {
+            font-size: 16px;
+            line-height: 5px;
+        }
+        .filter-sidebar {
+            height: 100vh;
+            width: 0;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            background-color: #fff;
+            overflow: hidden;
+            transition: 0.5s;
+            padding-top: 20px;
+            padding-bottom: 2rem;
+            box-shadow: 0 0 20px 0 rgba(62, 28, 131, 0.1);
+        }
+        #paginationLinks {
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+            display: flex;
+            scroll-behavior: smooth;
+        }
+        .pagination-bx {
+            float: none !important
+        }
+        .job-post-info br {
+            display: none
+        }
+
+        .pagination {
+            display: block;
+            text-align: center;
+        }
+    }
+</style>
     <!-- Content -->
     <div class="page-content bg-white">
 
@@ -103,7 +190,7 @@
                                         @endif
                                     </ul> --}}
 
-                                   
+                                    @if (isset($totalPages) && $totalPages != 0)
                                     <ul class="pagination">
                                         <!-- Previous Button -->
 
@@ -111,7 +198,7 @@
                                         <!-- Next Button -->
                                         <li class="page-item {{ $currentPage == 1 ? 'disabled' : '' }}">
                                             <a class="page-linkem" href="javascript:void(0);"
-                                                data-page="{{ $currentPage - 1 }}">Previous</a>
+                                                data-page="{{ $currentPage - 1 }}">« Prev</a>
                                         </li>
 
                                         @for ($i = 1; $i <= $totalPages; $i++)
@@ -130,9 +217,10 @@
                                         <!-- Next Button -->
                                         <li class="page-item {{ $currentPage == $totalPages ? 'disabled' : '' }}">
                                             <a class="page-linkem" href="javascript:void(0);"
-                                                data-page="{{ $currentPage + 1 }}">Next</a>
+                                                data-page="{{ $currentPage + 1 }}">Next »</a>
                                         </li>
                                     </ul>
+                                    @endif
                                 </div>
 
                             </div>

@@ -33,14 +33,14 @@
                                             <i class="ri-close-circle-fill"></i> Reject 
                                         </a>
 
-                                        <div class="dropdown jobsee-dropdown">
+                                        {{-- <div class="dropdown jobsee-dropdown">
                                             <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #03A9F4;"> <i class="ri-file-excel-2-fill"></i> Excel 
                                             </button>
 
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                 <a class="dropdown-item" href="{{ route('jobs-export')}}">Export</a>
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                         {{-- <div class="dropdown jobsee-dropdown">
                                             <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #03A9F4;"> <i class="ri-filter-2-fill"></i> Filter 
@@ -157,7 +157,7 @@
                                          <div class="input-group">
                                             <select id="inputState" class="form-select" style="padding: 5px 0px 5px 5px;">
                                                 <option>+91</option>
-                                                <option>+356</option>
+                                                <option>+33</option>
                                                 <option>+54</option>
                                                 <option>+78</option>
                                             </select>

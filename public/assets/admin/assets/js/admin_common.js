@@ -129,79 +129,121 @@ $(document).ready(function () {
         var job_con_phone = $("#job_con_phone").val();
         var job_con_email = $("#job_con_email").val();
         var vacancy_count = $("#vacancy_count").val();
+        var select_work_mode = $("#select_work_mode").val();
 
+        $('#job_lang').on('change', function() {
+            $("#job_lang_limit_error").hide();
+                var selected = $(this).find('option:selected');
+                if (selected.length > 3) {
+                    selected.last().prop('selected', false);
+                    $("#job_lang_limit_error").show();
+                }else{
+                    $("#job_lang_limit_error").hide();
+                }
+            });
+
+        $('#job_skills').on('change', function() {
+            $("#job_skills_limit_error").hide();
+                var selected = $(this).find('option:selected');
+                if (selected.length > 3) {
+                    selected.last().prop('selected', false);
+                    $("#job_skills_limit_error").show();
+                }else{
+                    $("#job_skills_limit_error").hide();
+                }
+            });
         var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (emp_id === null || emp_id === "") {
+            $("#emp_id")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
             $("#employer_error").show();
             return;
         }
-        if (job_title === "") {
+          if (job_title === "") {
             $("#job_title_error").show();
+            $("#job_title")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
         if (job_type === "") {
             $("#job_type_error").show();
+            $("#job_type")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
         if (job_lang.length === 0) {
             $("#job_lang_error").show();
+            $("#job_lang")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
+        
         if (job_indus === null) {
             $("#job_indus_error").show();
+            $("#job_indus")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
 
         if (job_func_area === null) {
             $("#job_func_area_error").show();
+            $("#job_func_area")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
 
         if (job_designation === null) {
             $("#job_designation_error").show();
+            $("#job_designation")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
         if (job_expr === null) {
             $("#job_expr_error").show();
+            $("#job_expr")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
         if (job_location === null) {
             $("#job_location_error").show();
+            $("#job_location")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
-
         if (vacancy_count === "") {
             $("#vacancy_count_error").show();
+            $("#vacancy_count")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+        if (select_work_mode.length === 0) {
+            $("#select_work_mode_error").show();
+            $("#select_work_mode")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
         if (job_skills.length === 0) {
             $("#job_skills_error").show();
+            $("#job_skills")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
         if (job_disc === "") {
             $("#job_disc_error").show();
+            $("#job_disc")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
         if (job_educ === null) {
             $("#job_educ_error").show();
+            $("#job_educ")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
         if (job_con_person === "") {
             $("#job_con_person_error").show();
+            $("#job_con_person")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
         if (job_con_phone === "") {
             $("#job_con_phone_error").show();
+            $("#job_con_phone")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
         if (job_con_phone.length < 9 || job_con_phone.length > 9) {
             $("#job_con_phone_error").show();
             return;
         }
-
         if (job_con_email === "") {
             $("#job_con_email_error").show();
+            $("#job_con_email")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
 
@@ -275,7 +317,7 @@ $(document).ready(function () {
                     if (response.action == "delete") {
                         $("#delete-selected-modal").modal("hide");
                     }
-                    if (response.action == "delete") {
+                    if (response.action == "approve") {
                         $("#approve-modal").modal("hide");
                     }
                     if (response.action == "reject") {

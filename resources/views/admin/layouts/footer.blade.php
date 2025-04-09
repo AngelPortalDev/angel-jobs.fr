@@ -6,7 +6,7 @@
             <div class="col-12 text-center">
                 <script>
                     document.write(new Date().getFullYear())
-                </script> © Angel Jobs Indua
+                </script> © Angel Jobs France
             </div>
         </div>
     </div>

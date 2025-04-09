@@ -94,7 +94,7 @@
                                                             src="{{ Storage::url("employer/profile_image/".$empData->profile_img) }}" alt="" style='height:100%;width:100%'>
 												@else
 												 <img class="avatar-md rounded-circle bx-s"
-                                                            src="{{ Storage::url("no-image.jpg") }}" alt="" style='height:100%;width:100%'>
+                                                            src="{{ Storage::url('employer/profile_image/employer.png') }}" alt="" style='height:100%;width:100%'>
 												@endif
                                                 <td>{{ !empty($empData->fullname) ? $empData->fullname : '' }}</td>
                                                 <td>{{ !empty($empData->company_name) ? $empData->company_name : '' }}</td>
@@ -138,7 +138,7 @@
 
                              <div class="modal-body">
 
-                                 <form class="ps-3 pe-3" id="addEmployer">
+                                 <form class="ps-3 pe-3" id="addEmployer" enctype="multipart/form-data">
 
                                      <div class="mb-3">
                                          <label for="companyname" class="form-label">Company Name</label>
@@ -187,13 +187,13 @@
                                           <label for="mobile-number" class="form-label">Mobile Number</label>
                                          <div class="input-group">
                                             <input type="text" class="form-control" id="mob_code"
-                                                    placeholder="Mobile" value="+356" readonly>
-                                            <input class="form-control" type="text" name="contact_no" id="contact_no_signup"
+                                                    placeholder="Mobile" value="+33" readonly>
+                                            <input class="form-control" type="number" name="contact_no" id="contact_no_signup"
                                              placeholder="+1234567890"  style="width: 50%;">
                                         </div>
                                           <span id="contact_no_error" style="color:red;display:none;">
                                             <small>
-                                                <i>Please Provide 8 Digit Mobile No. </i>
+                                                <i>Please Provide 9 Digit Mobile No. </i>
                                             </small>
                                         </span>
                                             <span id="mob_exists_error" style="color:red;display:none;">
@@ -202,7 +202,58 @@
                                         </small>
                                     </span>
                                      </div>
-
+                                     <div class="form-group mb-3">
+                                        <input name="gst_license" id="gst_license" class="form-control"
+                                            placeholder="gst_license" type="file" placeholder="Upload GST or Licence number" accept=".png,.jpg,.jpeg,.pdf">                                                    
+                                            <label for="gst_license">Upload GST or Licence number</label>
+                                        
+                                        <span id="gst_license_error" style="color:red;display:none;">
+                                            <small>
+                                                <i>Upload GST or Licence number </i>
+                                            </small>
+                                        </span>
+                                        <span id="gst_license_file_error" style="color:red;display:none;">
+                                            <small>
+                                                <i>Invalid file type! Only PDF, PNG, and JPG are allowed. </i>
+                                            </small>
+                                        </span>
+                                        <span id="gst_license_size_error" style="color:red;display:none;">
+                                            <small>
+                                                <i>File size too large! Maximum allowed size is 2MB. </i>
+                                            </small>
+                                        </span>
+                                        <span id="gst_license_encrypted_error" style="color:red;display:none;">
+                                            <small>
+                                                <i>The file is encrypted. Please upload a standard file.</i>
+                                            </small>
+                                        </span>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <input name="owner_id" id="owner_id" class="form-control"
+                                            placeholder="owner_id" type="file" placeholder="Upload GST or Licence number" accept=".png,.jpg,.jpeg,.pdf">                                                    
+                                            <label for="owner_id">Select Owner ID</label>
+                                        
+                                        <span id="owner_id_error" style="color:red;display:none;">
+                                            <small>
+                                                <i>Upload Owner ID </i>
+                                            </small>
+                                        </span>
+                                        <span id="owner_id_file_error" style="color:red;display:none;">
+                                            <small>
+                                                <i>Invalid file type! Only PDF, PNG, and JPG are allowed. </i>
+                                            </small>
+                                        </span>
+                                        <span id="owner_id_size_error" style="color:red;display:none;">
+                                            <small>
+                                                <i>File size too large! Maximum allowed size is 2MB. </i>
+                                            </small>
+                                        </span>
+                                        <span id="owner_id_encrypted_error" style="color:red;display:none;">
+                                            <small>
+                                                <i>The file is encrypted. Please upload a standard file.</i>
+                                            </small>
+                                        </span>
+                                    </div>
                                      <div class="mb-3">
                                          <label for="password" class="form-label">Password</label>
                                          <input class="form-control" type="password" required=""
@@ -400,5 +451,22 @@
 
     </div>
     <!-- END wrapper -->
-
+    @if (session()->has('msgs'))
+    <script>
+        swal({
+            title: "{{ session()->get('msg') }}",  
+            text: "",
+            icon: "success",
+        });
+    </script>
+@endif
+@if (session()->has('msgf'))
+<script>
+    swal({
+        title: "{{ session()->get('msg') }}",  
+        text: "",
+        icon: "error",
+    });
+</script>
+@endif
 @endsection

@@ -197,7 +197,7 @@
                     <!-- Topbar Brand Logo -->
                     <div class="logo-topbar">
                         <!-- Logo light -->
-                        <a href="index.php" class="logo-light">
+                        <a href="{{route('admin-dashboard')}}" class="logo-light">
                             <span class="logo-lg">
                                 <img src="{{ asset('admin/assets/images/logo.png') }}" alt="logo">
                             </span>
@@ -207,7 +207,7 @@
                         </a>
 
                         <!-- Logo Dark -->
-                        <a href="index.php" class="logo-dark">
+                        <a href="{{route('admin-dashboard')}}" class="logo-dark">
                             <span class="logo-lg">
                                 <img src="{{ asset('admin/assets/images/logo-dark.png') }}" alt="dark logo">
                             </span>
@@ -300,22 +300,22 @@
         <div class="leftside-menu">
 
             <!-- Brand Logo Light -->
-            <a href="index.php" class="logo logo-light">
+            <a href="{{route('admin-dashboard')}}" class="logo logo-light">
                 <span class="logo-lg">
-                    <img src="{{ asset('admin/assets/images/angel-jobs-malta-logo.png') }}" alt="logo">
+                    <img src="{{ asset('images/angel-jobs-France.png') }}" alt="logo">
                 </span>
                 <span class="logo-sm">
-                    <img src="{{ asset('admin/assets/images/angel-jobs-malta-logo.png') }}" alt="small logo">
+                    <img src="{{ asset('images/angel-jobs-France.png') }}" alt="small logo">
                 </span>
             </a>
 
             <!-- Brand Logo Dark -->
-            <a href="index.php" class="logo logo-dark">
+            <a href="{{route('admin-dashboard')}}" class="logo logo-dark">
                 <span class="logo-lg">
-                    <img src="{{ asset('admin/assets/images/angel-jobs-malta-logo.png') }}" alt="dark logo">
+                    <img src="{{ asset('images/angel-jobs-France.png') }}" alt="dark logo">
                 </span>
                 <span class="logo-sm">
-                    <img src="{{ asset('admin/assets/images/angel-jobs-malta-logo.png') }}" alt="small logo">
+                    <img src="{{ asset('images/angel-jobs-France.png') }}" alt="small logo">
                 </span>
             </a>
 

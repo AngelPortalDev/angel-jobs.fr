@@ -18,7 +18,7 @@ $(document).ready(function () {
     function generatePagination(total_count, perPage, currentPage) {
         let totalPages = Math.ceil(total_count / perPage);
         let paginationHtml = '';
-        let dropdownpagination = '';  
+        let dropdownpagination = '';
         currentPage = Number(currentPage);
     
         if (totalPages > 1) {
@@ -43,15 +43,18 @@ $(document).ready(function () {
                 : `<li class="page-item disabled"><a href="#" class="page-link">Next »</a></li>`;
     
             paginationHtml += '</ul>';
+
+            dropdownpagination +='<select id="pageDropdown">';     
+            for (i = 1; i <= totalPages; i++){
+            dropdownpagination += `<option value="${i}" ${i === currentPage ? 'selected' : ''}>Page ${i}</option>`
+            }
+        dropdownpagination +='</select>'
         }
     
         $("#paginationLinks").html(paginationHtml);
-        dropdownpagination +='<select id="pageDropdown">';     
-        for (i = 1; i <= totalPages; i++){
-        dropdownpagination += `<option value="${i}" ${i === currentPage ? 'selected' : ''}>Page ${i}</option>`
-        }
-    dropdownpagination +='</select>'
-    }  
+        $("#pageDropdownlist").html(dropdownpagination);
+
+    }
     
 
     // $(".jslogincheck").on("click", function () {
@@ -1002,8 +1005,8 @@ $(document).ready(function () {
                 },
                 success: function (res) {
                     $("#loader").fadeOut();
-                    console.log("Pagination AJAX Success:", res);
-                   
+                    // console.log("Pagination AJAX Success:", res);
+                    document.getElementById("filter-sidebar").style.width = "0";
                         loadJobs(res.html, res.page, res.count, res.total_count, res.perPage);
                         $('#pageDropdown').selectpicker();
                 },
@@ -1047,7 +1050,7 @@ $(document).ready(function () {
                 success: function (res) {
                     $("#loader").fadeOut();
                    //console.log("Pagination AJAX Success:", res);
-                    
+                   $("#jobCount")[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
                    loadJobs(res.html, res.page, res.count, res.total_count, res.perPage);
                     
                     $(".pagination .page-item").removeClass("active");

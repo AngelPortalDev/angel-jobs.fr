@@ -395,6 +395,16 @@ $(document).ready(function () {
          }
 
          var form = $(".actionId").serializeArray();
+         var form = $(".actionId").serializeArray();
+         var selectedItems = form.filter(item => item.name === 'userId[]');  
+         if (selectedItems.length > 1) {
+             swal({
+                 title: "Select only one jobseeker",
+                 text: "Please Try Again",
+                 icon: "error",
+             });
+             return false;  
+         } 
          $("#loader").fadeIn();
          $.ajax({
              url: baseUrl + "/admin/jobseeker-plan-assign",
