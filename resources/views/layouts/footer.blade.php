@@ -197,6 +197,7 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="{{ asset('js/common.js') }}"></script>
 <script src="{{ asset('admin/assets/js/vendor/quill.min.js') }}"></script>
+<script src="https://www.google.com/recaptcha/api.js"></script>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
