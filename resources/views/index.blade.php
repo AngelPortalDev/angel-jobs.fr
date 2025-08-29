@@ -1,5 +1,56 @@
 @extends('layouts.main')
 @section('content')
+<style>
+      @media (min-width: 992px) and (max-width: 1199px) {
+        .find-job-bx {
+            margin-bottom: 80px !important;
+        }
+        .dez-bnr-inr {
+            height: 350px !important;
+        }
+    }
+
+    @media (min-width: 1200px) and (max-width: 1399px) {
+        .dez-bnr-inr {
+            height: 400px !important;
+        }
+        .find-job-bx {
+            margin-bottom: 80px !important;
+        }
+    }
+
+    @media (min-width: 1400px) and (max-width: 1599px) {
+        .dez-bnr-inr {
+            height: 500px !important;
+        }
+        .find-job-bx {
+            text-align: left;
+            margin-left: -120px;
+            margin-bottom: 50px;
+        }
+}
+
+@media (min-width: 1600px) and (max-width: 1699px) {
+         .dez-bnr-inr {
+            height: 500px !important;
+        }
+        .find-job-bx {
+            text-align: left;
+            margin-left: -120px;
+            margin-bottom: 50px;
+        }
+}
+
+@media (min-width: 1700px) {
+         .dez-bnr-inr {
+            height: 600px !important;
+        }
+        .find-job-bx {
+            text-align: left;
+            margin-left: -240px;
+        }
+}
+</style>
     <!-- Content -->
     <div class="page-content">
         <!-- Section Banner -->
@@ -423,11 +474,11 @@
                                     'work_mode'
                                 ];
 
-                                $getData_jobs = []; // Initialize the variable                          
-                              
-                                    
+                                $getData_jobs = []; // Initialize the variable
+
+
                                     $getData_jobs = jobList($table,$select,['approval_status' => 'APPROVED','status' => 'Live','is_deleted' => 'No',],5,'posted_on','DESC',);
-                                   
+
 
                             @endphp
 
@@ -439,21 +490,21 @@
                             foreach ($workmode as $index => $mode) {
                                 switch ($mode) {
                                     case '1':
-                                        $workModeText .= 'Remote ';  
+                                        $workModeText .= 'Remote ';
                                         break;
                                     case '2':
-                                        $workModeText .= 'WFO ';    
+                                        $workModeText .= 'WFO ';
                                         break;
                                     case '3':
-                                        $workModeText .= 'Hybrid '; 
+                                        $workModeText .= 'Hybrid ';
                                         break;
                                     default:
-                                        $workModeText .= ''; 
+                                        $workModeText .= '';
                                 }
                                 if ($index < count($workmode) - 1) {
                                     $workModeText .= ', ';
                                 }
-                            }                              
+                            }
                             $workModeText = trim($workModeText);
                             @endphp
                                 <li>
@@ -494,14 +545,14 @@
                                                     </li>
                                                     {{-- <li><i class='far fa-bookmark'></i>{{$lists->job_type_name}} </li> --}}
                                                     <li>
-                                                       
+
                                                             <span> <i class="fa fa-euro"></i>
                                                                 {{ empty($lists->job_salary_to_name) ? 'Not Disclosed' : $lists->job_salary_to_name }}</span>
                                                     </li>
                                                     <li>
                                                         <span><i class="fas fa-tasks" ></i>{{ isset($lists->job_type_name) ? $lists->job_type_name : 'Not Disclosed' }}</span>
                                                     </li>
-                          
+
                             <br>
                             <li class="mt-2"><i class='far fa-clock'></i>
                                 Published {{ duration($lists->posted_on) }} ago</li>
@@ -532,7 +583,7 @@
                                     @endif
                                 @endif
                             @endforeach
-                        
+
                             @if ($totalSkills > $maxSkillsToShow)
                             <span class="show-more-btn">
                                 <a href="{{ url('job-details-view', $id) }}">See More...</a>
